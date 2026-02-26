@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>aRKithect — Residential Renovations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --off-white: #f8f6f2;
+    --black: #111110;
+    --mid: #8a8880;
+    --accent: #c8a96e;
+    --line: #e5e2db;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--off-white);
+    color: var(--black);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 48px;
+    background: rgba(248,246,242,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 600; letter-spacing: 0.05em;
+    color: var(--black); text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  nav a {
+    text-decoration: none; color: var(--mid);
+    font-size: 13px; font-weight: 400; letter-spacing: 0.12em;
+    text-transform: uppercase; transition: color 0.2s;
+  }
+  nav a:hover { color: var(--black); }
+  .nav-sim-btn {
+    padding: 10px 22px;
+    background: var(--black) !important; color: var(--off-white) !important;
+    font-size: 12px !important; letter-spacing: 0.12em;
+    transition: background 0.2s !important; border-radius: 2px;
+  }
+  .nav-sim-btn:hover { background: var(--accent) !important; color: var(--black) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 140px 48px 80px; position: relative;
+  }
+  .hero-inner { max-width: 680px; }
+  .hero-label {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 7vw, 96px); font-weight: 300;
+    line-height: 1.02; letter-spacing: -0.01em;
+    color: var(--black); margin-bottom: 32px;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero p { font-size: 17px; color: var(--mid); max-width: 460px; line-height: 1.7; margin-bottom: 48px; }
+  .hero-btns { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; padding: 16px 40px;
+    background: var(--black); color: var(--off-white); text-decoration: none;
+    font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;
+    transition: background 0.25s, color 0.25s;
+  }
+  .btn:hover { background: var(--accent); color: var(--black); }
+  .btn-outline {
+    display: inline-block; padding: 15px 40px;
+    background: transparent; color: var(--black); text-decoration: none;
+    font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;
+    border: 1px solid var(--black); transition: background 0.25s, color 0.25s;
+  }
+  .btn-outline:hover { background: var(--black); color: var(--off-white); }
+  .hero-deco {
+    position: absolute; right: 48px; top: 50%; transform: translateY(-50%);
+    font-family: 'Cormorant Garamond', serif; font-size: 200px; font-weight: 300;
+    color: transparent; -webkit-text-stroke: 1px var(--line);
+    user-select: none; pointer-events: none; line-height: 1;
+  }
+
+  /* SIMULATOR BANNER */
+  .sim-banner {
+    margin: 0 48px; padding: 32px 40px; background: var(--black);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 32px; flex-wrap: wrap;
+  }
+  .sim-banner-text h3 {
+    font-family: 'Cormorant Garamond', serif; font-size: 28px;
+    font-weight: 300; color: var(--off-white); margin-bottom: 6px;
+  }
+  .sim-banner-text p { font-size: 14px; color: #888; }
+  .sim-banner .btn { background: var(--accent); color: var(--black); flex-shrink: 0; }
+  .sim-banner .btn:hover { background: var(--off-white); }
+
+  /* SECTION LABELS */
+  .section-label {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px; display: block;
+  }
+
+  /* WORK SECTION */
+  #work { padding: 100px 48px; }
+  .work-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 72px; border-bottom: 1px solid var(--line); padding-bottom: 32px;
+  }
+  .work-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 56px); font-weight: 300; line-height: 1.1;
+  }
+  .work-header p { font-size: 14px; color: var(--mid); max-width: 280px; text-align: right; }
+
+  /* PROJECT CARD */
+  .project { margin-bottom: 100px; }
+  .project-meta { display: flex; gap: 40px; margin-bottom: 24px; align-items: baseline; }
+  .project-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; }
+  .project-details { font-size: 13px; color: var(--mid); letter-spacing: 0.05em; }
+  .project-details span { margin: 0 8px; color: var(--line); }
+
+  /* =====================================================
+     BEFORE / AFTER SLIDER — continuous drag reveal
+     Structure:
+       .slider-wrap          (outer boundary, overflow:hidden)
+         .slide-before       (full size, sits behind)
+         .slide-after-wrap   (clips from left, width changes on drag)
+           .slide-after      (full slider width, anchored right)
+         .slide-divider      (the vertical line + handle)
+         .label-before / .label-after
+  ===================================================== */
+  .slider-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    cursor: ew-resize;
+    user-select: none;
+    border: 1px solid var(--line);
+    /* Prevent any transition on child widths — must be instant */
+  }
+
+  /* BEFORE — full size, static underneath */
+  .slide-before {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Placeholder versions of before/after for when no real img is used */
+  .slide-before.placeholder {
+    background: linear-gradient(135deg, #d4c9b8 0%, #b8a99a 50%, #a09080 100%);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.5);
+    font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.15em;
+  }
+
+  /* AFTER wrapper — this is what we resize. Overflow hidden clips the image. */
+  .slide-after-wrap {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 50%;           /* JS will update this in real time */
+    overflow: hidden;
+    /* NO transition here — must be perfectly instant */
+  }
+
+  /* AFTER image — always full slider width, anchored to left of wrapper */
+  .slide-after {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    /* Width is set by JS to match the slider-wrap width so it never stretches */
+    object-fit: cover;
+    display: block;
+  }
+
+  .slide-after.placeholder {
+    background: linear-gradient(135deg, #e8e4dc 0%, #d0c8bc 50%, #c8bfb0 100%);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(0,0,0,0.25);
+    font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.15em;
+  }
+
+  /* DIVIDER LINE + HANDLE */
+  .slide-divider {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;            /* JS updates this */
+    width: 3px;
+    background: white;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 20;
+    box-shadow: 0 0 8px rgba(0,0,0,0.25);
+  }
+
+  /* Circular handle on the divider */
+  .slide-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px; height: 44px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+    /* Arrow icon */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='15 18 9 12 15 6'/%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 22px;
+  }
+
+  /* BEFORE / AFTER labels */
+  .label-before, .label-after {
+    position: absolute; bottom: 16px; z-index: 10;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: white; font-weight: 500;
+    padding: 5px 12px;
+    background: rgba(0,0,0,0.38); backdrop-filter: blur(4px);
+    border-radius: 2px;
+    pointer-events: none;
+  }
+  .label-before { left: 16px; }
+  .label-after  { right: 16px; }
+
+  /* PROJECT DESCRIPTION */
+  .project-description {
+    margin-top: 28px; max-width: 900px;
+    display: flex; gap: 80px; align-items: flex-start;
+  }
+  .project-description p { font-size: 15px; color: var(--mid); line-height: 1.75; flex: 1; }
+  .project-stats { display: flex; gap: 40px; flex-shrink: 0; }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300;
+    display: block; color: var(--black); line-height: 1; margin-bottom: 4px;
+  }
+  .stat-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); }
+
+  .divider { width: calc(100% - 96px); height: 1px; background: var(--line); margin: 0 48px; }
+
+  /* CONTACT */
+  #contact {
+    padding: 100px 48px; display: grid;
+    grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+  }
+  .contact-left h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 56px); font-weight: 300; line-height: 1.1; margin-bottom: 24px;
+  }
+  .contact-left p { font-size: 16px; color: var(--mid); line-height: 1.75; margin-bottom: 40px; max-width: 400px; }
+  .contact-info { display: flex; flex-direction: column; gap: 16px; }
+  .contact-info a {
+    text-decoration: none; color: var(--black); font-size: 15px;
+    display: flex; align-items: center; gap: 12px; transition: color 0.2s;
+  }
+  .contact-info a:hover { color: var(--accent); }
+  .info-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mid); width: 60px; }
+  form { display: flex; flex-direction: column; gap: 20px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mid); }
+  input, textarea, select {
+    padding: 14px 16px; background: white; border: 1px solid var(--line);
+    color: var(--black); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300;
+    outline: none; transition: border-color 0.2s; width: 100%;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+  textarea { resize: vertical; min-height: 120px; }
+  .btn-submit {
+    padding: 18px 48px; background: var(--black); color: var(--off-white);
+    border: none; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;
+    transition: background 0.25s; align-self: flex-start;
+  }
+  .btn-submit:hover { background: var(--accent); color: var(--black); }
+
+  footer {
+    padding: 32px 48px; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer p { font-size: 13px; color: var(--mid); }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif; font-size: 18px;
+    font-weight: 600; color: var(--black); text-decoration: none;
+  }
+  .footer-logo span { color: var(--accent); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-label { animation: fadeUp 0.7s ease both 0.1s; }
+  .hero h1    { animation: fadeUp 0.8s ease both 0.25s; }
+  .hero p     { animation: fadeUp 0.8s ease both 0.4s; }
+  .hero-btns  { animation: fadeUp 0.8s ease both 0.55s; }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-sim-btn { display: none; }
+    .hero, #work, #contact { padding-left: 24px; padding-right: 24px; }
+    .hero-deco { display: none; }
+    .sim-banner { margin: 0 24px; }
+    .work-header { flex-direction: column; gap: 16px; }
+    .work-header p { text-align: left; }
+    #contact { grid-template-columns: 1fr; gap: 48px; }
+    .form-row { grid-template-columns: 1fr; }
+    .project-description { flex-direction: column; gap: 32px; }
+    footer { flex-direction: column; gap: 12px; text-align: center; }
+    .divider { margin: 0 24px; width: calc(100% - 48px); }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">a<span>RK</span>ithect</a>
+  <div class="nav-links">
+    <a href="#work">Work</a>
+    <a href="#contact">Contact</a>
+    <a href="/simulator.html" class="nav-sim-btn">Room Simulator</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Residential Renovations</div>
+    <h1>Spaces <em>transformed,</em><br>lives improved.</h1>
+    <p>We craft thoughtful renovations that respect your home's character while elevating every detail. Based locally, working personally.</p>
+    <div class="hero-btns">
+      <a href="#work" class="btn">View our work</a>
+      <a href="/simulator.html" class="btn-outline">Try Room Simulator</a>
+    </div>
+  </div>
+  <div class="hero-deco" aria-hidden="true">R</div>
+</section>
+
+<div class="sim-banner">
+  <div class="sim-banner-text">
+    <h3>Visualise your renovation before it begins</h3>
+    <p>Design your room in 2D and 3D — adjust dimensions, openings, and surface materials.</p>
+  </div>
+  <a href="/simulator.html" class="btn">Open Simulator →</a>
+</div>
+
+<section id="work">
+  <div class="work-header">
+    <div>
+      <span class="section-label">Portfolio</span>
+      <h2>Recent<br>projects</h2>
+    </div>
+    <p>Drag the handle to reveal the transformation.</p>
+  </div>
+
+  <!-- PROJECT 1 -->
+  <div class="project">
+    <div class="project-meta">
+      <h3 class="project-title">Modern Bathroom Renovation</h3>
+      <div class="project-details">Residential <span>·</span> Paris <span>·</span> 2025</div>
+    </div>
+
+    <div class="slider-wrap" id="slider1">
+      <img class="slide-before" src="/images/bathroom_before.jpg" alt="Before">
+      <!-- AFTER wrapper — JS sets its width -->
+      <div class="slide-after-wrap" id="after-wrap1">
+        <img class="slide-after" id="after-img1" src="/images/bathroom_after.jpg" alt="After">
+      </div>
+
+      <div class="slide-divider" id="divider1"></div>
+      <div class="label-before">Before</div>
+      <div class="label-after">After</div>
+    </div>
+
+    <div class="project-description">
+      <p>A complete kitchen overhaul transforming a dated, cramped cooking space into an open, light-filled heart of the home. New cabinetry, island layout, and material upgrades throughout.</p>
+      <div class="project-stats">
+        <div class="stat"><span class="stat-num">6</span><span class="stat-label">Weeks</span></div>
+        <div class="stat"><span class="stat-num">3×</span><span class="stat-label">More light</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PROJECT 2 -->
+  <div class="project" style="margin-top: 80px;">
+    <div class="project-meta">
+      <h3 class="project-title">Maplewood Bathroom Refresh</h3>
+      <div class="project-details">Residential <span>·</span> Bathroom <span>·</span> 2024</div>
+    </div>
+
+    <div class="slider-wrap" id="slider2">
+      <div class="slide-before placeholder">Your "before" photo here</div>
+      <div class="slide-after-wrap" id="after-wrap2">
+        <div class="slide-after placeholder" id="after-img2">Your "after" photo here</div>
+      </div>
+      <div class="slide-divider" id="divider2"></div>
+      <div class="label-before">Before</div>
+      <div class="label-after">After</div>
+    </div>
+
+    <div class="project-description">
+      <p>A master bathroom reimagined with a walk-in shower, heated flooring, and custom vanity. Every surface was replaced, turning a tired space into a daily retreat.</p>
+      <div class="project-stats">
+        <div class="stat"><span class="stat-num">4</span><span class="stat-label">Weeks</span></div>
+        <div class="stat"><span class="stat-num">Full</span><span class="stat-label">Gut &amp; rebuild</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="contact-left">
+    <span class="section-label">Get in touch</span>
+    <h2>Let's talk about your project</h2>
+    <p>Every renovation starts with a conversation. Tell us about your space and we'll get back to you within one business day.</p>
+    <div class="contact-info">
+      <a href="tel:+00000000000"><span class="info-label">Phone</span>+1 (000) 000-0000</a>
+      <a href="mailto:hello@renewrenovations.com"><span class="info-label">Email</span>hello@renewrenovations.com</a>
+      <a href="#"><span class="info-label">Area</span>Your city / service area</a>
+    </div>
+  </div>
+  <form onsubmit="handleSubmit(event)">
+    <div class="form-row">
+      <div class="form-group"><label for="fname">Name</label><input type="text" id="fname" placeholder="Your name" required></div>
+      <div class="form-group"><label for="femail">Email</label><input type="email" id="femail" placeholder="your@email.com" required></div>
+    </div>
+    <div class="form-group">
+      <label for="fproject">Project type</label>
+      <select id="fproject">
+        <option value="">Select a space...</option>
+        <option>Kitchen</option><option>Bathroom</option><option>Living room</option><option>Full home</option><option>Other</option>
+      </select>
+    </div>
+    <div class="form-group"><label for="fmessage">Message</label><textarea id="fmessage" placeholder="Tell us about your project..."></textarea></div>
+    <button type="submit" class="btn-submit">Send message</button>
+    <p id="form-success" style="display:none; color:var(--accent); font-size:14px; margin-top:8px;">✓ Message sent! We'll be in touch soon.</p>
+  </form>
+</section>
+
+<footer>
+  <a href="/" class="footer-logo">a<span>RK</span>ithect</a>
+  <p>© 2025 Renew Renovations. All rights reserved.</p>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────
+//  Continuous before/after slider
+//  Technique: resize the .slide-after-wrap div width in px.
+//  The .slide-after inside always matches the full slider width
+//  so the image never stretches — it just gets revealed or hidden.
+// ─────────────────────────────────────────────
+function initSlider(wrapperId, afterWrapId, afterImgId, dividerId) {
+  var wrap      = document.getElementById(wrapperId);
+  var afterWrap = document.getElementById(afterWrapId);
+  var afterImg  = document.getElementById(afterImgId);
+  var divider   = document.getElementById(dividerId);
+  var dragging  = false;
+
+  // Size the after image to always equal the full wrap width
+  function sizeAfterImg() {
+    var totalW = wrap.offsetWidth;
+    afterImg.style.width  = totalW + 'px';
+    afterImg.style.height = wrap.offsetHeight + 'px';
+  }
+
+  function setPos(clientX) {
+    var rect   = wrap.getBoundingClientRect();
+    var x      = clientX - rect.left;
+    var total  = rect.width;
+    // Clamp between 2px and (total - 2px) so handle never disappears
+    var clamped = Math.max(2, Math.min(total - 2, x));
+
+    // Set the after-wrap width in pixels — no percentage rounding artifacts
+    afterWrap.style.width = clamped + 'px';
+
+    // Move the divider line to match
+    divider.style.left = clamped + 'px';
+  }
+
+  // Mouse
+  wrap.addEventListener('mousedown', function(e) {
+    dragging = true;
+    setPos(e.clientX);
+    e.preventDefault(); // stop text selection while dragging
+  });
+  window.addEventListener('mousemove', function(e) {
+    if (dragging) setPos(e.clientX);
+  });
+  window.addEventListener('mouseup', function() {
+    dragging = false;
+  });
+
+  // Touch
+  wrap.addEventListener('touchstart', function(e) {
+    dragging = true;
+    setPos(e.touches[0].clientX);
+  }, { passive: true });
+  window.addEventListener('touchmove', function(e) {
+    if (dragging) setPos(e.touches[0].clientX);
+  }, { passive: true });
+  window.addEventListener('touchend', function() {
+    dragging = false;
+  });
+
+  // Init + keep sized on resize
+  sizeAfterImg();
+  setPos(wrap.getBoundingClientRect().left + wrap.offsetWidth / 2);
+  window.addEventListener('resize', function() {
+    sizeAfterImg();
+    // Re-centre divider on resize
+    setPos(wrap.getBoundingClientRect().left + wrap.offsetWidth / 2);
+  });
+}
+
+initSlider('slider1', 'after-wrap1', 'after-img1', 'divider1');
+initSlider('slider2', 'after-wrap2', 'after-img2', 'divider2');
+
+// ─── Contact form ───────────────────────────
+function handleSubmit(e) {
+  e.preventDefault();
+  document.getElementById('form-success').style.display = 'block';
+  e.target.reset();
+  setTimeout(function() {
+    document.getElementById('form-success').style.display = 'none';
+  }, 4000);
+}
+
+// ─── Scroll fade-in ─────────────────────────
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      e.target.style.opacity   = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.project, .sim-banner, .contact-left, form').forEach(function(el) {
+  el.style.opacity    = '0';
+  el.style.transform  = 'translateY(24px)';
+  el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
