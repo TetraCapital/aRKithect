@@ -28,7 +28,6 @@
     overflow-x: hidden;
   }
 
-  /* NAV */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
@@ -42,7 +41,7 @@
     font-size: 22px; font-weight: 600; letter-spacing: 0.05em;
     color: var(--black); text-decoration: none;
   }
-  .logo span { color: var(--accent); }
+  .logo .rk { color: var(--accent); font-weight: 700; }
   .nav-links { display: flex; align-items: center; gap: 32px; }
   nav a {
     text-decoration: none; color: var(--mid);
@@ -58,7 +57,20 @@
   }
   .nav-sim-btn:hover { background: var(--accent) !important; color: var(--black) !important; }
 
-  /* HERO */
+  .lang-toggle {
+    display: flex; align-items: center;
+    border: 1px solid var(--line); border-radius: 2px; overflow: hidden;
+  }
+  .lang-btn {
+    padding: 6px 12px; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; background: transparent; color: var(--mid);
+    border: none; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    font-weight: 400; transition: all 0.15s;
+  }
+  .lang-btn.active { background: var(--black); color: var(--off-white); }
+  .lang-btn:not(.active):hover { color: var(--black); }
+  .lang-sep { width: 1px; height: 20px; background: var(--line); }
+
   .hero {
     min-height: 100vh; display: flex; align-items: center;
     padding: 140px 48px 80px; position: relative;
@@ -98,7 +110,6 @@
     user-select: none; pointer-events: none; line-height: 1;
   }
 
-  /* SIMULATOR BANNER */
   .sim-banner {
     margin: 0 48px; padding: 32px 40px; background: var(--black);
     display: flex; align-items: center; justify-content: space-between;
@@ -112,13 +123,11 @@
   .sim-banner .btn { background: var(--accent); color: var(--black); flex-shrink: 0; }
   .sim-banner .btn:hover { background: var(--off-white); }
 
-  /* SECTION LABELS */
   .section-label {
     font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
     color: var(--accent); margin-bottom: 16px; display: block;
   }
 
-  /* WORK SECTION */
   #work { padding: 100px 48px; }
   .work-header {
     display: flex; align-items: flex-end; justify-content: space-between;
@@ -130,123 +139,66 @@
   }
   .work-header p { font-size: 14px; color: var(--mid); max-width: 280px; text-align: right; }
 
-  /* PROJECT CARD */
   .project { margin-bottom: 100px; }
   .project-meta { display: flex; gap: 40px; margin-bottom: 24px; align-items: baseline; }
   .project-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; }
   .project-details { font-size: 13px; color: var(--mid); letter-spacing: 0.05em; }
   .project-details span { margin: 0 8px; color: var(--line); }
 
-  /* =====================================================
-     BEFORE / AFTER SLIDER — continuous drag reveal
-     Structure:
-       .slider-wrap          (outer boundary, overflow:hidden)
-         .slide-before       (full size, sits behind)
-         .slide-after-wrap   (clips from left, width changes on drag)
-           .slide-after      (full slider width, anchored right)
-         .slide-divider      (the vertical line + handle)
-         .label-before / .label-after
-  ===================================================== */
   .slider-wrap {
-    position: relative;
-    width: 100%;
-    max-width: 900px;
-    aspect-ratio: 16/9;
-    overflow: hidden;
-    cursor: ew-resize;
-    user-select: none;
-    border: 1px solid var(--line);
-    /* Prevent any transition on child widths — must be instant */
+    position: relative; width: 100%; max-width: 900px;
+    aspect-ratio: 16/9; overflow: hidden;
+    cursor: ew-resize; user-select: none; border: 1px solid var(--line);
   }
-
-  /* BEFORE — full size, static underneath */
   .slide-before {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; display: block;
   }
-
-  /* Placeholder versions of before/after for when no real img is used */
   .slide-before.placeholder {
     background: linear-gradient(135deg, #d4c9b8 0%, #b8a99a 50%, #a09080 100%);
     display: flex; align-items: center; justify-content: center;
     color: rgba(255,255,255,0.5);
     font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.15em;
   }
-
-  /* AFTER wrapper — this is what we resize. Overflow hidden clips the image. */
   .slide-after-wrap {
-    position: absolute;
-    top: 0; left: 0; bottom: 0;
-    width: 50%;           /* JS will update this in real time */
-    overflow: hidden;
-    /* NO transition here — must be perfectly instant */
+    position: absolute; top: 0; left: 0; bottom: 0;
+    width: 50%; overflow: hidden;
   }
-
-  /* AFTER image — always full slider width, anchored to left of wrapper */
   .slide-after {
-    position: absolute;
-    top: 0; left: 0;
-    height: 100%;
-    /* Width is set by JS to match the slider-wrap width so it never stretches */
-    object-fit: cover;
-    display: block;
+    position: absolute; top: 0; left: 0; height: 100%;
+    object-fit: cover; display: block;
   }
-
   .slide-after.placeholder {
     background: linear-gradient(135deg, #e8e4dc 0%, #d0c8bc 50%, #c8bfb0 100%);
     display: flex; align-items: center; justify-content: center;
     color: rgba(0,0,0,0.25);
     font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.15em;
   }
-
-  /* DIVIDER LINE + HANDLE */
   .slide-divider {
-    position: absolute;
-    top: 0; bottom: 0;
-    left: 50%;            /* JS updates this */
-    width: 3px;
-    background: white;
-    transform: translateX(-50%);
-    pointer-events: none;
-    z-index: 20;
+    position: absolute; top: 0; bottom: 0; left: 50%;
+    width: 3px; background: white;
+    transform: translateX(-50%); pointer-events: none; z-index: 20;
     box-shadow: 0 0 8px rgba(0,0,0,0.25);
   }
-
-  /* Circular handle on the divider */
   .slide-divider::after {
     content: '';
-    position: absolute;
-    top: 50%; left: 50%;
+    position: absolute; top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 44px; height: 44px;
-    background: white;
-    border-radius: 50%;
+    width: 44px; height: 44px; background: white; border-radius: 50%;
     box-shadow: 0 2px 16px rgba(0,0,0,0.2);
-    /* Arrow icon */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='15 18 9 12 15 6'/%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 22px;
+    background-repeat: no-repeat; background-position: center; background-size: 22px;
   }
-
-  /* BEFORE / AFTER labels */
   .label-before, .label-after {
     position: absolute; bottom: 16px; z-index: 10;
     font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
-    color: white; font-weight: 500;
-    padding: 5px 12px;
+    color: white; font-weight: 500; padding: 5px 12px;
     background: rgba(0,0,0,0.38); backdrop-filter: blur(4px);
-    border-radius: 2px;
-    pointer-events: none;
+    border-radius: 2px; pointer-events: none;
   }
   .label-before { left: 16px; }
   .label-after  { right: 16px; }
 
-  /* PROJECT DESCRIPTION */
   .project-description {
     margin-top: 28px; max-width: 900px;
     display: flex; gap: 80px; align-items: flex-start;
@@ -262,7 +214,6 @@
 
   .divider { width: calc(100% - 96px); height: 1px; background: var(--line); margin: 0 48px; }
 
-  /* CONTACT */
   #contact {
     padding: 100px 48px; display: grid;
     grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
@@ -300,14 +251,14 @@
 
   footer {
     padding: 32px 48px; border-top: 1px solid var(--line);
-    display: flex; justify-content: space-between; align-items: center;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
   }
   footer p { font-size: 13px; color: var(--mid); }
   .footer-logo {
     font-family: 'Cormorant Garamond', serif; font-size: 18px;
     font-weight: 600; color: var(--black); text-decoration: none;
   }
-  .footer-logo span { color: var(--accent); }
+  .footer-logo .rk { color: var(--accent); font-weight: 700; }
 
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(30px); }
@@ -319,7 +270,7 @@
   .hero-btns  { animation: fadeUp 0.8s ease both 0.55s; }
 
   @media (max-width: 768px) {
-    nav { padding: 20px 24px; }
+    nav { padding: 20px 24px; flex-wrap: wrap; gap: 12px; }
     .nav-sim-btn { display: none; }
     .hero, #work, #contact { padding-left: 24px; padding-right: 24px; }
     .hero-deco { display: none; }
@@ -337,96 +288,101 @@
 <body>
 
 <nav>
-  <a href="/" class="logo">a<span>RK</span>ithect</a>
+  <a href="/" class="logo">a<span class="rk">RK</span>ithect</a>
   <div class="nav-links">
-    <a href="#work">Work</a>
-    <a href="#contact">Contact</a>
-    <a href="/simulator.html" class="nav-sim-btn">Room Simulator</a>
+    <a href="#work" data-i18n="nav.work">Work</a>
+    <a href="#contact" data-i18n="nav.contact">Contact</a>
+    <a href="/simulator.html" class="nav-sim-btn" data-i18n="nav.simulator">Room Simulator</a>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <div class="lang-sep"></div>
+      <button class="lang-btn" onclick="setLang('fr')">FR</button>
+    </div>
   </div>
 </nav>
 
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-label">Residential Renovations</div>
-    <h1>Spaces <em>transformed,</em><br>lives improved.</h1>
-    <p>We craft thoughtful renovations that respect your home's character while elevating every detail. Based locally, working personally.</p>
+    <div class="hero-label" data-i18n="hero.label">Residential Renovations</div>
+    <h1 data-i18n-html="hero.h1">Spaces <em>transformed,</em><br>lives improved.</h1>
+    <p data-i18n="hero.p">We craft thoughtful renovations that respect your home's character while elevating every detail. Based locally, working personally.</p>
     <div class="hero-btns">
-      <a href="#work" class="btn">View our work</a>
-      <a href="/simulator.html" class="btn-outline">Try Room Simulator</a>
+      <a href="#work" class="btn" data-i18n="hero.cta1">View our work</a>
+      <a href="/simulator.html" class="btn-outline" data-i18n="hero.cta2">Try Room Simulator</a>
     </div>
   </div>
-  <div class="hero-deco" aria-hidden="true">R</div>
+  <div class="hero-deco" aria-hidden="true">RK</div>
 </section>
 
 <div class="sim-banner">
   <div class="sim-banner-text">
-    <h3>Visualise your renovation before it begins</h3>
-    <p>Design your room in 2D and 3D — adjust dimensions, openings, and surface materials.</p>
+    <h3 data-i18n="banner.h3">Visualise your renovation before it begins</h3>
+    <p data-i18n="banner.p">Design your room in 2D and 3D — adjust dimensions, openings, and surface materials.</p>
   </div>
-  <a href="/simulator.html" class="btn">Open Simulator →</a>
+  <a href="/simulator.html" class="btn" data-i18n="banner.cta">Open Simulator →</a>
 </div>
 
 <section id="work">
   <div class="work-header">
     <div>
-      <span class="section-label">Portfolio</span>
-      <h2>Recent<br>projects</h2>
+      <span class="section-label" data-i18n="work.label">Portfolio</span>
+      <h2 data-i18n-html="work.h2">Recent<br>projects</h2>
     </div>
-    <p>Drag the handle to reveal the transformation.</p>
+    <p data-i18n="work.hint">Drag the handle to reveal the transformation.</p>
   </div>
 
-  <!-- PROJECT 1 -->
   <div class="project">
     <div class="project-meta">
-      <h3 class="project-title">Modern Bathroom Renovation</h3>
-      <div class="project-details">Residential <span>·</span> Paris <span>·</span> 2025</div>
-    </div>
-
-    <div class="slider-wrap" id="slider1">
-      <img class="slide-before" src="/images/bathroom_before.jpg" alt="Before">
-      <!-- AFTER wrapper — JS sets its width -->
-      <div class="slide-after-wrap" id="after-wrap1">
-        <img class="slide-after" id="after-img1" src="/images/bathroom_after.jpg" alt="After">
+      <h3 class="project-title" data-i18n="p1.title">Elmwood Kitchen Renovation</h3>
+      <div class="project-details">
+        <span data-i18n="p1.type">Residential</span> <span>·</span>
+        <span data-i18n="p1.room">Kitchen</span> <span>·</span> 2024
       </div>
-
-      <div class="slide-divider" id="divider1"></div>
-      <div class="label-before">Before</div>
-      <div class="label-after">After</div>
     </div>
-
+    <div class="slider-wrap" id="slider1">
+      <!-- Replace div below with: <img class="slide-before" src="/images/kitchen-before.jpg" alt="Before"> -->
+      <div class="slide-before placeholder" data-i18n="slider.before">Your "before" photo here</div>
+      <div class="slide-after-wrap" id="after-wrap1">
+        <!-- Replace div below with: <img class="slide-after" id="after-img1" src="/images/kitchen-after.jpg" alt="After"> -->
+        <div class="slide-after placeholder" id="after-img1" data-i18n="slider.after">Your "after" photo here</div>
+      </div>
+      <div class="slide-divider" id="divider1"></div>
+      <div class="label-before" data-i18n="slider.labelBefore">Before</div>
+      <div class="label-after"  data-i18n="slider.labelAfter">After</div>
+    </div>
     <div class="project-description">
-      <p>A complete kitchen overhaul transforming a dated, cramped cooking space into an open, light-filled heart of the home. New cabinetry, island layout, and material upgrades throughout.</p>
+      <p data-i18n="p1.desc">A complete kitchen overhaul transforming a dated, cramped cooking space into an open, light-filled heart of the home. New cabinetry, island layout, and material upgrades throughout.</p>
       <div class="project-stats">
-        <div class="stat"><span class="stat-num">6</span><span class="stat-label">Weeks</span></div>
-        <div class="stat"><span class="stat-num">3×</span><span class="stat-label">More light</span></div>
+        <div class="stat"><span class="stat-num">6</span><span class="stat-label" data-i18n="stat.weeks">Weeks</span></div>
+        <div class="stat"><span class="stat-num">3×</span><span class="stat-label" data-i18n="stat.light">More light</span></div>
       </div>
     </div>
   </div>
 
   <div class="divider"></div>
 
-  <!-- PROJECT 2 -->
   <div class="project" style="margin-top: 80px;">
     <div class="project-meta">
-      <h3 class="project-title">Maplewood Bathroom Refresh</h3>
-      <div class="project-details">Residential <span>·</span> Bathroom <span>·</span> 2024</div>
+      <h3 class="project-title" data-i18n="p2.title">Maplewood Bathroom Refresh</h3>
+      <div class="project-details">
+        <span data-i18n="p2.type">Residential</span> <span>·</span>
+        <span data-i18n="p2.room">Bathroom</span> <span>·</span> 2024
+      </div>
     </div>
-
     <div class="slider-wrap" id="slider2">
-      <div class="slide-before placeholder">Your "before" photo here</div>
+      <div class="slide-before placeholder" data-i18n="slider.before">Your "before" photo here</div>
       <div class="slide-after-wrap" id="after-wrap2">
-        <div class="slide-after placeholder" id="after-img2">Your "after" photo here</div>
+        <div class="slide-after placeholder" id="after-img2" data-i18n="slider.after">Your "after" photo here</div>
       </div>
       <div class="slide-divider" id="divider2"></div>
-      <div class="label-before">Before</div>
-      <div class="label-after">After</div>
+      <div class="label-before" data-i18n="slider.labelBefore">Before</div>
+      <div class="label-after"  data-i18n="slider.labelAfter">After</div>
     </div>
-
     <div class="project-description">
-      <p>A master bathroom reimagined with a walk-in shower, heated flooring, and custom vanity. Every surface was replaced, turning a tired space into a daily retreat.</p>
+      <p data-i18n="p2.desc">A master bathroom reimagined with a walk-in shower, heated flooring, and custom vanity. Every surface was replaced, turning a tired space into a daily retreat.</p>
       <div class="project-stats">
-        <div class="stat"><span class="stat-num">4</span><span class="stat-label">Weeks</span></div>
-        <div class="stat"><span class="stat-num">Full</span><span class="stat-label">Gut &amp; rebuild</span></div>
+        <div class="stat"><span class="stat-num">4</span><span class="stat-label" data-i18n="stat.weeks">Weeks</span></div>
+        <div class="stat"><span class="stat-num">Full</span><span class="stat-label" data-i18n="stat.gut">Gut &amp; rebuild</span></div>
       </div>
     </div>
   </div>
@@ -434,45 +390,143 @@
 
 <section id="contact">
   <div class="contact-left">
-    <span class="section-label">Get in touch</span>
-    <h2>Let's talk about your project</h2>
-    <p>Every renovation starts with a conversation. Tell us about your space and we'll get back to you within one business day.</p>
+    <span class="section-label" data-i18n="contact.label">Get in touch</span>
+    <h2 data-i18n="contact.h2">Let's talk about your project</h2>
+    <p data-i18n="contact.p">Every renovation starts with a conversation. Tell us about your space and we'll get back to you within one business day.</p>
     <div class="contact-info">
-      <a href="tel:+00000000000"><span class="info-label">Phone</span>+1 (000) 000-0000</a>
-      <a href="mailto:hello@renewrenovations.com"><span class="info-label">Email</span>hello@renewrenovations.com</a>
-      <a href="#"><span class="info-label">Area</span>Your city / service area</a>
+      <a href="tel:+00000000000"><span class="info-label" data-i18n="contact.phone">Phone</span>+1 (000) 000-0000</a>
+      <a href="mailto:hello@arkithect.com"><span class="info-label" data-i18n="contact.email">Email</span>hello@arkithect.com</a>
+      <a href="#"><span class="info-label" data-i18n="contact.area">Area</span><span data-i18n="contact.areaVal">Your city / service area</span></a>
     </div>
   </div>
   <form onsubmit="handleSubmit(event)">
     <div class="form-row">
-      <div class="form-group"><label for="fname">Name</label><input type="text" id="fname" placeholder="Your name" required></div>
-      <div class="form-group"><label for="femail">Email</label><input type="email" id="femail" placeholder="your@email.com" required></div>
+      <div class="form-group">
+        <label for="fname" data-i18n="form.name">Name</label>
+        <input type="text" id="fname" data-i18n-placeholder="form.namePh" placeholder="Your name" required>
+      </div>
+      <div class="form-group">
+        <label for="femail" data-i18n="form.email">Email</label>
+        <input type="email" id="femail" placeholder="your@email.com" required>
+      </div>
     </div>
     <div class="form-group">
-      <label for="fproject">Project type</label>
+      <label for="fproject" data-i18n="form.project">Project type</label>
       <select id="fproject">
-        <option value="">Select a space...</option>
-        <option>Kitchen</option><option>Bathroom</option><option>Living room</option><option>Full home</option><option>Other</option>
+        <option value="" data-i18n="form.projectPh">Select a space...</option>
+        <option data-i18n="form.kitchen">Kitchen</option>
+        <option data-i18n="form.bathroom">Bathroom</option>
+        <option data-i18n="form.living">Living room</option>
+        <option data-i18n="form.full">Full home</option>
+        <option data-i18n="form.other">Other</option>
       </select>
     </div>
-    <div class="form-group"><label for="fmessage">Message</label><textarea id="fmessage" placeholder="Tell us about your project..."></textarea></div>
-    <button type="submit" class="btn-submit">Send message</button>
-    <p id="form-success" style="display:none; color:var(--accent); font-size:14px; margin-top:8px;">✓ Message sent! We'll be in touch soon.</p>
+    <div class="form-group">
+      <label for="fmessage" data-i18n="form.message">Message</label>
+      <textarea id="fmessage" data-i18n-placeholder="form.messagePh" placeholder="Tell us about your project..."></textarea>
+    </div>
+    <button type="submit" class="btn-submit" data-i18n="form.submit">Send message</button>
+    <p id="form-success" style="display:none; color:var(--accent); font-size:14px; margin-top:8px;" data-i18n="form.success">✓ Message sent! We'll be in touch soon.</p>
   </form>
 </section>
 
 <footer>
-  <a href="/" class="footer-logo">a<span>RK</span>ithect</a>
-  <p>© 2025 Renew Renovations. All rights reserved.</p>
+  <a href="/" class="footer-logo">a<span class="rk">RK</span>ithect</a>
+  <p>© 2025 aRKithect. <span data-i18n="footer.rights">All rights reserved.</span></p>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <div class="lang-sep"></div>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
 </footer>
 
 <script>
-// ─────────────────────────────────────────────
-//  Continuous before/after slider
-//  Technique: resize the .slide-after-wrap div width in px.
-//  The .slide-after inside always matches the full slider width
-//  so the image never stretches — it just gets revealed or hidden.
-// ─────────────────────────────────────────────
+var TRANSLATIONS = {
+  en: {
+    'nav.work':'Work','nav.contact':'Contact','nav.simulator':'Room Simulator',
+    'hero.label':'Residential Renovations',
+    'hero.h1':'Spaces <em>transformed,</em><br>lives improved.',
+    'hero.p':'We craft thoughtful renovations that respect your home\'s character while elevating every detail. Based locally, working personally.',
+    'hero.cta1':'View our work','hero.cta2':'Try Room Simulator',
+    'banner.h3':'Visualise your renovation before it begins',
+    'banner.p':'Design your room in 2D and 3D — adjust dimensions, openings, and surface materials.',
+    'banner.cta':'Open Simulator →',
+    'work.label':'Portfolio','work.h2':'Recent<br>projects',
+    'work.hint':'Drag the handle to reveal the transformation.',
+    'p1.title':'Elmwood Kitchen Renovation','p1.type':'Residential','p1.room':'Kitchen',
+    'p1.desc':'A complete kitchen overhaul transforming a dated, cramped cooking space into an open, light-filled heart of the home. New cabinetry, island layout, and material upgrades throughout.',
+    'p2.title':'Maplewood Bathroom Refresh','p2.type':'Residential','p2.room':'Bathroom',
+    'p2.desc':'A master bathroom reimagined with a walk-in shower, heated flooring, and custom vanity. Every surface was replaced, turning a tired space into a daily retreat.',
+    'slider.before':'Your "before" photo here','slider.after':'Your "after" photo here',
+    'slider.labelBefore':'Before','slider.labelAfter':'After',
+    'stat.weeks':'Weeks','stat.light':'More light','stat.gut':'Gut & rebuild',
+    'contact.label':'Get in touch','contact.h2':'Let\'s talk about your project',
+    'contact.p':'Every renovation starts with a conversation. Tell us about your space and we\'ll get back to you within one business day.',
+    'contact.phone':'Phone','contact.email':'Email','contact.area':'Area',
+    'contact.areaVal':'Your city / service area',
+    'form.name':'Name','form.namePh':'Your name','form.email':'Email',
+    'form.project':'Project type','form.projectPh':'Select a space...',
+    'form.kitchen':'Kitchen','form.bathroom':'Bathroom','form.living':'Living room',
+    'form.full':'Full home','form.other':'Other',
+    'form.message':'Message','form.messagePh':'Tell us about your project...',
+    'form.submit':'Send message','form.success':'✓ Message sent! We\'ll be in touch soon.',
+    'footer.rights':'All rights reserved.',
+  },
+  fr: {
+    'nav.work':'Réalisations','nav.contact':'Contact','nav.simulator':'Simulateur',
+    'hero.label':'Rénovations Résidentielles',
+    'hero.h1':'Des espaces <em>transformés,</em><br>des vies améliorées.',
+    'hero.p':'Nous créons des rénovations réfléchies qui respectent le caractère de votre maison tout en sublimant chaque détail. Ancré localement, travail personnalisé.',
+    'hero.cta1':'Voir nos réalisations','hero.cta2':'Essayer le simulateur',
+    'banner.h3':'Visualisez votre rénovation avant qu\'elle commence',
+    'banner.p':'Concevez votre pièce en 2D et 3D — ajustez les dimensions, les ouvertures et les matériaux.',
+    'banner.cta':'Ouvrir le simulateur →',
+    'work.label':'Portfolio','work.h2':'Projets<br>récents',
+    'work.hint':'Faites glisser le curseur pour révéler la transformation.',
+    'p1.title':'Rénovation Cuisine Elmwood','p1.type':'Résidentiel','p1.room':'Cuisine',
+    'p1.desc':'Une refonte complète de la cuisine, transformant un espace daté et exigu en un cœur de maison ouvert et lumineux. Nouvelles armoires, îlot central et matériaux premium.',
+    'p2.title':'Réfection Salle de Bain Maplewood','p2.type':'Résidentiel','p2.room':'Salle de bain',
+    'p2.desc':'Une salle de bain principale repensée avec douche à l\'italienne, plancher chauffant et meuble vasque sur mesure. Chaque surface a été remplacée pour créer un véritable havre.',
+    'slider.before':'Votre photo "avant" ici','slider.after':'Votre photo "après" ici',
+    'slider.labelBefore':'Avant','slider.labelAfter':'Après',
+    'stat.weeks':'Semaines','stat.light':'Plus de lumière','stat.gut':'Démolition totale',
+    'contact.label':'Nous contacter','contact.h2':'Parlons de votre projet',
+    'contact.p':'Chaque rénovation commence par une conversation. Parlez-nous de votre espace et nous vous répondrons sous un jour ouvré.',
+    'contact.phone':'Tél.','contact.email':'Email','contact.area':'Zone',
+    'contact.areaVal':'Votre ville / zone d\'intervention',
+    'form.name':'Nom','form.namePh':'Votre nom','form.email':'Email',
+    'form.project':'Type de projet','form.projectPh':'Sélectionnez un espace...',
+    'form.kitchen':'Cuisine','form.bathroom':'Salle de bain','form.living':'Salon',
+    'form.full':'Maison entière','form.other':'Autre',
+    'form.message':'Message','form.messagePh':'Parlez-nous de votre projet...',
+    'form.submit':'Envoyer le message','form.success':'✓ Message envoyé ! Nous vous recontacterons très bientôt.',
+    'footer.rights':'Tous droits réservés.',
+  }
+};
+
+var currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
+  });
+  var t = TRANSLATIONS[lang];
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n-html');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n-placeholder');
+    if (t[key] !== undefined) el.placeholder = t[key];
+  });
+  document.documentElement.lang = lang;
+}
+
 function initSlider(wrapperId, afterWrapId, afterImgId, dividerId) {
   var wrap      = document.getElementById(wrapperId);
   var afterWrap = document.getElementById(afterWrapId);
@@ -480,58 +534,28 @@ function initSlider(wrapperId, afterWrapId, afterImgId, dividerId) {
   var divider   = document.getElementById(dividerId);
   var dragging  = false;
 
-  // Size the after image to always equal the full wrap width
   function sizeAfterImg() {
-    var totalW = wrap.offsetWidth;
-    afterImg.style.width  = totalW + 'px';
+    afterImg.style.width  = wrap.offsetWidth + 'px';
     afterImg.style.height = wrap.offsetHeight + 'px';
   }
-
   function setPos(clientX) {
-    var rect   = wrap.getBoundingClientRect();
-    var x      = clientX - rect.left;
-    var total  = rect.width;
-    // Clamp between 2px and (total - 2px) so handle never disappears
-    var clamped = Math.max(2, Math.min(total - 2, x));
-
-    // Set the after-wrap width in pixels — no percentage rounding artifacts
+    var rect    = wrap.getBoundingClientRect();
+    var clamped = Math.max(2, Math.min(rect.width - 2, clientX - rect.left));
     afterWrap.style.width = clamped + 'px';
-
-    // Move the divider line to match
-    divider.style.left = clamped + 'px';
+    divider.style.left    = clamped + 'px';
   }
 
-  // Mouse
-  wrap.addEventListener('mousedown', function(e) {
-    dragging = true;
-    setPos(e.clientX);
-    e.preventDefault(); // stop text selection while dragging
-  });
-  window.addEventListener('mousemove', function(e) {
-    if (dragging) setPos(e.clientX);
-  });
-  window.addEventListener('mouseup', function() {
-    dragging = false;
-  });
+  wrap.addEventListener('mousedown', function(e) { dragging = true; setPos(e.clientX); e.preventDefault(); });
+  window.addEventListener('mousemove', function(e) { if (dragging) setPos(e.clientX); });
+  window.addEventListener('mouseup', function() { dragging = false; });
+  wrap.addEventListener('touchstart', function(e) { dragging = true; setPos(e.touches[0].clientX); }, { passive: true });
+  window.addEventListener('touchmove', function(e) { if (dragging) setPos(e.touches[0].clientX); }, { passive: true });
+  window.addEventListener('touchend', function() { dragging = false; });
 
-  // Touch
-  wrap.addEventListener('touchstart', function(e) {
-    dragging = true;
-    setPos(e.touches[0].clientX);
-  }, { passive: true });
-  window.addEventListener('touchmove', function(e) {
-    if (dragging) setPos(e.touches[0].clientX);
-  }, { passive: true });
-  window.addEventListener('touchend', function() {
-    dragging = false;
-  });
-
-  // Init + keep sized on resize
   sizeAfterImg();
   setPos(wrap.getBoundingClientRect().left + wrap.offsetWidth / 2);
   window.addEventListener('resize', function() {
     sizeAfterImg();
-    // Re-centre divider on resize
     setPos(wrap.getBoundingClientRect().left + wrap.offsetWidth / 2);
   });
 }
@@ -539,23 +563,16 @@ function initSlider(wrapperId, afterWrapId, afterImgId, dividerId) {
 initSlider('slider1', 'after-wrap1', 'after-img1', 'divider1');
 initSlider('slider2', 'after-wrap2', 'after-img2', 'divider2');
 
-// ─── Contact form ───────────────────────────
 function handleSubmit(e) {
   e.preventDefault();
   document.getElementById('form-success').style.display = 'block';
   e.target.reset();
-  setTimeout(function() {
-    document.getElementById('form-success').style.display = 'none';
-  }, 4000);
+  setTimeout(function() { document.getElementById('form-success').style.display = 'none'; }, 4000);
 }
 
-// ─── Scroll fade-in ─────────────────────────
 var observer = new IntersectionObserver(function(entries) {
   entries.forEach(function(e) {
-    if (e.isIntersecting) {
-      e.target.style.opacity   = '1';
-      e.target.style.transform = 'translateY(0)';
-    }
+    if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
   });
 }, { threshold: 0.1 });
 
