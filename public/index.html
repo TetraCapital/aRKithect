@@ -70,27 +70,59 @@
   }
   .lang-btn.active { background: var(--black); color: var(--off-white); }
   .lang-btn:not(.active):hover { color: var(--black); }
-  .lang-sep { width: 1px; height: 20px; background: var(--line); }
+  .lang-sep { width: 1px; height: 20px; background: var(--line); flex-shrink: 0; }
   .lang-flag { font-size: 15px; line-height: 1; }
 
+  /* HERO */
   .hero {
     min-height: 100vh; display: flex; align-items: center;
-    padding: 140px 48px 80px; position: relative;
+    padding: 140px 48px 80px; position: relative; overflow: hidden;
   }
-  .hero-inner { max-width: 680px; }
+  .hero-inner { max-width: 38%; position: relative; z-index: 2; }
   .hero-label {
     font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
     color: var(--accent); margin-bottom: 28px;
   }
   .hero h1 {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(52px, 7vw, 96px); font-weight: 300;
+    font-size: clamp(42px, 5vw, 80px); font-weight: 300;
     line-height: 1.02; letter-spacing: -0.01em;
     color: var(--black); margin-bottom: 32px;
   }
   .hero h1 em { font-style: italic; color: var(--accent); }
-  .hero p { font-size: 17px; color: var(--mid); max-width: 460px; line-height: 1.7; margin-bottom: 48px; }
+  .hero p { font-size: 17px; color: var(--mid); max-width: 400px; line-height: 1.7; margin-bottom: 48px; }
   .hero-btns { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+
+  /* AUTO-SCROLLING PHOTO STRIP in hero right 2/3 */
+  .hero-gallery {
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 62%;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, black 0%, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 0%, black 85%, transparent 100%);
+  }
+  .hero-gallery-track {
+    display: flex;
+    height: 100%;
+    gap: 12px;
+    animation: galleryScroll 28s linear infinite;
+    will-change: transform;
+  }
+  .hero-gallery-track:hover { animation-play-state: paused; }
+  .hero-gallery-track img {
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+    flex-shrink: 0;
+    border-radius: 0;
+    filter: brightness(0.88);
+  }
+  @keyframes galleryScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
   .btn {
     display: inline-block; padding: 16px 40px;
     background: var(--black); color: var(--off-white); text-decoration: none;
@@ -105,12 +137,6 @@
     border: 1px solid var(--black); transition: background 0.25s, color 0.25s;
   }
   .btn-outline:hover { background: var(--black); color: var(--off-white); }
-  .hero-deco {
-    position: absolute; right: 48px; top: 50%; transform: translateY(-50%);
-    font-family: 'Cormorant Garamond', serif; font-size: 200px; font-weight: 300;
-    color: transparent; -webkit-text-stroke: 1px var(--line);
-    user-select: none; pointer-events: none; line-height: 1;
-  }
 
   .sim-banner {
     margin: 0 48px; padding: 32px 40px; background: var(--black);
@@ -147,6 +173,7 @@
   .project-details { font-size: 13px; color: var(--mid); letter-spacing: 0.05em; }
   .project-details span { margin: 0 8px; color: var(--line); }
 
+  /* SLIDER */
   .slider-wrap {
     position: relative; width: 100%; max-width: 900px;
     aspect-ratio: 16/9; overflow: hidden;
@@ -155,12 +182,6 @@
   .slide-before {
     position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: cover; display: block;
-  }
-  .slide-before.placeholder {
-    background: linear-gradient(135deg, #d4c9b8 0%, #b8a99a 50%, #a09080 100%);
-    display: flex; align-items: center; justify-content: center;
-    color: rgba(255,255,255,0.5);
-    font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.15em;
   }
   .slide-after-wrap {
     position: absolute; top: 0; left: 0; bottom: 0;
@@ -171,15 +192,14 @@
     object-fit: cover; display: block;
   }
   .slide-after.placeholder {
-    background: linear-gradient(135deg, #e8e4dc 0%, #d0c8bc 50%, #c8bfb0 100%);
+    background: #1a1a18;
     display: flex; align-items: center; justify-content: center;
-    color: rgba(0,0,0,0.25);
-    font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.15em;
   }
   .slide-divider {
     position: absolute; top: 0; bottom: 0; left: 50%;
     width: 3px; background: white;
-    transform: translateX(-50%); pointer-events: none; z-index: 20;
+    /* NO transform here — JS sets left in px directly */
+    pointer-events: none; z-index: 20;
     box-shadow: 0 0 8px rgba(0,0,0,0.25);
   }
   .slide-divider::after {
@@ -201,6 +221,21 @@
   .label-before { left: 16px; }
   .label-after  { right: 16px; }
 
+  .coming-soon-overlay {
+    position: absolute; inset: 0; z-index: 5;
+    background: rgba(17,17,16,0.55); backdrop-filter: blur(2px);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 8px;
+  }
+  .coming-soon-overlay span:first-child {
+    font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500;
+  }
+  .coming-soon-overlay span:last-child {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300; color: white; letter-spacing: 0.05em;
+  }
+
   .project-description {
     margin-top: 28px; max-width: 900px;
     display: flex; gap: 80px; align-items: flex-start;
@@ -216,6 +251,7 @@
 
   .divider { width: calc(100% - 96px); height: 1px; background: var(--line); margin: 0 48px; }
 
+  /* CONTACT */
   #contact {
     padding: 100px 48px; display: grid;
     grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
@@ -262,22 +298,6 @@
   }
   .footer-logo .rk { color: var(--accent); font-weight: 700; }
 
-  .coming-soon-overlay {
-    position: absolute; inset: 0; z-index: 5;
-    background: rgba(17,17,16,0.55);
-    backdrop-filter: blur(2px);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 8px;
-  }
-  .coming-soon-overlay span:first-child {
-    font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
-    color: var(--accent); font-weight: 500;
-  }
-  .coming-soon-overlay span:last-child {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px; font-weight: 300; color: white; letter-spacing: 0.05em;
-  }
-
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(30px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -290,8 +310,10 @@
   @media (max-width: 768px) {
     nav { padding: 20px 24px; flex-wrap: wrap; gap: 12px; }
     .nav-sim-btn { display: none; }
-    .hero, #work, #contact { padding-left: 24px; padding-right: 24px; }
-    .hero-deco { display: none; }
+    .hero { padding-left: 24px; padding-right: 24px; }
+    .hero-inner { max-width: 100%; }
+    .hero-gallery { display: none; }
+    #work, #contact { padding-left: 24px; padding-right: 24px; }
     .sim-banner { margin: 0 24px; }
     .work-header { flex-direction: column; gap: 16px; }
     .work-header p { text-align: left; }
@@ -312,9 +334,9 @@
     <a href="#contact" data-i18n="nav.contact">Contact</a>
     <a href="/simulator.html" class="nav-sim-btn" data-i18n="nav.simulator">Room Simulator</a>
     <div class="lang-toggle">
-      <button class="lang-btn active" onclick="setLang('en')"><span class="lang-flag">&#x1F1EC;&#x1F1E7;</span>EN</button>
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')"><span class="lang-flag">&#x1F1EC;&#x1F1E7;</span>EN</button>
       <div class="lang-sep"></div>
-      <button class="lang-btn" onclick="setLang('fr')"><span class="lang-flag">&#x1F1EB;&#x1F1F7;</span>FR</button>
+      <button class="lang-btn" data-lang="fr" onclick="setLang('fr')"><span class="lang-flag">&#x1F1EB;&#x1F1F7;</span>FR</button>
     </div>
   </div>
 </nav>
@@ -329,7 +351,23 @@
       <a href="/simulator.html" class="btn-outline" data-i18n="hero.cta2">Try Room Simulator</a>
     </div>
   </div>
-  <div class="hero-deco" aria-hidden="true">RK</div>
+
+  <!-- Auto-scrolling after photos strip — right 2/3 of hero -->
+  <div class="hero-gallery">
+    <div class="hero-gallery-track" id="galleryTrack">
+      <img src="/images/bathroom_after.jpg" alt="Bathroom renovation">
+      <img src="/images/bathroom_before.jpg" alt="Bathroom before">
+      <img src="/images/bedroom_before.jpg" alt="Bedroom">
+      <img src="/images/bedroom_before2.jpg" alt="Bedroom 2">
+      <img src="/images/livingroom_before.jpg" alt="Living room">
+      <!-- Duplicated for seamless loop -->
+      <img src="/images/bathroom_after.jpg" alt="Bathroom renovation">
+      <img src="/images/bathroom_before.jpg" alt="Bathroom before">
+      <img src="/images/bedroom_before.jpg" alt="Bedroom">
+      <img src="/images/bedroom_before2.jpg" alt="Bedroom 2">
+      <img src="/images/livingroom_before.jpg" alt="Living room">
+    </div>
+  </div>
 </section>
 
 <div class="sim-banner">
@@ -369,8 +407,8 @@
     <div class="project-description">
       <p data-i18n="p1.desc">A full bathroom transformation — from tired tiles and dated fixtures to a clean, spa-like finish. New walk-in shower, custom vanity, and floor-to-ceiling tiling throughout.</p>
       <div class="project-stats">
-        <div class="stat"><span class="stat-num">6</span><span class="stat-label" data-i18n="stat.weeks">Weeks</span></div>
-        <div class="stat"><span class="stat-num">Est.</span><span class="stat-label" data-i18n="stat.completion">Completion Q2</span></div>
+        <div class="stat"><span class="stat-num">4</span><span class="stat-label" data-i18n="stat.weeks">Weeks</span></div>
+        <div class="stat"><span class="stat-num">Full</span><span class="stat-label" data-i18n="stat.gut">Gut &amp; rebuild</span></div>
       </div>
     </div>
   </div>
@@ -388,7 +426,7 @@
     <div class="slider-wrap" id="slider2">
       <img class="slide-before" src="/images/bedroom_before.jpg" alt="Bedroom before renovation">
       <div class="slide-after-wrap" id="after-wrap2">
-        <div class="slide-after placeholder" id="after-img2" style="background:#1a1a18;">
+        <div class="slide-after placeholder" id="after-img2">
           <div class="coming-soon-overlay">
             <span data-i18n="comingSoon.label">In progress</span>
             <span data-i18n="comingSoon.text">Coming soon</span>
@@ -431,23 +469,62 @@
         <input type="email" id="femail" placeholder="your@email.com" required>
       </div>
     </div>
-    <div class="form-group">
-      <label for="fproject" data-i18n="form.project">Project type</label>
-      <select id="fproject">
-        <option value="" data-i18n="form.projectPh">Select a space...</option>
-        <option data-i18n="form.kitchen">Kitchen</option>
-        <option data-i18n="form.bathroom">Bathroom</option>
-        <option data-i18n="form.living">Living room</option>
-        <option data-i18n="form.full">Full home</option>
-        <option data-i18n="form.other">Other</option>
-      </select>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="fproject" data-i18n="form.project">Space</label>
+        <select id="fproject">
+          <option value="" data-i18n="form.projectPh">Select a space...</option>
+          <option data-i18n="form.kitchen">Kitchen</option>
+          <option data-i18n="form.bathroom">Bathroom</option>
+          <option data-i18n="form.living">Living room</option>
+          <option data-i18n="form.full">Full home</option>
+          <option data-i18n="form.other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="fbudget" data-i18n="form.budget">Budget</label>
+        <select id="fbudget">
+          <option value="" data-i18n="form.budgetPh">Approx. budget...</option>
+          <option data-i18n="form.budget1">Under 20k</option>
+          <option data-i18n="form.budget2">20k – 50k</option>
+          <option data-i18n="form.budget3">50k – 100k</option>
+          <option data-i18n="form.budget4">100k – 200k</option>
+          <option data-i18n="form.budget5">200k+</option>
+          <option data-i18n="form.budgetTbd">To be discussed</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="ftimeline" data-i18n="form.timeline">Start date</label>
+        <select id="ftimeline">
+          <option value="" data-i18n="form.timelinePh">When to start...</option>
+          <option data-i18n="form.timeline1">As soon as possible</option>
+          <option data-i18n="form.timeline2">Within 3 months</option>
+          <option data-i18n="form.timeline3">3 – 6 months</option>
+          <option data-i18n="form.timeline4">6 – 12 months</option>
+          <option data-i18n="form.timeline5">Just exploring</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="fstyle" data-i18n="form.style">Style preference</label>
+        <select id="fstyle">
+          <option value="" data-i18n="form.stylePh">Design style...</option>
+          <option data-i18n="form.style1">Modern / Minimalist</option>
+          <option data-i18n="form.style2">Scandinavian</option>
+          <option data-i18n="form.style3">Industrial</option>
+          <option data-i18n="form.style4">Classic / Haussmann</option>
+          <option data-i18n="form.style5">Warm / Natural materials</option>
+          <option data-i18n="form.style6">Open to suggestions</option>
+        </select>
+      </div>
     </div>
     <div class="form-group">
-      <label for="fmessage" data-i18n="form.message">Message</label>
-      <textarea id="fmessage" data-i18n-placeholder="form.messagePh" placeholder="Tell us about your project..."></textarea>
+      <label for="fdesc" data-i18n="form.desc">Project description</label>
+      <textarea id="fdesc" data-i18n-placeholder="form.descPh" placeholder="Describe the current state of the space and what you'd like to achieve..."></textarea>
     </div>
     <button type="submit" class="btn-submit" data-i18n="form.submit">Send message</button>
-    <p id="form-success" style="display:none; color:var(--accent); font-size:14px; margin-top:8px;" data-i18n="form.success">✓ Message sent! We'll be in touch soon.</p>
+    <p id="form-success" style="display:none; color:var(--accent); font-size:14px; margin-top:8px;" data-i18n="form.success">Message sent! We'll be in touch soon.</p>
   </form>
 </section>
 
@@ -455,9 +532,9 @@
   <a href="/" class="footer-logo">a<span class="rk">RK</span>ithect</a>
   <p>© 2025 aRKithect. <span data-i18n="footer.rights">All rights reserved.</span></p>
   <div class="lang-toggle">
-    <button class="lang-btn active" onclick="setLang('en')"><span class="lang-flag">&#x1F1EC;&#x1F1E7;</span>EN</button>
+    <button class="lang-btn active" data-lang="en" onclick="setLang('en')"><span class="lang-flag">&#x1F1EC;&#x1F1E7;</span>EN</button>
     <div class="lang-sep"></div>
-    <button class="lang-btn" onclick="setLang('fr')"><span class="lang-flag">&#x1F1EB;&#x1F1F7;</span>FR</button>
+    <button class="lang-btn" data-lang="fr" onclick="setLang('fr')"><span class="lang-flag">&#x1F1EB;&#x1F1F7;</span>FR</button>
   </div>
 </footer>
 
@@ -478,7 +555,7 @@ var TRANSLATIONS = {
     'p1.desc':'A full bathroom transformation — from tired tiles and dated fixtures to a clean, spa-like finish. New walk-in shower, custom vanity, and floor-to-ceiling tiling throughout.',
     'p2.title':'Bedroom Renovation','p2.type':'Residential','p2.room':'Bedroom',
     'p2.desc':'A complete bedroom overhaul currently underway — new flooring, bespoke joinery, and a full repaint. After photos coming upon completion.',
-    'slider.before':'Your "before" photo here','slider.after':'Your "after" photo here',
+    'slider.before':'Before photo','slider.after':'After photo',
     'slider.labelBefore':'Before','slider.labelAfter':'After',
     'stat.weeks':'Weeks','stat.light':'More light','stat.gut':'Gut & rebuild','stat.completion':'Completion Q2',
     'comingSoon.label':'In progress','comingSoon.text':'Coming soon',
@@ -491,12 +568,12 @@ var TRANSLATIONS = {
     'form.kitchen':'Kitchen','form.bathroom':'Bathroom','form.living':'Living room',
     'form.full':'Full home','form.other':'Other',
     'form.budget':'Budget','form.budgetPh':'Approx. budget...',
-    'form.budget1':'Under 20k','form.budget2':'20k - 50k',
-    'form.budget3':'50k - 100k','form.budget4':'100k - 200k',
+    'form.budget1':'Under 20k','form.budget2':'20k – 50k',
+    'form.budget3':'50k – 100k','form.budget4':'100k – 200k',
     'form.budget5':'200k+','form.budgetTbd':'To be discussed',
     'form.timeline':'Start date','form.timelinePh':'When to start...',
     'form.timeline1':'As soon as possible','form.timeline2':'Within 3 months',
-    'form.timeline3':'3 - 6 months','form.timeline4':'6 - 12 months',
+    'form.timeline3':'3 – 6 months','form.timeline4':'6 – 12 months',
     'form.timeline5':'Just exploring',
     'form.style':'Style preference','form.stylePh':'Design style...',
     'form.style1':'Modern / Minimalist','form.style2':'Scandinavian',
@@ -522,7 +599,7 @@ var TRANSLATIONS = {
     'p1.desc':'Une transformation complète — de carrelages usés et équipements datés à une finition épurée et apaisante. Douche à l\'italienne, meuble vasque sur mesure et faïence du sol au plafond.',
     'p2.title':'Rénovation Chambre','p2.type':'Résidentiel','p2.room':'Chambre',
     'p2.desc':'Un chantier de chambre en cours — nouveau parquet, menuiserie sur mesure et peinture complète. Photos disponibles à la livraison.',
-    'slider.before':'Votre photo "avant" ici','slider.after':'Votre photo "après" ici',
+    'slider.before':'Photo avant','slider.after':'Photo après',
     'slider.labelBefore':'Avant','slider.labelAfter':'Après',
     'stat.weeks':'Semaines','stat.light':'Plus de lumière','stat.gut':'Démolition totale','stat.completion':'Livraison T2',
     'comingSoon.label':'En cours','comingSoon.text':'Bientôt disponible',
@@ -535,12 +612,12 @@ var TRANSLATIONS = {
     'form.kitchen':'Cuisine','form.bathroom':'Salle de bain','form.living':'Salon',
     'form.full':'Maison entière','form.other':'Autre',
     'form.budget':'Budget','form.budgetPh':'Budget approximatif...',
-    'form.budget1':'Moins de 20k','form.budget2':'20k - 50k',
-    'form.budget3':'50k - 100k','form.budget4':'100k - 200k',
+    'form.budget1':'Moins de 20k','form.budget2':'20k – 50k',
+    'form.budget3':'50k – 100k','form.budget4':'100k – 200k',
     'form.budget5':'200k+','form.budgetTbd':'À définir ensemble',
     'form.timeline':'Date de début','form.timelinePh':'Quand commencer...',
     'form.timeline1':'Dès que possible','form.timeline2':'Dans les 3 mois',
-    'form.timeline3':'3 - 6 mois','form.timeline4':'6 - 12 mois',
+    'form.timeline3':'3 – 6 mois','form.timeline4':'6 – 12 mois',
     'form.timeline5':'Je me renseigne',
     'form.style':'Style souhaité','form.stylePh':'Style décoratif...',
     'form.style1':'Moderne / Minimaliste','form.style2':'Scandinave',
@@ -557,8 +634,9 @@ var currentLang = 'en';
 
 function setLang(lang) {
   currentLang = lang;
+  // Use data-lang attribute — textContent includes emoji so comparison fails
   document.querySelectorAll('.lang-btn').forEach(function(btn) {
-    btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
   });
   var t = TRANSLATIONS[lang];
   document.querySelectorAll('[data-i18n]').forEach(function(el) {
@@ -591,7 +669,8 @@ function initSlider(wrapperId, afterWrapId, afterImgId, dividerId) {
     var rect    = wrap.getBoundingClientRect();
     var clamped = Math.max(2, Math.min(rect.width - 2, clientX - rect.left));
     afterWrap.style.width = clamped + 'px';
-    divider.style.left    = clamped + 'px';
+    // Set left directly in px — no transform on .slide-divider so this is exact
+    divider.style.left = clamped + 'px';
   }
 
   wrap.addEventListener('mousedown', function(e) { dragging = true; setPos(e.clientX); e.preventDefault(); });
