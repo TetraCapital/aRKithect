@@ -312,9 +312,9 @@
     <a href="#contact" data-i18n="nav.contact">Contact</a>
     <a href="/simulator.html" class="nav-sim-btn" data-i18n="nav.simulator">Room Simulator</a>
     <div class="lang-toggle">
-      <button class="lang-btn active" onclick="setLang('en')"><span class="lang-flag">&#x1F1EC;&#x1F1E7;</span>EN</button>
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')"><span class="lang-flag">&#x1F1EC;&#x1F1E7;</span>EN</button>
       <div class="lang-sep"></div>
-      <button class="lang-btn" onclick="setLang('fr')"><span class="lang-flag">&#x1F1EB;&#x1F1F7;</span>FR</button>
+      <button class="lang-btn" data-lang="fr" onclick="setLang('fr')"><span class="lang-flag">&#x1F1EB;&#x1F1F7;</span>FR</button>
     </div>
   </div>
 </nav>
@@ -431,20 +431,59 @@
         <input type="email" id="femail" placeholder="your@email.com" required>
       </div>
     </div>
-    <div class="form-group">
-      <label for="fproject" data-i18n="form.project">Project type</label>
-      <select id="fproject">
-        <option value="" data-i18n="form.projectPh">Select a space...</option>
-        <option data-i18n="form.kitchen">Kitchen</option>
-        <option data-i18n="form.bathroom">Bathroom</option>
-        <option data-i18n="form.living">Living room</option>
-        <option data-i18n="form.full">Full home</option>
-        <option data-i18n="form.other">Other</option>
-      </select>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="fproject" data-i18n="form.project">Space</label>
+        <select id="fproject">
+          <option value="" data-i18n="form.projectPh">Select a space...</option>
+          <option data-i18n="form.kitchen">Kitchen</option>
+          <option data-i18n="form.bathroom">Bathroom</option>
+          <option data-i18n="form.living">Living room</option>
+          <option data-i18n="form.full">Full home</option>
+          <option data-i18n="form.other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="fbudget" data-i18n="form.budget">Budget</label>
+        <select id="fbudget">
+          <option value="" data-i18n="form.budgetPh">Approx. budget...</option>
+          <option data-i18n="form.budget1">Under 20k</option>
+          <option data-i18n="form.budget2">20k - 50k</option>
+          <option data-i18n="form.budget3">50k - 100k</option>
+          <option data-i18n="form.budget4">100k - 200k</option>
+          <option data-i18n="form.budget5">200k+</option>
+          <option data-i18n="form.budgetTbd">To be discussed</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="ftimeline" data-i18n="form.timeline">Start date</label>
+        <select id="ftimeline">
+          <option value="" data-i18n="form.timelinePh">When to start...</option>
+          <option data-i18n="form.timeline1">As soon as possible</option>
+          <option data-i18n="form.timeline2">Within 3 months</option>
+          <option data-i18n="form.timeline3">3 - 6 months</option>
+          <option data-i18n="form.timeline4">6 - 12 months</option>
+          <option data-i18n="form.timeline5">Just exploring</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="fstyle" data-i18n="form.style">Style preference</label>
+        <select id="fstyle">
+          <option value="" data-i18n="form.stylePh">Design style...</option>
+          <option data-i18n="form.style1">Modern / Minimalist</option>
+          <option data-i18n="form.style2">Scandinavian</option>
+          <option data-i18n="form.style3">Industrial</option>
+          <option data-i18n="form.style4">Classic / Haussmann</option>
+          <option data-i18n="form.style5">Warm / Natural materials</option>
+          <option data-i18n="form.style6">Open to suggestions</option>
+        </select>
+      </div>
     </div>
     <div class="form-group">
-      <label for="fmessage" data-i18n="form.message">Message</label>
-      <textarea id="fmessage" data-i18n-placeholder="form.messagePh" placeholder="Tell us about your project..."></textarea>
+      <label for="fdesc" data-i18n="form.desc">Project description</label>
+      <textarea id="fdesc" data-i18n-placeholder="form.descPh" placeholder="Describe the current state of the space and what you'd like to achieve..."></textarea>
     </div>
     <button type="submit" class="btn-submit" data-i18n="form.submit">Send message</button>
     <p id="form-success" style="display:none; color:var(--accent); font-size:14px; margin-top:8px;" data-i18n="form.success">✓ Message sent! We'll be in touch soon.</p>
@@ -455,9 +494,9 @@
   <a href="/" class="footer-logo">a<span class="rk">RK</span>ithect</a>
   <p>© 2025 aRKithect. <span data-i18n="footer.rights">All rights reserved.</span></p>
   <div class="lang-toggle">
-    <button class="lang-btn active" onclick="setLang('en')"><span class="lang-flag">&#x1F1EC;&#x1F1E7;</span>EN</button>
+    <button class="lang-btn active" data-lang="en" onclick="setLang('en')"><span class="lang-flag">&#x1F1EC;&#x1F1E7;</span>EN</button>
     <div class="lang-sep"></div>
-    <button class="lang-btn" onclick="setLang('fr')"><span class="lang-flag">&#x1F1EB;&#x1F1F7;</span>FR</button>
+    <button class="lang-btn" data-lang="fr" onclick="setLang('fr')"><span class="lang-flag">&#x1F1EB;&#x1F1F7;</span>FR</button>
   </div>
 </footer>
 
@@ -576,7 +615,7 @@ var currentLang = 'en';
 function setLang(lang) {
   currentLang = lang;
   document.querySelectorAll('.lang-btn').forEach(function(btn) {
-    btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
   });
   var t = TRANSLATIONS[lang];
   document.querySelectorAll('[data-i18n]').forEach(function(el) {
