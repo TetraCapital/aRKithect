@@ -262,6 +262,22 @@
   }
   .footer-logo .rk { color: var(--accent); font-weight: 700; }
 
+  .coming-soon-overlay {
+    position: absolute; inset: 0; z-index: 5;
+    background: rgba(17,17,16,0.55);
+    backdrop-filter: blur(2px);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 8px;
+  }
+  .coming-soon-overlay span:first-child {
+    font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500;
+  }
+  .coming-soon-overlay span:last-child {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300; color: white; letter-spacing: 0.05em;
+  }
+
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(30px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -335,28 +351,26 @@
 
   <div class="project">
     <div class="project-meta">
-      <h3 class="project-title" data-i18n="p1.title">Elmwood Kitchen Renovation</h3>
+      <h3 class="project-title" data-i18n="p1.title">Bathroom Renovation</h3>
       <div class="project-details">
         <span data-i18n="p1.type">Residential</span> <span>·</span>
-        <span data-i18n="p1.room">Kitchen</span> <span>·</span> 2024
+        <span data-i18n="p1.room">Bathroom</span> <span>·</span> 2024
       </div>
     </div>
     <div class="slider-wrap" id="slider1">
-      <!-- Replace div below with: <img class="slide-before" src="/images/kitchen-before.jpg" alt="Before"> -->
-      <div class="slide-before placeholder" data-i18n="slider.before">Your "before" photo here</div>
+      <img class="slide-before" src="/images/bathroom_before.jpg" alt="Bathroom before renovation">
       <div class="slide-after-wrap" id="after-wrap1">
-        <!-- Replace div below with: <img class="slide-after" id="after-img1" src="/images/kitchen-after.jpg" alt="After"> -->
-        <div class="slide-after placeholder" id="after-img1" data-i18n="slider.after">Your "after" photo here</div>
+        <img class="slide-after" id="after-img1" src="/images/bathroom_after.jpg" alt="Bathroom after renovation">
       </div>
       <div class="slide-divider" id="divider1"></div>
       <div class="label-before" data-i18n="slider.labelBefore">Before</div>
       <div class="label-after"  data-i18n="slider.labelAfter">After</div>
     </div>
     <div class="project-description">
-      <p data-i18n="p1.desc">A complete kitchen overhaul transforming a dated, cramped cooking space into an open, light-filled heart of the home. New cabinetry, island layout, and material upgrades throughout.</p>
+      <p data-i18n="p1.desc">A full bathroom transformation — from tired tiles and dated fixtures to a clean, spa-like finish. New walk-in shower, custom vanity, and floor-to-ceiling tiling throughout.</p>
       <div class="project-stats">
         <div class="stat"><span class="stat-num">6</span><span class="stat-label" data-i18n="stat.weeks">Weeks</span></div>
-        <div class="stat"><span class="stat-num">3×</span><span class="stat-label" data-i18n="stat.light">More light</span></div>
+        <div class="stat"><span class="stat-num">Est.</span><span class="stat-label" data-i18n="stat.completion">Completion Q2</span></div>
       </div>
     </div>
   </div>
@@ -365,26 +379,31 @@
 
   <div class="project" style="margin-top: 80px;">
     <div class="project-meta">
-      <h3 class="project-title" data-i18n="p2.title">Maplewood Bathroom Refresh</h3>
+      <h3 class="project-title" data-i18n="p2.title">Bedroom Renovation</h3>
       <div class="project-details">
         <span data-i18n="p2.type">Residential</span> <span>·</span>
-        <span data-i18n="p2.room">Bathroom</span> <span>·</span> 2024
+        <span data-i18n="p2.room">Bedroom</span> <span>·</span> 2025
       </div>
     </div>
     <div class="slider-wrap" id="slider2">
-      <div class="slide-before placeholder" data-i18n="slider.before">Your "before" photo here</div>
+      <img class="slide-before" src="/images/bedroom_before.jpg" alt="Bedroom before renovation">
       <div class="slide-after-wrap" id="after-wrap2">
-        <div class="slide-after placeholder" id="after-img2" data-i18n="slider.after">Your "after" photo here</div>
+        <div class="slide-after placeholder" id="after-img2" style="background:#1a1a18;">
+          <div class="coming-soon-overlay">
+            <span data-i18n="comingSoon.label">In progress</span>
+            <span data-i18n="comingSoon.text">Coming soon</span>
+          </div>
+        </div>
       </div>
       <div class="slide-divider" id="divider2"></div>
       <div class="label-before" data-i18n="slider.labelBefore">Before</div>
       <div class="label-after"  data-i18n="slider.labelAfter">After</div>
     </div>
     <div class="project-description">
-      <p data-i18n="p2.desc">A master bathroom reimagined with a walk-in shower, heated flooring, and custom vanity. Every surface was replaced, turning a tired space into a daily retreat.</p>
+      <p data-i18n="p2.desc">A complete bedroom overhaul currently underway — new flooring, bespoke joinery, and a full repaint. After photos coming upon completion.</p>
       <div class="project-stats">
-        <div class="stat"><span class="stat-num">4</span><span class="stat-label" data-i18n="stat.weeks">Weeks</span></div>
-        <div class="stat"><span class="stat-num">Full</span><span class="stat-label" data-i18n="stat.gut">Gut &amp; rebuild</span></div>
+        <div class="stat"><span class="stat-num">6</span><span class="stat-label" data-i18n="stat.weeks">Weeks</span></div>
+        <div class="stat"><span class="stat-num">Est.</span><span class="stat-label" data-i18n="stat.completion">Completion Q2</span></div>
       </div>
     </div>
   </div>
@@ -473,6 +492,15 @@ var TRANSLATIONS = {
     'form.message':'Message','form.messagePh':'Tell us about your project...',
     'form.submit':'Send message','form.success':'✓ Message sent! We\'ll be in touch soon.',
     'footer.rights':'All rights reserved.',
+    'comingSoon.label':'In progress',
+    'comingSoon.text':'Coming soon',
+    'p1.title':'Bathroom Renovation',
+    'p1.room':'Bathroom',
+    'p1.desc':'A full bathroom transformation — from tired tiles and dated fixtures to a clean, spa-like finish. New walk-in shower, custom vanity, and floor-to-ceiling tiling throughout.',
+    'p2.title':'Bedroom Renovation',
+    'p2.room':'Bedroom',
+    'p2.desc':'A complete bedroom overhaul currently underway — new flooring, bespoke joinery, and a full repaint. After photos coming upon completion.',
+    'stat.completion':'Completion Q2',
     'form.budget':'Budget','form.budgetPh':'Approx. budget...',
     'form.budget1':'Under 20k','form.budget2':'20k - 50k',
     'form.budget3':'50k - 100k','form.budget4':'100k - 200k',
@@ -517,6 +545,15 @@ var TRANSLATIONS = {
     'form.message':'Message','form.messagePh':'Parlez-nous de votre projet...',
     'form.submit':'Envoyer le message','form.success':'✓ Message envoyé ! Nous vous recontacterons très bientôt.',
     'footer.rights':'Tous droits réservés.',
+    'comingSoon.label':'En cours',
+    'comingSoon.text':'Bientôt disponible',
+    'p1.title':'Rénovation Salle de Bain',
+    'p1.room':'Salle de bain',
+    'p1.desc':'Une transformation complète de salle de bain — de carrelages usés et équipements datés à une finition épurée et apaisante. Douche à l'italienne, meuble vasque sur mesure et faïence du sol au plafond.',
+    'p2.title':'Rénovation Chambre',
+    'p2.room':'Chambre',
+    'p2.desc':'Un chantier de chambre en cours — nouveau parquet, menuiserie sur mesure et peinture complète. Photos après travaux disponibles à la livraison.',
+    'stat.completion':'Livraison T2',
     'form.budget':'Budget','form.budgetPh':'Budget approximatif...',
     'form.budget1':'Moins de 20k','form.budget2':'20k - 50k',
     'form.budget3':'50k - 100k','form.budget4':'100k - 200k',
