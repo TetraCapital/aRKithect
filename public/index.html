@@ -66,10 +66,12 @@
     text-transform: uppercase; background: transparent; color: var(--mid);
     border: none; cursor: pointer; font-family: 'DM Sans', sans-serif;
     font-weight: 400; transition: all 0.15s;
+    display: flex; align-items: center; gap: 6px;
   }
   .lang-btn.active { background: var(--black); color: var(--off-white); }
   .lang-btn:not(.active):hover { color: var(--black); }
   .lang-sep { width: 1px; height: 20px; background: var(--line); }
+  .lang-flag { font-size: 15px; line-height: 1; }
 
   .hero {
     min-height: 100vh; display: flex; align-items: center;
@@ -294,9 +296,9 @@
     <a href="#contact" data-i18n="nav.contact">Contact</a>
     <a href="/simulator.html" class="nav-sim-btn" data-i18n="nav.simulator">Room Simulator</a>
     <div class="lang-toggle">
-      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn active" onclick="setLang('en')"><span class="lang-flag">&#x1F1EC;&#x1F1E7;</span>EN</button>
       <div class="lang-sep"></div>
-      <button class="lang-btn" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" onclick="setLang('fr')"><span class="lang-flag">&#x1F1EB;&#x1F1F7;</span>FR</button>
     </div>
   </div>
 </nav>
@@ -434,9 +436,9 @@
   <a href="/" class="footer-logo">a<span class="rk">RK</span>ithect</a>
   <p>© 2025 aRKithect. <span data-i18n="footer.rights">All rights reserved.</span></p>
   <div class="lang-toggle">
-    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn active" onclick="setLang('en')"><span class="lang-flag">&#x1F1EC;&#x1F1E7;</span>EN</button>
     <div class="lang-sep"></div>
-    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+    <button class="lang-btn" onclick="setLang('fr')"><span class="lang-flag">&#x1F1EB;&#x1F1F7;</span>FR</button>
   </div>
 </footer>
 
@@ -471,6 +473,20 @@ var TRANSLATIONS = {
     'form.message':'Message','form.messagePh':'Tell us about your project...',
     'form.submit':'Send message','form.success':'✓ Message sent! We\'ll be in touch soon.',
     'footer.rights':'All rights reserved.',
+    'form.budget':'Budget','form.budgetPh':'Approx. budget...',
+    'form.budget1':'Under 20k','form.budget2':'20k - 50k',
+    'form.budget3':'50k - 100k','form.budget4':'100k - 200k',
+    'form.budget5':'200k+','form.budgetTbd':'To be discussed',
+    'form.timeline':'Start date','form.timelinePh':'When to start...',
+    'form.timeline1':'As soon as possible','form.timeline2':'Within 3 months',
+    'form.timeline3':'3 - 6 months','form.timeline4':'6 - 12 months',
+    'form.timeline5':'Just exploring',
+    'form.style':'Style preference','form.stylePh':'Design style...',
+    'form.style1':'Modern / Minimalist','form.style2':'Scandinavian',
+    'form.style3':'Industrial','form.style4':'Classic / Haussmann',
+    'form.style5':'Warm / Natural materials','form.style6':'Open to suggestions',
+    'form.desc':'Project description',
+    'form.descPh':'Describe the current state of the space and what you\'d like to achieve...',
   },
   fr: {
     'nav.work':'Réalisations','nav.contact':'Contact','nav.simulator':'Simulateur',
@@ -501,6 +517,20 @@ var TRANSLATIONS = {
     'form.message':'Message','form.messagePh':'Parlez-nous de votre projet...',
     'form.submit':'Envoyer le message','form.success':'✓ Message envoyé ! Nous vous recontacterons très bientôt.',
     'footer.rights':'Tous droits réservés.',
+    'form.budget':'Budget','form.budgetPh':'Budget approximatif...',
+    'form.budget1':'Moins de 20k','form.budget2':'20k - 50k',
+    'form.budget3':'50k - 100k','form.budget4':'100k - 200k',
+    'form.budget5':'200k+','form.budgetTbd':'A definir ensemble',
+    'form.timeline':'Date de debut','form.timelinePh':'Quand commencer...',
+    'form.timeline1':'Des que possible','form.timeline2':'Dans les 3 mois',
+    'form.timeline3':'3 - 6 mois','form.timeline4':'6 - 12 mois',
+    'form.timeline5':'Je me renseigne',
+    'form.style':'Style souhaite','form.stylePh':'Style decoratif...',
+    'form.style1':'Moderne / Minimaliste','form.style2':'Scandinave',
+    'form.style3':'Industriel','form.style4':'Classique / Haussmannien',
+    'form.style5':'Chaleureux / Materiaux naturels','form.style6':'Ouvert aux suggestions',
+    'form.desc':'Description du projet',
+    'form.descPh':'Decrivez l\'etat actuel de l\'espace et ce que vous souhaitez obtenir...',
   }
 };
 
