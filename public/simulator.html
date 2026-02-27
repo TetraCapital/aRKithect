@@ -888,22 +888,51 @@ window.addEventListener('mousemove', function(e) {
       if (bestWall >= 0) {
         var wA = corners[bestWall], wB = corners[(bestWall+1)%corners.length];
         var wdx = wB.x-wA.x, wdy = wB.y-wA.y, wlen = Math.sqrt(wdx*wdx+wdy*wdy);
-        // Wall outward normal (pointing right of A→B direction)
+        // Inward normal (left of A→B = inside the room)
         var wnx = wdy/wlen, wny = -wdx/wlen;
-        // Snap centre flush to wall inner face
-        var halfD = (f.rot%2===0 ? f.d : f.w) / 2;
-        // Project furniture centre onto wall line
+
+        // Wall base rotation (which way the piece should face to have its back to the wall)
+        var wallAngleRad = Math.atan2(wdy, wdx);
+        var wallRot = Math.round(wallAngleRad / (Math.PI/2));
+
+        // Per-type wall-face config:
+        //   wallFaceRot: extra 90° turns so the correct face of the piece hits the wall
+        //   wallDepth: half-depth of the face that touches the wall (in piece local space, pre-rotation)
+        //   noSnap: free-standing, don't snap
+        var WALL_FACE = {
+          'toilet':       { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },  // cistern (+hd) against wall
+          'sink':         { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },  // pipes into wall
+          'bath':         { wallFaceRot: 0, wallDepth: function(f){ return f.w/2; } },  // taps (short side) against wall — w is the narrow dim
+          'shower':       { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },
+          'base-unit':    { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },
+          'fridge':       { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },
+          'oven':         { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },
+          'island':       { noSnap: true },
+          'dining-table': { noSnap: true },
+          'sofa':         { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },  // flat back against wall
+          'armchair':     { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },
+          'desk':         { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },
+          'bed-double':   { wallFaceRot: 2, wallDepth: function(f){ return f.d/2; } },  // headboard (−hd) → 180° extra
+          'bed-single':   { wallFaceRot: 2, wallDepth: function(f){ return f.d/2; } },
+          'wardrobe':     { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },
+        };
+        var cfg = WALL_FACE[f.type] || { wallFaceRot: 0, wallDepth: function(ff){ return ff.d/2; } };
+        if (cfg.noSnap) { draw2D(); return; }
+
+        // Set rotation: wall base + face offset
+        f.rot = ((wallRot + 1 + cfg.wallFaceRot) % 4 + 4) % 4;
+
+        // Half-depth in current rotation: after rotation, which axis faces wall?
+        // f.rot even → piece local-D axis is along world inward normal → use wallDepth(f)
+        // f.rot odd  → piece local-W axis faces wall → use w/2
+        var halfD = cfg.wallDepth(f);
+
+        // Project furniture centre onto wall line, then offset inward
         var t2 = ((f.x-wA.x)*wdx + (f.y-wA.y)*wdy) / (wlen*wlen);
-        t2 = Math.max(0.01, Math.min(0.99, t2));
+        t2 = Math.max(0.02, Math.min(0.98, t2));
         var projX = wA.x + t2*wdx, projY = wA.y + t2*wdy;
-        // Place furniture halfD inward from wall
         f.x = projX - wnx * halfD;
         f.y = projY - wny * halfD;
-        // Auto-rotate to face inward from wall
-        var wallAngleDeg = Math.atan2(wdy, wdx) * 180 / Math.PI;
-        // Round wall angle to nearest 90
-        var wallRot = Math.round(wallAngleDeg / 90);
-        f.rot = ((wallRot + 1) % 4 + 4) % 4; // face inward
       }
 
       draw2D();
@@ -1084,7 +1113,8 @@ function buildWallDropdowns() {
 
 function hoverWall(idx) {
   hoveredWallIdx = idx;
-  draw2D();
+  if (currentView === '3d' && renderer3d) buildRoom3D();
+  else draw2D();
 }
 
 function toggleWallDropdown(type) {
@@ -1388,6 +1418,52 @@ function init3D() {
   startAnimate3D();
 }
 
+// Simple ear-clip triangulation for a polygon given as THREE.Vector2 array
+// Returns flat index array for BufferGeometry.setIndex
+function triangulatePolygon(pts) {
+  var n = pts.length;
+  if (n < 3) return [];
+  var indices = [];
+  var verts = pts.map(function(p,i){return i;});
+  var remaining = verts.slice();
+  var safety = 0;
+  while (remaining.length > 3 && safety++ < 1000) {
+    var found = false;
+    for (var i = 0; i < remaining.length; i++) {
+      var prev = remaining[(i-1+remaining.length)%remaining.length];
+      var curr = remaining[i];
+      var next = remaining[(i+1)%remaining.length];
+      var a = pts[prev], b = pts[curr], c = pts[next];
+      // Check if ear (cross product sign = ccw)
+      var cross = (b.x-a.x)*(c.y-a.y) - (b.y-a.y)*(c.x-a.x);
+      if (cross <= 0) continue;
+      // Check no other point inside triangle
+      var inside = false;
+      for (var j = 0; j < remaining.length; j++) {
+        var idx = remaining[j];
+        if (idx===prev||idx===curr||idx===next) continue;
+        var p = pts[idx];
+        if (pointInTriangle(p,a,b,c)) { inside=true; break; }
+      }
+      if (!inside) {
+        indices.push(prev, curr, next);
+        remaining.splice(i, 1);
+        found = true; break;
+      }
+    }
+    if (!found) break;
+  }
+  if (remaining.length === 3) indices.push(remaining[0], remaining[1], remaining[2]);
+  return indices;
+}
+function pointInTriangle(p, a, b, c) {
+  var d1=(p.x-b.x)*(a.y-b.y)-(a.x-b.x)*(p.y-b.y);
+  var d2=(p.x-c.x)*(b.y-c.y)-(b.x-c.x)*(p.y-c.y);
+  var d3=(p.x-a.x)*(c.y-a.y)-(c.x-a.x)*(p.y-a.y);
+  var hn=(d1<0)||(d2<0)||(d3<0), hp=(d1>0)||(d2>0)||(d3>0);
+  return !(hn&&hp);
+}
+
 function buildRoom3D() {
   if (!scene3d) return;
   if (roomGroup) {
@@ -1413,114 +1489,130 @@ function buildRoom3D() {
 
   var H=H_CEIL;
 
-  // Centre polygon for Three.js (centred at 0,0)
+  // Use world coordinates directly, offset to centre scene at 0,0
   var bounds=getBounds();
   var cx=(bounds.minX+bounds.maxX)/2, cy=(bounds.minY+bounds.maxY)/2;
-  var poly=corners.map(function(c){return {x:c.x-cx, y:c.y-cy};});
+  // Map: world X → Three X,  world Y → Three -Z  (standard top-down: Y increases downward on screen = south = +Z in Three)
+  // To avoid the Shape rotation mirror bug we build floor/ceiling as BufferGeometry in XZ directly
+  function w2t(wx, wy) { return {x: wx-cx, z: -(wy-cy)}; }  // world → three XZ
 
-  // Floor & Ceiling via ShapeGeometry
-  var floorShape=new THREE.Shape();
-  floorShape.moveTo(poly[0].x, poly[0].y);
-  poly.slice(1).forEach(function(p){floorShape.lineTo(p.x,p.y);});
-  floorShape.closePath();
-
-  var floorGeo=new THREE.ShapeGeometry(floorShape,1);
-  // Rotate flat shape to lie on XZ
-  var floor=new THREE.Mesh(floorGeo, makeMat(surfaces.floor));
-  floor.rotation.x=-Math.PI/2; floor.receiveShadow=true;
+  // Floor via BufferGeometry (avoids ShapeGeometry rotation flip)
+  var floorPts = corners.map(function(c){ var t=w2t(c.x,c.y); return new THREE.Vector2(t.x, t.z); });
+  var floorShape = new THREE.Shape(floorPts);
+  var floorGeo = new THREE.ShapeGeometry(floorShape);
+  // ShapeGeometry is in XY; we need XZ → rotate around X
+  // But negate Z in shape coords first so rotation goes right direction:
+  // Actually: build vertices manually as a flat XZ mesh
+  var floorVerts = [];
+  var indices = [];
+  floorPts.forEach(function(p){ floorVerts.push(p.x, 0, p.y); });
+  // Simple ear-clip triangulation for convex/concave polygon
+  var triIndices = triangulatePolygon(floorPts);
+  var flatFloorGeo = new THREE.BufferGeometry();
+  var posArr = new Float32Array(floorVerts);
+  flatFloorGeo.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
+  flatFloorGeo.setIndex(triIndices);
+  flatFloorGeo.computeVertexNormals();
+  var floor = new THREE.Mesh(flatFloorGeo, makeMat(surfaces.floor));
+  floor.receiveShadow = true;
   roomGroup.add(floor);
 
-  var ceilGeo=new THREE.ShapeGeometry(floorShape.clone(),1);
-  var ceil=new THREE.Mesh(ceilGeo, makeMat(surfaces.ceiling));
-  ceil.rotation.x=Math.PI/2; ceil.position.y=H;
+  // Ceiling — same verts, flipped normal, at height H
+  var ceilVerts = [];
+  floorPts.forEach(function(p){ ceilVerts.push(p.x, H, p.y); });
+  var flatCeilGeo = new THREE.BufferGeometry();
+  flatCeilGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(ceilVerts), 3));
+  flatCeilGeo.setIndex(triIndices.slice().reverse());
+  flatCeilGeo.computeVertexNormals();
+  var ceil = new THREE.Mesh(flatCeilGeo, makeMat(surfaces.ceiling));
   roomGroup.add(ceil);
 
-  // Walls — one per edge
-  for (var i=0;i<poly.length;i++) {
-    var A=poly[i], B=poly[(i+1)%poly.length];
-    var dx=B.x-A.x, dz=B.y-A.y;
+  // Walls — one per edge, using w2t coordinates
+  var hovWallMesh = null; // for green highlight
+  for (var i=0;i<corners.length;i++) {
+    var A=w2t(corners[i].x, corners[i].y), B=w2t(corners[(i+1)%corners.length].x, corners[(i+1)%corners.length].y);
+    var dx=B.x-A.x, dz=B.z-A.z;
     var len=Math.sqrt(dx*dx+dz*dz);
     if (len<0.01) continue;
 
+    var isHovered = (i === hoveredWallIdx);
     var wsurf=surfaces['wall-'+i]||surfaces['wall-0'];
     var ops=openings.filter(function(o){return o.wallIdx===i;});
+    var rotY = -Math.atan2(dz, dx);
+
+    var wallMat = makeMat(wsurf);
+    if (isHovered) { wallMat = wallMat.clone(); wallMat.color.set(0x5fcf80); wallMat.emissive.set(0x1a4a20); }
 
     if (ops.length===0) {
       var wGeo=new THREE.PlaneGeometry(len,H);
-      var wMesh=new THREE.Mesh(wGeo, makeMat(wsurf));
-      wMesh.position.set((A.x+B.x)/2, H/2, (A.y+B.y)/2);
-      wMesh.rotation.y=-Math.atan2(dz,dx);
+      var wMesh=new THREE.Mesh(wGeo, wallMat);
+      wMesh.position.set((A.x+B.x)/2, H/2, (A.z+B.z)/2);
+      wMesh.rotation.y=rotY;
       wMesh.receiveShadow=true;
       roomGroup.add(wMesh);
-      // outward normal: perpendicular to wall, pointing away from room centre
-      var nx=-dz/len, nz=dx/len;  // rotate wall dir 90° left = inward, so use right
-      // check which side faces outward by comparing to centroid
-      var midX=(A.x+B.x)/2, midZ=(A.y+B.y)/2;
-      if (nx*midX + nz*midZ > 0) { nx=-nx; nz=-nz; }  // ensure points outward
-      outerWallMeshes.push({mesh:wMesh, normal:new THREE.Vector3(nx,0,nz)});
+      var nx=-dz/len, nz2=dx/len;
+      var midX=(A.x+B.x)/2, midZ=(A.z+B.z)/2;
+      if (nx*midX + nz2*midZ > 0) { nx=-nx; nz2=-nz2; }
+      outerWallMeshes.push({mesh:wMesh, normal:new THREE.Vector3(nx,0,nz2), wallIdx:i});
     } else {
-      // Wall with holes
-      var wShape=new THREE.Shape();
-      wShape.moveTo(-len/2,0); wShape.lineTo(len/2,0);
-      wShape.lineTo(len/2,H); wShape.lineTo(-len/2,H); wShape.closePath();
+      var wShape2=new THREE.Shape();
+      wShape2.moveTo(-len/2,0); wShape2.lineTo(len/2,0);
+      wShape2.lineTo(len/2,H); wShape2.lineTo(-len/2,H); wShape2.closePath();
 
       ops.forEach(function(op){
         var maxOff=len-op.width;
         var off=Math.max(0,Math.min(maxOff, op.position*len - op.width/2));
-        var hx=-len/2+off;
-        var hy=op.sill||0;
+        var hx=-len/2+off, hy=op.sill||0;
         var hole=new THREE.Path();
         hole.moveTo(hx,hy); hole.lineTo(hx+op.width,hy);
         hole.lineTo(hx+op.width,hy+op.height); hole.lineTo(hx,hy+op.height);
         hole.closePath();
-        wShape.holes.push(hole);
+        wShape2.holes.push(hole);
 
         if (op.type==='window') {
           var gGeo=new THREE.PlaneGeometry(op.width-0.04,op.height-0.04);
           var gMat=new THREE.MeshStandardMaterial({color:0x88bbdd,transparent:true,opacity:0.22,roughness:0.05,side:THREE.DoubleSide});
           var gMesh=new THREE.Mesh(gGeo,gMat);
-          var rotY=-Math.atan2(dz,dx);
-          var midX=A.x+(B.x-A.x)*(off+op.width/2)/len;
-          var midZ=A.y+(B.y-A.y)*(off+op.width/2)/len;
-          gMesh.position.set(midX, (hy+op.height/2), midZ);
-          gMesh.rotation.y=rotY;
-          roomGroup.add(gMesh);
+          var offFrac=(off+op.width/2)/len;
+          gMesh.position.set(A.x+(B.x-A.x)*offFrac, (hy+op.height/2), A.z+(B.z-A.z)*offFrac);
+          gMesh.rotation.y=rotY; roomGroup.add(gMesh);
         }
       });
 
-      var sGeo=new THREE.ShapeGeometry(wShape,4);
-      var sMesh=new THREE.Mesh(sGeo, makeMat(wsurf));
-      sMesh.position.set((A.x+B.x)/2, 0, (A.y+B.y)/2);
-      sMesh.rotation.y=-Math.atan2(dz,dx);
+      var sGeo=new THREE.ShapeGeometry(wShape2,4);
+      var sMesh=new THREE.Mesh(sGeo, wallMat);
+      sMesh.position.set((A.x+B.x)/2, 0, (A.z+B.z)/2);
+      sMesh.rotation.y=rotY;
       sMesh.receiveShadow=true;
       roomGroup.add(sMesh);
-      var nx2=-dz/len, nz2=dx/len;
-      var midX2=(A.x+B.x)/2, midZ2=(A.y+B.y)/2;
-      if (nx2*midX2 + nz2*midZ2 > 0) { nx2=-nx2; nz2=-nz2; }
-      outerWallMeshes.push({mesh:sMesh, normal:new THREE.Vector3(nx2,0,nz2)});
+      var nx3=-dz/len, nz3=dx/len;
+      var midX3=(A.x+B.x)/2, midZ3=(A.z+B.z)/2;
+      if (nx3*midX3 + nz3*midZ3 > 0) { nx3=-nx3; nz3=-nz3; }
+      outerWallMeshes.push({mesh:sMesh, normal:new THREE.Vector3(nx3,0,nz3), wallIdx:i});
     }
   }
 
   // Inner walls in 3D
   innerWalls.forEach(function(iw){
-    var ax=iw.ax-cx, ay=iw.ay-cy, bx=iw.bx-cx, by=iw.by-cy;
-    var dx=bx-ax, dz=by-ay, len=Math.sqrt(dx*dx+dz*dz);
+    var a=w2t(iw.ax,iw.ay), b=w2t(iw.bx,iw.by);
+    var dx=b.x-a.x, dz=b.z-a.z, len=Math.sqrt(dx*dx+dz*dz);
     if (len<0.01) return;
     var iGeo=new THREE.PlaneGeometry(len,H);
     var iMat=new THREE.MeshStandardMaterial({color:hexToColor('#e8e4dc'),roughness:0.85,side:THREE.DoubleSide});
     var iMesh=new THREE.Mesh(iGeo,iMat);
-    iMesh.position.set((ax+bx)/2, H/2, (ay+by)/2);
+    iMesh.position.set((a.x+b.x)/2, H/2, (a.z+b.z)/2);
     iMesh.rotation.y=-Math.atan2(dz,dx);
     iMesh.receiveShadow=true;
     roomGroup.add(iMesh);
   });
 
-  // Furniture in 3D (simple boxes)
+  // Furniture in 3D
   furniture.forEach(function(f){
+    var ft=w2t(f.x,f.y);
     var fGeo=new THREE.BoxGeometry(f.w, 0.75, f.d);
     var fMat=new THREE.MeshStandardMaterial({color:0x2a2a28,roughness:0.7,metalness:0.05});
     var fMesh=new THREE.Mesh(fGeo,fMat);
-    fMesh.position.set(f.x-cx, 0.375, f.y-cy);
+    fMesh.position.set(ft.x, 0.375, ft.z);
     fMesh.rotation.y=f.rot*Math.PI/2;
     fMesh.castShadow=true; fMesh.receiveShadow=true;
     roomGroup.add(fMesh);
