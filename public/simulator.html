@@ -309,7 +309,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer;
     </div>
     <div class="view-3d" id="view3d">
       <div id="canvas3d"></div>
-      <canvas id="compass3d" style="position:absolute;bottom:50px;right:16px;width:72px;height:72px;pointer-events:none;z-index:10;"></canvas>
+      <canvas id="compass3d" style="position:absolute;top:16px;right:16px;width:72px;height:72px;pointer-events:none;z-index:10;"></canvas>
       <div class="canvas-hint">Left-drag: orbit · Scroll: zoom · Right-drag: pan</div>
     </div>
   </div>
@@ -400,6 +400,7 @@ function resizeCanvas() {
   var area = document.getElementById('view2d');
   c2d.width  = area.clientWidth;
   c2d.height = area.clientHeight;
+  centreViewOnRoom();
   draw2D();
 }
 
@@ -461,11 +462,14 @@ function snapPoint(wx, wy, refIdx) {
 // ================================================
 function draw2D() {
   ctx.clearRect(0, 0, c2d.width, c2d.height);
+  // Light background matching 3D scene
+  ctx.fillStyle = '#d8e4ec';
+  ctx.fillRect(0, 0, c2d.width, c2d.height);
   ensureWallSurfaces();
 
   // Grid
   if (showGrid) {
-    ctx.strokeStyle = '#242420'; ctx.lineWidth = 0.5;
+    ctx.strokeStyle = 'rgba(150,170,190,0.35)'; ctx.lineWidth = 0.5;
     var step = view.scale;
     var ox0 = ((c2d.width/2 + view.x) % step + c2d.width * 3) % step;
     var oy0 = ((c2d.height/2 + view.y) % step + c2d.height * 3) % step;
@@ -538,7 +542,7 @@ function draw2D() {
   corners.forEach(function(c, idx) {
     var sp = W2S(c.x, c.y);
     ctx.beginPath(); ctx.arc(sp.x, sp.y, 7, 0, Math.PI*2);
-    ctx.fillStyle   = idx === draggingCornerIdx ? '#c8a96e' : '#1e1e1b';
+    ctx.fillStyle   = idx === draggingCornerIdx ? '#c8a96e' : '#d8e4ec';
     ctx.strokeStyle = '#c8a96e'; ctx.lineWidth = 2;
     ctx.fill(); ctx.stroke();
   });
@@ -721,7 +725,7 @@ function drawFurnShape(ctx, type, hw, hd) {
 }
 
 function drawDimensions() {
-  ctx.fillStyle = '#5a5854';
+  ctx.fillStyle = '#5a6a7a';
   ctx.font = Math.max(10, px(0.16)) + 'px DM Sans';
   ctx.textAlign = 'center';
   for (var i = 0; i < corners.length; i++) {
@@ -743,18 +747,26 @@ function drawDimensions() {
 }
 
 function drawCompass() {
-  var cx = c2d.width - 34, cy = 54;
+  var cx = c2d.width - 40, cy = 40;
   ctx.save();
-  ctx.fillStyle = 'rgba(22,22,20,0.85)';
-  ctx.beginPath(); ctx.arc(cx, cy, 22, 0, Math.PI*2); ctx.fill();
-  ctx.strokeStyle = '#2a2a26'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.fillStyle = 'rgba(220,232,240,0.88)';
+  ctx.beginPath(); ctx.arc(cx, cy, 24, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = 'rgba(100,120,140,0.4)'; ctx.lineWidth = 1; ctx.stroke();
   ['N','E','S','W'].forEach(function(d,i) {
     var a = i*Math.PI/2 - Math.PI/2;
-    ctx.fillStyle = d==='N' ? '#c8a96e' : '#6b6860';
-    ctx.font = (d==='N'?'bold ':'') + '10px DM Sans';
+    ctx.fillStyle = d==='N' ? '#c8a96e' : '#6b7a88';
+    ctx.font = (d==='N'?'bold ':'') + '11px DM Sans';
     ctx.textAlign = 'center';
-    ctx.fillText(d, cx + Math.cos(a)*13, cy + Math.sin(a)*13 + 4);
+    ctx.textBaseline = 'middle';
+    ctx.fillText(d, cx + Math.cos(a)*14, cy + Math.sin(a)*14);
   });
+  // North arrow
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(cx + Math.cos(-Math.PI/2)*16, cy + Math.sin(-Math.PI/2)*16);
+  ctx.strokeStyle = '#c8a96e'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI*2);
+  ctx.fillStyle = '#c8a96e'; ctx.fill();
   ctx.restore();
 }
 
@@ -821,10 +833,17 @@ c2d.addEventListener('mousedown', function(e) {
   var ss = getEventScreen(e);
   var ww = S2W(ss.x, ss.y);
 
-  if (e.button === 2 || tool === 'pan') {
+  // Right-click or middle-click always pans
+  if (e.button === 2 || e.button === 1) {
     isRightDrag = true;
     rightDragStart = {x: e.clientX - view.x, y: e.clientY - view.y};
     e.preventDefault(); return;
+  }
+
+  if (tool === 'pan') {
+    isRightDrag = true;
+    rightDragStart = {x: e.clientX - view.x, y: e.clientY - view.y};
+    return;
   }
 
   if (tool === 'wall') {
@@ -853,6 +872,9 @@ c2d.addEventListener('mousedown', function(e) {
       draw2D(); return;
     }
 
+    // Nothing hit — pan the view by dragging empty space
+    isRightDrag = true;
+    rightDragStart = {x: e.clientX - view.x, y: e.clientY - view.y};
     selectedFurnId = null; draw2D();
   }
 });
@@ -1065,7 +1087,7 @@ function resetToRect() {
   };
   ensureWallSurfaces();
   renderOpeningsList(); renderInnerWallsList(); renderFurnList();
-  draw2D();
+  resetView();
   if (currentView === '3d') buildRoom3D();
 }
 
@@ -1096,7 +1118,20 @@ function updateSurfaceList() {
   }).join('');
 }
 
-function resetView() { view = {x:0,y:0,scale:70}; draw2D(); }
+function centreViewOnRoom() {
+  var b = getBounds();
+  var roomCx = (b.minX + b.maxX) / 2;
+  var roomCy = (b.minY + b.maxY) / 2;
+  // Offset so room centre maps to canvas centre
+  view.x = -roomCx * view.scale;
+  view.y = -roomCy * view.scale;
+}
+
+function resetView() {
+  view.scale = 70;
+  centreViewOnRoom();
+  draw2D();
+}
 
 // ================================================
 // OPENINGS
@@ -1584,11 +1619,12 @@ function buildRoom3D() {
       wMesh.rotation.y=rotY;
       wMesh.receiveShadow=true;
       roomGroup.add(wMesh);
-      // Outward normal: perpendicular to wall, pointing AWAY from room centroid (which is 0,0 in Three space)
+      // Outward normal: perpendicular to wall, pointing AWAY from room centroid (0,0 in Three space)
       var nx = -dz/len, nz2 = dx/len;
-      // If this normal points toward centroid (0,0), flip it
+      // Flip if normal points TOWARD centroid: dot(normal, mid) > 0 means pointing away from origin
+      // We want it pointing AWAY, so flip when it points TOWARD (dot < 0)
       var midX=(A.x+B.x)/2, midZ=(A.z+B.z)/2;
-      if (nx*(-midX) + nz2*(-midZ) > 0) { nx=-nx; nz2=-nz2; } // dot with vector from mid→centroid
+      if (nx*midX + nz2*midZ < 0) { nx=-nx; nz2=-nz2; }
       outerWallMeshes.push({mesh:wMesh, normal:new THREE.Vector3(nx,0,nz2), wallIdx:i});
     } else {
       var wShape2=new THREE.Shape();
@@ -1623,7 +1659,7 @@ function buildRoom3D() {
       roomGroup.add(sMesh);
       var nx3=-dz/len, nz3=dx/len;
       var midX3=(A.x+B.x)/2, midZ3=(A.z+B.z)/2;
-      if (nx3*(-midX3) + nz3*(-midZ3) > 0) { nx3=-nx3; nz3=-nz3; }
+      if (nx3*midX3 + nz3*midZ3 < 0) { nx3=-nx3; nz3=-nz3; }
       outerWallMeshes.push({mesh:sMesh, normal:new THREE.Vector3(nx3,0,nz3), wallIdx:i});
     }
   }
