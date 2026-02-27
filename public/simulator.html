@@ -71,7 +71,34 @@ input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer;
 .swatch[data-texture="brick"]    { background-color:var(--c,#b5614a); background-image:repeating-linear-gradient(0deg,transparent,transparent 8px,rgba(0,0,0,.15) 8px,rgba(0,0,0,.15) 10px),repeating-linear-gradient(90deg,rgba(0,0,0,.1) 0,rgba(0,0,0,.1) 1px,transparent 1px,transparent 20px); }
 .swatch[data-texture="concrete"] { background-color:var(--c,#9a9890); }
 
-/* FURNITURE CATALOGUE */
+/* WALL DROPDOWN */
+.wall-dropdown-wrap { position: relative; margin-bottom: 10px; }
+.wall-dropdown-btn {
+  width: 100%; padding: 8px 10px; background: var(--panel2);
+  border: 1px solid var(--border); color: var(--text);
+  border-radius: 3px; cursor: pointer; display: flex;
+  justify-content: space-between; align-items: center;
+  font-size: 13px; transition: border-color .15s;
+}
+.wall-dropdown-btn:hover { border-color: var(--accent); }
+.wall-dd-arrow { color: var(--muted); font-size: 10px; }
+.wall-dropdown-list {
+  display: none; position: absolute; top: calc(100% + 3px); left: 0; right: 0;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 3px; z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  max-height: 220px; overflow-y: auto;
+}
+.wall-dropdown-list.open { display: block; }
+.wall-dd-item {
+  padding: 8px 12px; font-size: 12px; color: var(--text);
+  cursor: pointer; display: flex; justify-content: space-between;
+  align-items: center; transition: background .1s;
+}
+.wall-dd-item:hover { background: var(--panel2); color: var(--accent); }
+.wall-dd-item.active { color: var(--accent); }
+.wall-dd-len { font-size: 10px; color: var(--muted); }
+
+
 .room-type-sel { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 12px; }
 .room-type-btn { padding: 8px 4px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; background: var(--panel2); border: 1px solid var(--border); color: var(--muted); cursor: pointer; border-radius: 3px; font-family: 'DM Sans', sans-serif; text-align: center; transition: all .15s; }
 .room-type-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,169,110,.08); }
@@ -162,11 +189,11 @@ input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer;
 
         <div class="section-head">Add Door</div>
         <div class="field-label">Wall</div>
-        <div class="wall-selector" id="door-wall-sel">
-          <button class="wall-btn active" onclick="selWall('door',0,this)">Wall 1</button>
-          <button class="wall-btn" onclick="selWall('door',1,this)">Wall 2</button>
-          <button class="wall-btn" onclick="selWall('door',2,this)">Wall 3</button>
-          <button class="wall-btn" onclick="selWall('door',3,this)">Wall 4</button>
+        <div class="wall-dropdown-wrap" id="door-wall-wrap">
+          <div class="wall-dropdown-btn" id="door-wall-btn" onclick="toggleWallDropdown('door')">
+            <span id="door-wall-label">Wall 1</span><span class="wall-dd-arrow">▾</span>
+          </div>
+          <div class="wall-dropdown-list" id="door-wall-list"></div>
         </div>
         <div class="field-row">
           <div class="input-wrap"><input type="number" id="doorW" value="0.9" min="0.5" max="2.4" step="0.05"><span class="input-unit">m</span></div>
@@ -181,11 +208,11 @@ input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer;
 
         <div class="section-head">Add Window</div>
         <div class="field-label">Wall</div>
-        <div class="wall-selector" id="window-wall-sel">
-          <button class="wall-btn active" onclick="selWall('window',0,this)">Wall 1</button>
-          <button class="wall-btn" onclick="selWall('window',1,this)">Wall 2</button>
-          <button class="wall-btn" onclick="selWall('window',2,this)">Wall 3</button>
-          <button class="wall-btn" onclick="selWall('window',3,this)">Wall 4</button>
+        <div class="wall-dropdown-wrap" id="window-wall-wrap">
+          <div class="wall-dropdown-btn" id="window-wall-btn" onclick="toggleWallDropdown('window')">
+            <span id="window-wall-label">Wall 1</span><span class="wall-dd-arrow">▾</span>
+          </div>
+          <div class="wall-dropdown-list" id="window-wall-list"></div>
         </div>
         <div class="field-row-3">
           <div class="input-wrap"><input type="number" id="winW" value="1.2" min="0.3" max="3" step="0.1"><span class="input-unit">m</span></div>
@@ -213,11 +240,13 @@ input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer;
         <div class="wall-selector" style="grid-template-columns:repeat(2,1fr)">
           <button class="wall-btn active" onclick="selectSurface('floor',this)">Floor</button>
           <button class="wall-btn" onclick="selectSurface('ceiling',this)">Ceiling</button>
-          <button class="wall-btn" onclick="selectSurface('wall-0',this)">Wall 1</button>
-          <button class="wall-btn" onclick="selectSurface('wall-1',this)">Wall 2</button>
-          <button class="wall-btn" onclick="selectSurface('wall-2',this)">Wall 3</button>
-          <button class="wall-btn" onclick="selectSurface('wall-3',this)">Wall 4</button>
           <button class="wall-btn" onclick="selectSurface('all-walls',this)" style="grid-column:span 2">All Walls</button>
+        </div>
+        <div class="wall-dropdown-wrap" id="surface-wall-wrap" style="margin-bottom:10px;">
+          <div class="wall-dropdown-btn" id="surface-wall-btn" onclick="toggleWallDropdown('surface')">
+            <span id="surface-wall-label">Wall 1</span><span class="wall-dd-arrow">▾</span>
+          </div>
+          <div class="wall-dropdown-list" id="surface-wall-list"></div>
         </div>
         <div class="section-head">Material</div>
         <div class="input-wrap" style="margin-bottom:10px;">
@@ -343,6 +372,7 @@ var doorWallIdx    = 0;
 var windowWallIdx  = 0;
 var selectedFurnId = null;
 var roomType       = 'bathroom';
+var hoveredWallIdx = -1;  // for dropdown highlight
 
 // View transform
 var view = {x:0, y:0, scale:70};
@@ -475,6 +505,17 @@ function draw2D() {
     ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
     ctx.strokeStyle = '#3a3a36'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
+  }
+
+  // Hovered wall highlight (green, for dropdown)
+  if (hoveredWallIdx >= 0 && hoveredWallIdx < corners.length) {
+    var hA = W2S(corners[hoveredWallIdx].x, corners[hoveredWallIdx].y);
+    var hB = W2S(corners[(hoveredWallIdx+1)%corners.length].x, corners[(hoveredWallIdx+1)%corners.length].y);
+    ctx.save();
+    ctx.strokeStyle = '#5fcf80'; ctx.lineWidth = wt + 4; ctx.lineCap = 'square';
+    ctx.globalAlpha = 0.7;
+    ctx.beginPath(); ctx.moveTo(hA.x, hA.y); ctx.lineTo(hB.x, hB.y); ctx.stroke();
+    ctx.restore();
   }
 
   // Openings
@@ -835,6 +876,36 @@ window.addEventListener('mousemove', function(e) {
     if (f) {
       f.x = ww.x - furnDragOffset.x;
       f.y = ww.y - furnDragOffset.y;
+
+      // Snap to nearest wall if within 0.25m
+      var SNAP_DIST = 0.25;
+      var bestDist = SNAP_DIST + 1, bestWall = -1;
+      for (var wi2 = 0; wi2 < corners.length; wi2++) {
+        var cA = corners[wi2], cB = corners[(wi2+1)%corners.length];
+        var d2 = distPtSeg({x:f.x,y:f.y}, cA, cB);
+        if (d2 < bestDist) { bestDist = d2; bestWall = wi2; }
+      }
+      if (bestWall >= 0) {
+        var wA = corners[bestWall], wB = corners[(bestWall+1)%corners.length];
+        var wdx = wB.x-wA.x, wdy = wB.y-wA.y, wlen = Math.sqrt(wdx*wdx+wdy*wdy);
+        // Wall outward normal (pointing right of A→B direction)
+        var wnx = wdy/wlen, wny = -wdx/wlen;
+        // Snap centre flush to wall inner face
+        var halfD = (f.rot%2===0 ? f.d : f.w) / 2;
+        // Project furniture centre onto wall line
+        var t2 = ((f.x-wA.x)*wdx + (f.y-wA.y)*wdy) / (wlen*wlen);
+        t2 = Math.max(0.01, Math.min(0.99, t2));
+        var projX = wA.x + t2*wdx, projY = wA.y + t2*wdy;
+        // Place furniture halfD inward from wall
+        f.x = projX - wnx * halfD;
+        f.y = projY - wny * halfD;
+        // Auto-rotate to face inward from wall
+        var wallAngleDeg = Math.atan2(wdy, wdx) * 180 / Math.PI;
+        // Round wall angle to nearest 90
+        var wallRot = Math.round(wallAngleDeg / 90);
+        f.rot = ((wallRot + 1) % 4 + 4) % 4; // face inward
+      }
+
       draw2D();
     }
     return;
@@ -894,9 +965,6 @@ c2d.addEventListener('contextmenu', function(e) {
   }
 });
 
-document.addEventListener('mousedown', function(e) {
-  if (!e.target.closest('#ctx-menu')) document.getElementById('ctx-menu').classList.remove('visible');
-});
 
 function ctxAddCorner() {
   document.getElementById('ctx-menu').classList.remove('visible');
@@ -905,6 +973,7 @@ function ctxAddCorner() {
   var nx = {x: A.x + (B.x-A.x)*ctxWallT, y: A.y + (B.y-A.y)*ctxWallT};
   corners.splice(ctxWallIdx+1, 0, nx);
   ensureWallSurfaces();
+  refreshWallDropdowns();
   draw2D();
 }
 
@@ -914,6 +983,7 @@ function ctxDelCorner() {
   corners.splice(ctxCornerIdx, 1);
   openings = openings.filter(function(o){return o.wallIdx < corners.length;});
   ensureWallSurfaces();
+  refreshWallDropdowns();
   draw2D();
 }
 
@@ -994,11 +1064,74 @@ function resetView() { view = {x:0,y:0,scale:70}; draw2D(); }
 // ================================================
 // OPENINGS
 // ================================================
-function selWall(type, idx, btn) {
-  var sel = document.getElementById(type+'-wall-sel');
-  sel.querySelectorAll('.wall-btn').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
-  if (type==='door') doorWallIdx=idx; else windowWallIdx=idx;
+// ================================================
+// WALL DROPDOWNS
+// ================================================
+function buildWallDropdowns() {
+  ['door','window','surface'].forEach(function(type) {
+    var list = document.getElementById(type+'-wall-list');
+    if (!list) return;
+    list.innerHTML = corners.map(function(c, i) {
+      var len = dist(corners[i], corners[(i+1)%corners.length]).toFixed(2);
+      return '<div class="wall-dd-item" data-idx="'+i+'"'
+        + ' onmouseenter="hoverWall('+i+')"'
+        + ' onmouseleave="hoverWall(-1)"'
+        + ' onclick="selectWallFromDD(\''+type+'\','+i+')">Wall '+(i+1)
+        + '<span class="wall-dd-len">'+len+' m</span></div>';
+    }).join('');
+  });
+}
+
+function hoverWall(idx) {
+  hoveredWallIdx = idx;
+  draw2D();
+}
+
+function toggleWallDropdown(type) {
+  ['door','window','surface'].forEach(function(t) {
+    if (t !== type) document.getElementById(t+'-wall-list').classList.remove('open');
+  });
+  var list = document.getElementById(type+'-wall-list');
+  list.classList.toggle('open');
+  if (list.classList.contains('open')) buildWallDropdowns();
+}
+
+function selectWallFromDD(type, idx) {
+  hoveredWallIdx = -1;
+  document.getElementById(type+'-wall-list').classList.remove('open');
+  var label = 'Wall '+(idx+1)+' ('+dist(corners[idx],corners[(idx+1)%corners.length]).toFixed(2)+' m)';
+  document.getElementById(type+'-wall-label').textContent = label;
+  if (type==='door')    { doorWallIdx   = idx; }
+  if (type==='window')  { windowWallIdx = idx; }
+  if (type==='surface') { selectSurface('wall-'+idx, null); }
+  draw2D();
+}
+
+// Close dropdowns on outside click
+document.addEventListener('mousedown', function(e) {
+  if (!e.target.closest('.wall-dropdown-wrap')) {
+    document.querySelectorAll('.wall-dropdown-list').forEach(function(l){l.classList.remove('open');});
+    hoveredWallIdx = -1;
+  }
+  if (!e.target.closest('#ctx-menu')) document.getElementById('ctx-menu').classList.remove('visible');
+});
+
+function selWall(type, idx) {
+  if (type==='door')   doorWallIdx   = idx;
+  if (type==='window') windowWallIdx = idx;
+}
+
+// Call after any corner change to keep dropdowns current
+function refreshWallDropdowns() {
+  // Reset if selected wall no longer exists
+  if (doorWallIdx   >= corners.length) doorWallIdx   = 0;
+  if (windowWallIdx >= corners.length) windowWallIdx = 0;
+  var dl = document.getElementById('door-wall-label');
+  var wl = document.getElementById('window-wall-label');
+  if (dl) dl.textContent = 'Wall '+(doorWallIdx+1);
+  if (wl) wl.textContent = 'Wall '+(windowWallIdx+1);
+  // Rebuild open dropdown if any
+  if (document.querySelector('.wall-dropdown-list.open')) buildWallDropdowns();
 }
 
 function addOpening(type) {
@@ -1088,7 +1221,7 @@ function selectCustomColor(color) {
 function selectSurface(surf, btn) {
   activeSurface=surf;
   document.querySelectorAll('#tab-surfaces .wall-btn').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
+  if (btn) btn.classList.add('active');
   var ref=surf==='all-walls'?surfaces['wall-0']:surfaces[surf];
   if (ref){
     document.getElementById('mat-type').value=ref.material;
@@ -1258,9 +1391,22 @@ function init3D() {
 function buildRoom3D() {
   if (!scene3d) return;
   if (roomGroup) {
+    roomGroup.traverse(function(o){
+      if (o.geometry) o.geometry.dispose();
+      if (o.material) {
+        if (Array.isArray(o.material)) o.material.forEach(function(m){m.dispose();});
+        else o.material.dispose();
+      }
+    });
     scene3d.remove(roomGroup);
-    roomGroup.traverse(function(o){if(o.geometry)o.geometry.dispose();if(o.material){if(Array.isArray(o.material))o.material.forEach(function(m){m.dispose();});else o.material.dispose();}});
   }
+  // Clear any stray children not in roomGroup
+  while (scene3d.children.length > 3) { // keep ambient, sun, fill lights
+    var last = scene3d.children[scene3d.children.length - 1];
+    if (last.isLight) break;
+    scene3d.remove(last);
+  }
+  roomGroup = null;
   roomGroup=new THREE.Group();
   outerWallMeshes=[];
   ensureWallSurfaces();
@@ -1524,6 +1670,7 @@ window.addEventListener('DOMContentLoaded',function(){
   updateSwatches();
   updateInfoPanel();
   renderFurnCatalogue();
+  refreshWallDropdowns();
 
   // Override switchView to also show 3D toolbar
   var orig=switchView;
