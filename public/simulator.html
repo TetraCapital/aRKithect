@@ -888,51 +888,56 @@ window.addEventListener('mousemove', function(e) {
       if (bestWall >= 0) {
         var wA = corners[bestWall], wB = corners[(bestWall+1)%corners.length];
         var wdx = wB.x-wA.x, wdy = wB.y-wA.y, wlen = Math.sqrt(wdx*wdx+wdy*wdy);
-        // Inward normal (left of A→B = inside the room)
-        var wnx = wdy/wlen, wny = -wdx/wlen;
+        // Inward normal: left perpendicular of A→B (assuming CCW polygon = room interior is left)
+        // If polygon is CW, flip
+        var sign = polyWindingSign(); // 1=CW screen, -1=CCW screen
+        var wnx = -wdy/wlen * sign;  // inward normal X
+        var wny =  wdx/wlen * sign;  // inward normal Y
 
-        // Wall base rotation (which way the piece should face to have its back to the wall)
-        var wallAngleRad = Math.atan2(wdy, wdx);
-        var wallRot = Math.round(wallAngleRad / (Math.PI/2));
+        // The inward normal points INTO the room. The piece's −hd face should point TOWARD the wall
+        // i.e. the −hd face direction = -inward normal = outward normal.
+        // angle of outward normal:
+        var outAngle = Math.atan2(-wny, -wnx); // angle pointing away from room
 
-        // Per-type wall-face config:
-        //   wallFaceRot: extra 90° turns so the correct face of the piece hits the wall
-        //   wallDepth: half-depth of the face that touches the wall (in piece local space, pre-rotation)
-        //   noSnap: free-standing, don't snap
-        var WALL_FACE = {
-          'toilet':       { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },  // cistern (+hd) against wall
-          'sink':         { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },  // pipes into wall
-          'bath':         { wallFaceRot: 0, wallDepth: function(f){ return f.w/2; } },  // taps (short side) against wall — w is the narrow dim
-          'shower':       { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },
-          'base-unit':    { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },
-          'fridge':       { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },
-          'oven':         { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },
-          'island':       { noSnap: true },
-          'dining-table': { noSnap: true },
-          'sofa':         { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },  // flat back against wall
-          'armchair':     { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },
-          'desk':         { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },
-          'bed-double':   { wallFaceRot: 2, wallDepth: function(f){ return f.d/2; } },  // headboard (−hd) → 180° extra
-          'bed-single':   { wallFaceRot: 2, wallDepth: function(f){ return f.d/2; } },
-          'wardrobe':     { wallFaceRot: 0, wallDepth: function(f){ return f.d/2; } },
+        // Per-type: which face offset (in 90° turns) needs to point outward (toward wall)
+        // All pieces: wall-face is −hd (top of unrotated drawing) EXCEPT beds (headboard also −hd, same)
+        // The −hd face points in the direction of angle = -PI/2 when rot=0 (pointing up = north)
+        // After rot r (90° turns CCW), −hd face points at angle: -PI/2 + r*PI/2
+        // We want: -PI/2 + r*PI/2 = outAngle
+        // → r = (outAngle + PI/2) / (PI/2) = outAngle*2/PI + 1
+
+        // Per-type extra offset so the CORRECT anatomical face hits the wall:
+        // toilet: cistern at −hd → offset 0
+        // sink: back/pipes at −hd → offset 0
+        // bath: tap end is the SHORT side = ±hw, not ±hd. Tap end = −hw face.
+        //       −hw face points at angle -PI when rot=0, so we need extra -PI/2 = -1 turn
+        // sofa: back rest at −hd → offset 0
+        // bed: headboard at −hd*0.9 → that IS the −hd face → offset 0 (fix from before)
+        // desk: back at −hd → offset 0
+        // armchair: back at −hd → offset 0
+        // wardrobe: back at −hd (shallow) → offset 0
+        // fridge/oven/base-unit: back at −hd → offset 0
+        // island/dining-table: no snap
+        var FACE_OFFSET = {
+          'bath': -1,  // tap end is the -hw face, needs -90° extra
         };
-        var cfg = WALL_FACE[f.type] || { wallFaceRot: 0, wallDepth: function(ff){ return ff.d/2; } };
-        if (cfg.noSnap) { draw2D(); return; }
+        var NO_SNAP = { 'island': true, 'dining-table': true };
+        if (NO_SNAP[f.type]) { draw2D(); return; }
 
-        // Set rotation: wall base + face offset
-        f.rot = ((wallRot + 1 + cfg.wallFaceRot) % 4 + 4) % 4;
+        var faceOff = FACE_OFFSET[f.type] || 0;
+        var rRaw = outAngle * 2 / Math.PI + 1 + faceOff;
+        f.rot = ((Math.round(rRaw) % 4) + 4) % 4;
 
-        // Half-depth in current rotation: after rotation, which axis faces wall?
-        // f.rot even → piece local-D axis is along world inward normal → use wallDepth(f)
-        // f.rot odd  → piece local-W axis faces wall → use w/2
-        var halfD = cfg.wallDepth(f);
+        // Half-depth of the wall-face in piece local space (before rotation)
+        // For bath the wall-face is the w side; for all others it's the d side
+        var halfD = (f.type === 'bath') ? f.w/2 : f.d/2;
 
-        // Project furniture centre onto wall line, then offset inward
+        // Project furniture centre onto wall line, then push inward by halfD
         var t2 = ((f.x-wA.x)*wdx + (f.y-wA.y)*wdy) / (wlen*wlen);
-        t2 = Math.max(0.02, Math.min(0.98, t2));
+        t2 = Math.max(0.05, Math.min(0.95, t2));
         var projX = wA.x + t2*wdx, projY = wA.y + t2*wdy;
-        f.x = projX - wnx * halfD;
-        f.y = projY - wny * halfD;
+        f.x = projX + wnx * halfD;
+        f.y = projY + wny * halfD;
       }
 
       draw2D();
@@ -1418,40 +1423,65 @@ function init3D() {
   startAnimate3D();
 }
 
+// Polygon winding: positive = CCW in standard math coords
+// In canvas/world coords Y increases downward, so CCW visually = negative shoelace
+function polyWindingSign() {
+  var s = 0, n = corners.length;
+  for (var i = 0; i < n; i++) {
+    var j = (i+1)%n;
+    s += (corners[j].x - corners[i].x) * (corners[j].y + corners[i].y);
+  }
+  return s > 0 ? 1 : -1; // 1 = CW in screen space (Y-down), -1 = CCW
+}
+
 // Simple ear-clip triangulation for a polygon given as THREE.Vector2 array
 // Returns flat index array for BufferGeometry.setIndex
 function triangulatePolygon(pts) {
   var n = pts.length;
   if (n < 3) return [];
+  if (n === 3) return [0, 1, 2];
+
+  // Compute signed area to determine winding
+  var signedArea = 0;
+  for (var i = 0; i < n; i++) {
+    var j = (i+1)%n;
+    signedArea += pts[i].x * pts[j].y - pts[j].x * pts[i].y;
+  }
+  var isCCW = signedArea > 0;
+
   var indices = [];
-  var verts = pts.map(function(p,i){return i;});
-  var remaining = verts.slice();
+  var remaining = [];
+  for (var k = 0; k < n; k++) remaining.push(k);
+
   var safety = 0;
-  while (remaining.length > 3 && safety++ < 1000) {
+  while (remaining.length > 3 && safety++ < n * n * 2) {
     var found = false;
-    for (var i = 0; i < remaining.length; i++) {
-      var prev = remaining[(i-1+remaining.length)%remaining.length];
+    var len2 = remaining.length;
+    for (var i = 0; i < len2; i++) {
+      var prev = remaining[(i - 1 + len2) % len2];
       var curr = remaining[i];
-      var next = remaining[(i+1)%remaining.length];
+      var next = remaining[(i + 1) % len2];
       var a = pts[prev], b = pts[curr], c = pts[next];
-      // Check if ear (cross product sign = ccw)
+      // Cross product: positive = CCW turn at b
       var cross = (b.x-a.x)*(c.y-a.y) - (b.y-a.y)*(c.x-a.x);
-      if (cross <= 0) continue;
-      // Check no other point inside triangle
+      // For CCW polygon, ear has positive cross; for CW, negative
+      var isConvex = isCCW ? (cross > 0) : (cross < 0);
+      if (!isConvex) continue;
+      // Check no other point is inside this triangle
       var inside = false;
-      for (var j = 0; j < remaining.length; j++) {
+      for (var j = 0; j < len2; j++) {
         var idx = remaining[j];
-        if (idx===prev||idx===curr||idx===next) continue;
-        var p = pts[idx];
-        if (pointInTriangle(p,a,b,c)) { inside=true; break; }
+        if (idx === prev || idx === curr || idx === next) continue;
+        if (pointInTriangle(pts[idx], a, b, c)) { inside = true; break; }
       }
       if (!inside) {
         indices.push(prev, curr, next);
         remaining.splice(i, 1);
-        found = true; break;
+        found = true;
+        break;
       }
     }
-    if (!found) break;
+    if (!found) break; // degenerate, bail
   }
   if (remaining.length === 3) indices.push(remaining[0], remaining[1], remaining[2]);
   return indices;
