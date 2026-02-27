@@ -10,481 +10,129 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #0e0e0d;
-  --panel: #161614;
-  --panel2: #1e1e1b;
-  --border: #2a2a26;
-  --text: #e8e4dc;
-  --muted: #6b6860;
-  --accent: #c8a96e;
-  --accent2: #8fbcbb;
-  --red: #e06060;
-  --green: #7bbf8a;
+  --bg: #0e0e0d; --panel: #161614; --panel2: #1e1e1b;
+  --border: #2a2a26; --text: #e8e4dc; --muted: #6b6860;
+  --accent: #c8a96e; --accent2: #8fbcbb; --red: #e06060;
 }
 html, body { height: 100%; overflow: hidden; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 300;
-  display: flex;
-  flex-direction: column;
-}
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; display: flex; flex-direction: column; }
 
-/* TOP NAV */
-.topbar {
-  height: 52px;
-  background: var(--panel);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  gap: 0;
-  flex-shrink: 0;
-  z-index: 100;
-}
-.topbar-logo {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text);
-  text-decoration: none;
-  margin-right: 32px;
-}
+.topbar { height: 52px; background: var(--panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; gap: 0; flex-shrink: 0; z-index: 100; }
+.topbar-logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--text); text-decoration: none; margin-right: 32px; }
 .topbar-logo span { color: var(--accent); }
-.topbar-back {
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  text-decoration: none;
-  display: flex; align-items: center; gap: 8px;
-  transition: color 0.2s;
-  margin-right: 32px;
-}
+.topbar-back { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-right: 32px; transition: color .2s; }
 .topbar-back:hover { color: var(--text); }
-.topbar-title {
-  font-size: 13px;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-}
-.topbar-title span { color: var(--text); font-weight: 400; }
+.topbar-title { font-size: 13px; color: var(--muted); }
+.view-toggle { margin-left: auto; display: flex; gap: 2px; background: var(--bg); padding: 4px; border-radius: 4px; }
+.view-btn { padding: 6px 16px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; background: transparent; color: var(--muted); border: none; cursor: pointer; border-radius: 3px; font-family: 'DM Sans', sans-serif; transition: all .15s; }
+.view-btn.active { background: var(--panel2); color: var(--accent); }
 
-.view-toggle {
-  margin-left: auto;
-  display: flex;
-  gap: 2px;
-  background: var(--bg);
-  padding: 4px;
-  border-radius: 4px;
-}
-.view-btn {
-  padding: 6px 16px;
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  background: transparent;
-  color: var(--muted);
-  border: none;
-  cursor: pointer;
-  border-radius: 3px;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.15s;
-}
-.view-btn.active {
-  background: var(--panel2);
-  color: var(--accent);
-}
-.view-btn:hover:not(.active) { color: var(--text); }
+.app-body { display: flex; flex: 1; overflow: hidden; }
 
-/* MAIN LAYOUT */
-.app-body {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
-
-/* LEFT PANEL */
-.left-panel {
-  width: 260px;
-  flex-shrink: 0;
-  background: var(--panel);
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.panel-tabs {
-  display: flex;
-  border-bottom: 1px solid var(--border);
-}
-.panel-tab {
-  flex: 1;
-  padding: 12px 8px;
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  background: transparent;
-  color: var(--muted);
-  border: none;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  border-bottom: 2px solid transparent;
-  transition: all 0.15s;
-  margin-bottom: -1px;
-}
-.panel-tab.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-.panel-tab:hover:not(.active) { color: var(--text); }
-
-.panel-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
-}
+.left-panel { width: 270px; flex-shrink: 0; background: var(--panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+.panel-tabs { display: flex; border-bottom: 1px solid var(--border); }
+.panel-tab { flex: 1; padding: 11px 4px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; background: transparent; color: var(--muted); border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; border-bottom: 2px solid transparent; transition: all .15s; margin-bottom: -1px; }
+.panel-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.panel-content { flex: 1; overflow-y: auto; padding: 14px; }
 .panel-content::-webkit-scrollbar { width: 4px; }
-.panel-content::-webkit-scrollbar-track { background: transparent; }
-.panel-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
+.panel-content::-webkit-scrollbar-thumb { background: var(--border); }
 .tab-pane { display: none; }
 .tab-pane.active { display: block; }
 
-/* FORM ELEMENTS */
-.field-group {
-  margin-bottom: 20px;
-}
-.field-label {
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 8px;
-  display: block;
-}
-.field-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-.field-row-3 {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 6px;
-}
-.input-wrap {
-  position: relative;
-}
-.input-wrap input[type="number"],
-.input-wrap input[type="text"],
-select {
-  width: 100%;
-  background: var(--panel2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 300;
-  padding: 8px 10px;
-  outline: none;
-  border-radius: 3px;
-  transition: border-color 0.15s;
-  appearance: none;
-}
-.input-wrap input:focus,
-select:focus { border-color: var(--accent); }
-.input-unit {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 10px;
-  color: var(--muted);
-  pointer-events: none;
-}
-input[type="color"] {
-  width: 100%;
-  height: 36px;
-  background: var(--panel2);
-  border: 1px solid var(--border);
-  cursor: pointer;
-  border-radius: 3px;
-  padding: 3px;
-}
-.small-label {
-  font-size: 10px;
-  color: var(--muted);
-  text-align: center;
-  margin-top: 4px;
-  display: block;
-}
-
-.section-head {
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 12px;
-  margin-top: 8px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--border);
-}
+.section-head { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin: 14px 0 10px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
 .section-head:first-child { margin-top: 0; }
+.field-label { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; display: block; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
+.input-wrap { position: relative; margin-bottom: 8px; }
+.input-wrap input[type="number"], select { width: 100%; background: var(--panel2); border: 1px solid var(--border); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 300; padding: 7px 28px 7px 10px; outline: none; border-radius: 3px; transition: border-color .15s; appearance: none; }
+.input-wrap input:focus, select:focus { border-color: var(--accent); }
+.input-unit { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); font-size: 10px; color: var(--muted); pointer-events: none; }
+input[type="color"] { width: 100%; height: 34px; background: var(--panel2); border: 1px solid var(--border); cursor: pointer; border-radius: 3px; padding: 3px; }
+input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+.small-label { font-size: 10px; color: var(--muted); text-align: center; display: block; margin-top: 2px; }
 
-/* SURFACE SWATCHES */
-.swatch-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  margin-bottom: 10px;
-}
-.swatch {
-  aspect-ratio: 1;
-  border-radius: 3px;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: border-color 0.15s, transform 0.1s;
-  position: relative;
-  overflow: hidden;
-}
-.swatch:hover { transform: scale(1.05); }
+.wall-selector { display: grid; grid-template-columns: repeat(2,1fr); gap: 5px; margin-bottom: 10px; }
+.wall-btn { padding: 7px 5px; font-size: 11px; background: var(--panel2); border: 1px solid var(--border); color: var(--muted); cursor: pointer; border-radius: 3px; font-family: 'DM Sans', sans-serif; transition: all .15s; text-align: center; }
+.wall-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,169,110,.08); }
+
+.apply-btn { width: 100%; padding: 9px; background: var(--accent); color: #111; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-weight: 500; border-radius: 3px; transition: opacity .15s; margin-top: 8px; }
+.apply-btn:hover { opacity: .85; }
+.apply-btn.secondary { background: var(--panel2); color: var(--text); border: 1px solid var(--border); }
+.apply-btn.danger { background: rgba(224,96,96,.12); color: var(--red); border: 1px solid rgba(224,96,96,.3); }
+
+.swatch-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; margin-bottom: 8px; }
+.swatch { aspect-ratio: 1; border-radius: 3px; cursor: pointer; border: 2px solid transparent; transition: border-color .15s, transform .1s; }
+.swatch:hover { transform: scale(1.06); }
 .swatch.selected { border-color: var(--accent); }
-.swatch-label {
-  font-size: 9px;
-  color: var(--muted);
-  text-align: center;
-  margin-top: 2px;
-}
+.swatch[data-texture="plain"]    { background: var(--c,#e8e4dc); }
+.swatch[data-texture="wood"]     { background: repeating-linear-gradient(90deg,var(--c,#8B6914) 0px,var(--c,#8B6914) 8px,color-mix(in srgb,var(--c,#8B6914) 70%,#000) 8px,color-mix(in srgb,var(--c,#8B6914) 70%,#000) 10px); }
+.swatch[data-texture="tile"]     { background: repeating-conic-gradient(var(--c,#e0ddd8) 0% 25%,color-mix(in srgb,var(--c,#e0ddd8) 85%,#000) 0% 50%) 0 0/16px 16px; }
+.swatch[data-texture="brick"]    { background-color:var(--c,#b5614a); background-image:repeating-linear-gradient(0deg,transparent,transparent 8px,rgba(0,0,0,.15) 8px,rgba(0,0,0,.15) 10px),repeating-linear-gradient(90deg,rgba(0,0,0,.1) 0,rgba(0,0,0,.1) 1px,transparent 1px,transparent 20px); }
+.swatch[data-texture="concrete"] { background-color:var(--c,#9a9890); }
 
-/* TEXTURE PATTERNS */
-.swatch[data-texture="plain"] { background: var(--c, #c8a96e); }
-.swatch[data-texture="wood"] {
-  background: repeating-linear-gradient(90deg, var(--c, #8B6914) 0px, var(--c, #8B6914) 8px, color-mix(in srgb, var(--c, #8B6914) 70%, #000) 8px, color-mix(in srgb, var(--c, #8B6914) 70%, #000) 10px);
-}
-.swatch[data-texture="tile"] {
-  background: repeating-conic-gradient(var(--c, #e0ddd8) 0% 25%, color-mix(in srgb, var(--c, #e0ddd8) 85%, #000) 0% 50%) 0 0 / 16px 16px;
-}
-.swatch[data-texture="brick"] {
-  background: repeating-linear-gradient(0deg, transparent, transparent 8px, rgba(0,0,0,0.15) 8px, rgba(0,0,0,0.15) 10px),
-              repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 20px);
-  background-color: var(--c, #b5614a);
-}
-.swatch[data-texture="concrete"] {
-  background-color: var(--c, #9a9890);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='transparent'/%3E%3Crect x='0' y='0' width='1' height='1' fill='rgba(0,0,0,0.05)'/%3E%3C/svg%3E");
-}
+/* FURNITURE CATALOGUE */
+.room-type-sel { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 12px; }
+.room-type-btn { padding: 8px 4px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; background: var(--panel2); border: 1px solid var(--border); color: var(--muted); cursor: pointer; border-radius: 3px; font-family: 'DM Sans', sans-serif; text-align: center; transition: all .15s; }
+.room-type-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,169,110,.08); }
+.furniture-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.furn-item { padding: 8px 6px; background: var(--panel2); border: 1px solid var(--border); border-radius: 3px; cursor: pointer; text-align: center; transition: all .15s; user-select: none; }
+.furn-item:hover { border-color: var(--accent); background: rgba(200,169,110,.06); }
+.furn-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+.furn-label { font-size: 10px; color: var(--muted); }
+.furn-hint { font-size: 10px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
 
-/* WALL SELECTOR */
-.wall-selector {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6px;
-  margin-bottom: 12px;
-}
-.wall-btn {
-  padding: 8px 6px;
-  font-size: 11px;
-  background: var(--panel2);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  cursor: pointer;
-  border-radius: 3px;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.15s;
-  text-align: center;
-}
-.wall-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,169,110,0.08); }
-.wall-btn:hover:not(.active) { color: var(--text); border-color: var(--muted); }
-
-/* APPLY BTN */
-.apply-btn {
-  width: 100%;
-  padding: 10px;
-  background: var(--accent);
-  color: #111;
-  border: none;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-weight: 500;
-  border-radius: 3px;
-  transition: opacity 0.15s;
-  margin-top: 12px;
-}
-.apply-btn:hover { opacity: 0.85; }
-.apply-btn.secondary {
-  background: var(--panel2);
-  color: var(--text);
-  border: 1px solid var(--border);
-}
-
-/* RANGE SLIDER */
-input[type="range"] {
-  width: 100%;
-  accent-color: var(--accent);
-  cursor: pointer;
-}
-
-/* CANVAS AREA */
-.canvas-area {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.canvas-toolbar {
-  height: 40px;
-  background: var(--panel);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  gap: 8px;
-  flex-shrink: 0;
-}
-.tool-btn {
-  padding: 5px 12px;
-  font-size: 11px;
-  background: transparent;
-  color: var(--muted);
-  border: 1px solid transparent;
-  cursor: pointer;
-  border-radius: 3px;
-  font-family: 'DM Sans', sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  transition: all 0.15s;
-}
+/* CANVAS */
+.canvas-area { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+.canvas-toolbar { height: 40px; background: var(--panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 14px; gap: 6px; flex-shrink: 0; }
+.tool-btn { padding: 5px 11px; font-size: 11px; background: transparent; color: var(--muted); border: 1px solid transparent; cursor: pointer; border-radius: 3px; font-family: 'DM Sans', sans-serif; letter-spacing: .08em; text-transform: uppercase; transition: all .15s; }
 .tool-btn.active { background: var(--panel2); border-color: var(--border); color: var(--accent); }
 .tool-btn:hover:not(.active) { color: var(--text); }
-
-.tool-sep { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
+.tool-sep { width: 1px; height: 20px; background: var(--border); margin: 0 3px; }
 .tool-info { margin-left: auto; font-size: 11px; color: var(--muted); }
+.snap-badge { background: rgba(200,169,110,.15); color: var(--accent); font-size: 10px; padding: 2px 7px; border-radius: 10px; border: 1px solid rgba(200,169,110,.3); display: none; }
+.snap-badge.visible { display: inline-block; }
 
-/* 2D CANVAS */
-#canvas2d {
-  position: absolute; inset: 0;
-  cursor: crosshair;
-}
-#canvas2d.pan-mode { cursor: grab; }
-#canvas2d.pan-mode.panning { cursor: grabbing; }
-
-/* 3D CANVAS */
-#canvas3d {
-  position: absolute; inset: 0;
-  display: none;
-}
-#canvas3d canvas {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-/* VIEW WRAPPER */
-.view-2d, .view-3d {
-  position: absolute;
-  inset: 40px 0 0 0;
-}
+.view-2d, .view-3d { position: absolute; top: 40px; left: 0; right: 0; bottom: 0; }
 .view-3d { display: none; }
+#canvas2d { position: absolute; inset: 0; display: block; }
+#canvas3d { position: absolute; inset: 0; width: 100%; height: 100%; }
+#canvas3d canvas { display: block; width: 100% !important; height: 100% !important; }
 
-/* GRID OVERLAY HINT */
-.canvas-hint {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(14,14,13,0.8);
-  border: 1px solid var(--border);
-  padding: 8px 16px;
-  font-size: 11px;
-  color: var(--muted);
-  border-radius: 20px;
-  backdrop-filter: blur(8px);
-  pointer-events: none;
-  white-space: nowrap;
-}
+.canvas-hint { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); background: rgba(14,14,13,.85); border: 1px solid var(--border); padding: 7px 16px; font-size: 11px; color: var(--muted); border-radius: 20px; backdrop-filter: blur(8px); pointer-events: none; white-space: nowrap; z-index: 10; }
+
+/* CONTEXT MENU */
+.ctx-menu { position: fixed; background: var(--panel); border: 1px solid var(--border); border-radius: 4px; z-index: 500; min-width: 150px; box-shadow: 0 8px 24px rgba(0,0,0,.4); display: none; }
+.ctx-menu.visible { display: block; }
+.ctx-item { padding: 9px 14px; font-size: 12px; color: var(--text); cursor: pointer; transition: background .1s; }
+.ctx-item:hover { background: var(--panel2); }
+.ctx-item.danger { color: var(--red); }
+.ctx-sep { height: 1px; background: var(--border); margin: 3px 0; }
 
 /* RIGHT PANEL */
-.right-panel {
-  width: 200px;
-  flex-shrink: 0;
-  background: var(--panel);
-  border-left: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-.right-panel-head {
-  padding: 12px 16px;
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--muted);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.right-panel-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 12px;
-}
+.right-panel { width: 190px; flex-shrink: 0; background: var(--panel); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+.right-panel-head { padding: 11px 14px; font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.right-panel-body { flex: 1; overflow-y: auto; padding: 11px; }
 .right-panel-body::-webkit-scrollbar { width: 4px; }
 .right-panel-body::-webkit-scrollbar-thumb { background: var(--border); }
-
-.room-prop {
-  margin-bottom: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
-}
+.room-prop { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
 .room-prop:last-child { border-bottom: none; }
-.room-prop-label { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
-.room-prop-value { font-size: 16px; color: var(--text); font-family: 'Cormorant Garamond', serif; }
+.room-prop-label { font-size: 10px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+.room-prop-value { font-size: 15px; color: var(--text); font-family: 'Cormorant Garamond', serif; }
 .room-prop-unit { font-size: 11px; color: var(--muted); }
-
-/* SURFACE PREVIEW IN RIGHT PANEL */
-.surface-preview-list { display: flex; flex-direction: column; gap: 6px; }
-.surface-item {
-  display: flex; align-items: center; gap: 8px;
-  padding: 6px 8px;
-  border-radius: 3px;
-  background: var(--panel2);
-  border: 1px solid var(--border);
-}
-.surface-dot {
-  width: 20px; height: 20px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
+.surface-preview-list { display: flex; flex-direction: column; gap: 5px; }
+.surface-item { display: flex; align-items: center; gap: 7px; padding: 5px 7px; border-radius: 3px; background: var(--panel2); border: 1px solid var(--border); }
+.surface-dot { width: 18px; height: 18px; border-radius: 2px; flex-shrink: 0; }
 .surface-name { font-size: 11px; color: var(--text); }
 .surface-mat { font-size: 10px; color: var(--muted); }
-
-/* TOOLTIP */
-.tooltip {
-  position: fixed;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  padding: 6px 10px;
-  font-size: 11px;
-  color: var(--text);
-  border-radius: 3px;
-  pointer-events: none;
-  z-index: 1000;
-  display: none;
-}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
   <a href="/" class="topbar-logo">a<span>RK</span>ithect</a>
   <a href="/" class="topbar-back">← Portfolio</a>
-  <span class="topbar-title">Room Simulator <span>/ New Room</span></span>
+  <span class="topbar-title">Room Simulator</span>
   <div class="view-toggle">
     <button class="view-btn active" id="btn2d" onclick="switchView('2d')">2D Plan</button>
     <button class="view-btn" id="btn3d" onclick="switchView('3d')">3D View</button>
@@ -492,174 +140,147 @@ input[type="range"] {
 </div>
 
 <div class="app-body">
-
-  <!-- LEFT PANEL -->
   <div class="left-panel">
     <div class="panel-tabs">
-      <button class="panel-tab active" onclick="switchTab('room')">Room</button>
-      <button class="panel-tab" onclick="switchTab('surfaces')">Surfaces</button>
+      <button class="panel-tab active" onclick="switchTab('room',this)">Room</button>
+      <button class="panel-tab" onclick="switchTab('surfaces',this)">Surfaces</button>
+      <button class="panel-tab" onclick="switchTab('furniture',this)">Furniture</button>
     </div>
-
     <div class="panel-content">
 
       <!-- ROOM TAB -->
       <div class="tab-pane active" id="tab-room">
+        <div class="section-head">Shape — drag corners to reshape</div>
+        <p style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:10px;">Drag any corner point to reshape the room. Right-click a wall segment to add a corner (create L-shapes etc). Angles snap to 90° automatically.</p>
+        <button class="apply-btn secondary" onclick="resetToRect()">↺ Reset to Rectangle</button>
 
-        <div class="section-head">Dimensions</div>
-        <div class="field-group">
-          <label class="field-label">Width &amp; Depth</label>
-          <div class="field-row">
-            <div class="input-wrap">
-              <input type="number" id="roomW" value="5" min="1" max="30" step="0.1" oninput="updateRoom()">
-              <span class="input-unit">m</span>
-            </div>
-            <div class="input-wrap">
-              <input type="number" id="roomD" value="4" min="1" max="30" step="0.1" oninput="updateRoom()">
-              <span class="input-unit">m</span>
-            </div>
-          </div>
-          <div style="display:flex; gap:4px; margin-top:4px;">
-            <span class="small-label" style="flex:1">Width</span>
-            <span class="small-label" style="flex:1">Depth</span>
-          </div>
+        <div class="section-head">Ceiling Height</div>
+        <div class="input-wrap">
+          <input type="number" id="roomH" value="2.6" min="1.8" max="6" step="0.05" oninput="updateHeight()">
+          <span class="input-unit">m</span>
         </div>
 
-        <div class="field-group">
-          <label class="field-label">Ceiling Height</label>
-          <div class="input-wrap">
-            <input type="number" id="roomH" value="2.6" min="1.8" max="6" step="0.05" oninput="updateRoom()">
-            <span class="input-unit">m</span>
-          </div>
+        <div class="section-head">Add Door</div>
+        <div class="field-label">Wall</div>
+        <div class="wall-selector" id="door-wall-sel">
+          <button class="wall-btn active" onclick="selWall('door',0,this)">Wall 1</button>
+          <button class="wall-btn" onclick="selWall('door',1,this)">Wall 2</button>
+          <button class="wall-btn" onclick="selWall('door',2,this)">Wall 3</button>
+          <button class="wall-btn" onclick="selWall('door',3,this)">Wall 4</button>
         </div>
+        <div class="field-row">
+          <div class="input-wrap"><input type="number" id="doorW" value="0.9" min="0.5" max="2.4" step="0.05"><span class="input-unit">m</span></div>
+          <div class="input-wrap"><input type="number" id="doorH" value="2.1" min="1.5" max="2.8" step="0.05"><span class="input-unit">m</span></div>
+        </div>
+        <div style="display:flex;gap:4px;"><span class="small-label" style="flex:1">Width</span><span class="small-label" style="flex:1">Height</span></div>
+        <div style="margin-top:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px;"><span>Position</span><span id="doorPosV">50%</span></div>
+          <input type="range" id="doorPos" min="5" max="95" value="50" oninput="document.getElementById('doorPosV').textContent=this.value+'%'">
+        </div>
+        <button class="apply-btn secondary" onclick="addOpening('door')">+ Add Door</button>
+
+        <div class="section-head">Add Window</div>
+        <div class="field-label">Wall</div>
+        <div class="wall-selector" id="window-wall-sel">
+          <button class="wall-btn active" onclick="selWall('window',0,this)">Wall 1</button>
+          <button class="wall-btn" onclick="selWall('window',1,this)">Wall 2</button>
+          <button class="wall-btn" onclick="selWall('window',2,this)">Wall 3</button>
+          <button class="wall-btn" onclick="selWall('window',3,this)">Wall 4</button>
+        </div>
+        <div class="field-row-3">
+          <div class="input-wrap"><input type="number" id="winW" value="1.2" min="0.3" max="3" step="0.1"><span class="input-unit">m</span></div>
+          <div class="input-wrap"><input type="number" id="winH" value="1.0" min="0.3" max="2.2" step="0.1"><span class="input-unit">m</span></div>
+          <div class="input-wrap"><input type="number" id="winSill" value="0.9" min="0" max="2" step="0.05"><span class="input-unit">m</span></div>
+        </div>
+        <div style="display:flex;gap:4px;"><span class="small-label" style="flex:1">W</span><span class="small-label" style="flex:1">H</span><span class="small-label" style="flex:1">Sill</span></div>
+        <div style="margin-top:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px;"><span>Position</span><span id="winPosV">50%</span></div>
+          <input type="range" id="winPos" min="5" max="95" value="50" oninput="document.getElementById('winPosV').textContent=this.value+'%'">
+        </div>
+        <button class="apply-btn secondary" onclick="addOpening('window')">+ Add Window</button>
+
+        <div class="section-head">Inner Walls</div>
+        <p style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px;">Select "Draw Wall" tool, then click two points inside the room.</p>
+        <div id="inner-walls-list"><span style="font-size:11px;color:var(--muted);">None yet.</span></div>
 
         <div class="section-head">Openings</div>
-
-        <div class="field-group">
-          <label class="field-label">Add Door</label>
-          <div class="wall-selector" id="door-wall-selector">
-            <button class="wall-btn active" data-wall="north" onclick="selectOpeningWall('door', 'north', this)">North</button>
-            <button class="wall-btn" data-wall="south" onclick="selectOpeningWall('door', 'south', this)">South</button>
-            <button class="wall-btn" data-wall="east" onclick="selectOpeningWall('door', 'east', this)">East</button>
-            <button class="wall-btn" data-wall="west" onclick="selectOpeningWall('door', 'west', this)">West</button>
-          </div>
-          <div class="field-row">
-            <div class="input-wrap">
-              <input type="number" id="doorW" value="0.9" min="0.6" max="2" step="0.05">
-              <span class="input-unit">m</span>
-            </div>
-            <div class="input-wrap">
-              <input type="number" id="doorH" value="2.1" min="1.5" max="2.5" step="0.05">
-              <span class="input-unit">m</span>
-            </div>
-          </div>
-          <div style="display:flex; gap:4px; margin-top:4px;">
-            <span class="small-label" style="flex:1">Width</span>
-            <span class="small-label" style="flex:1">Height</span>
-          </div>
-          <button class="apply-btn secondary" style="margin-top:8px;" onclick="addOpening('door')">+ Add Door</button>
-        </div>
-
-        <div class="field-group">
-          <label class="field-label">Add Window</label>
-          <div class="wall-selector" id="window-wall-selector">
-            <button class="wall-btn active" data-wall="north" onclick="selectOpeningWall('window', 'north', this)">North</button>
-            <button class="wall-btn" data-wall="south" onclick="selectOpeningWall('window', 'south', this)">South</button>
-            <button class="wall-btn" data-wall="east" onclick="selectOpeningWall('window', 'east', this)">East</button>
-            <button class="wall-btn" data-wall="west" onclick="selectOpeningWall('window', 'west', this)">West</button>
-          </div>
-          <div class="field-row-3">
-            <div class="input-wrap">
-              <input type="number" id="winW" value="1.2" min="0.3" max="3" step="0.1">
-              <span class="input-unit">m</span>
-            </div>
-            <div class="input-wrap">
-              <input type="number" id="winH" value="1.0" min="0.3" max="2" step="0.1">
-              <span class="input-unit">m</span>
-            </div>
-            <div class="input-wrap">
-              <input type="number" id="winSill" value="0.9" min="0" max="2" step="0.05">
-              <span class="input-unit">m</span>
-            </div>
-          </div>
-          <div style="display:flex; gap:4px; margin-top:4px;">
-            <span class="small-label" style="flex:1">W</span>
-            <span class="small-label" style="flex:1">H</span>
-            <span class="small-label" style="flex:1">Sill</span>
-          </div>
-          <button class="apply-btn secondary" style="margin-top:8px;" onclick="addOpening('window')">+ Add Window</button>
-        </div>
-
-        <div class="section-head">Openings List</div>
-        <div id="openings-list" style="font-size:12px; color:var(--muted);">No openings added yet.</div>
-
-      </div><!-- end tab-room -->
+        <div id="openings-list"><span style="font-size:11px;color:var(--muted);">None yet.</span></div>
+      </div>
 
       <!-- SURFACES TAB -->
       <div class="tab-pane" id="tab-surfaces">
-
         <div class="section-head">Select Surface</div>
-        <div class="wall-selector">
-          <button class="wall-btn active" onclick="selectSurface('floor', this)">Floor</button>
-          <button class="wall-btn" onclick="selectSurface('ceiling', this)">Ceiling</button>
-          <button class="wall-btn" onclick="selectSurface('wall-north', this)">N Wall</button>
-          <button class="wall-btn" onclick="selectSurface('wall-south', this)">S Wall</button>
-          <button class="wall-btn" onclick="selectSurface('wall-east', this)">E Wall</button>
-          <button class="wall-btn" onclick="selectSurface('wall-west', this)">W Wall</button>
-          <button class="wall-btn" onclick="selectSurface('all-walls', this)" style="grid-column: span 2;">All Walls</button>
+        <div class="wall-selector" style="grid-template-columns:repeat(2,1fr)">
+          <button class="wall-btn active" onclick="selectSurface('floor',this)">Floor</button>
+          <button class="wall-btn" onclick="selectSurface('ceiling',this)">Ceiling</button>
+          <button class="wall-btn" onclick="selectSurface('wall-0',this)">Wall 1</button>
+          <button class="wall-btn" onclick="selectSurface('wall-1',this)">Wall 2</button>
+          <button class="wall-btn" onclick="selectSurface('wall-2',this)">Wall 3</button>
+          <button class="wall-btn" onclick="selectSurface('wall-3',this)">Wall 4</button>
+          <button class="wall-btn" onclick="selectSurface('all-walls',this)" style="grid-column:span 2">All Walls</button>
         </div>
-
         <div class="section-head">Material</div>
-        <select id="mat-type" onchange="updateSwatches()" style="width:100%; background:var(--panel2); border:1px solid var(--border); color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; padding:8px 10px; border-radius:3px; outline:none; appearance:none; margin-bottom:12px;">
-          <option value="plain">Plain / Paint</option>
-          <option value="wood">Wood</option>
-          <option value="tile">Tile</option>
-          <option value="brick">Brick</option>
-          <option value="concrete">Concrete</option>
-        </select>
-
+        <div class="input-wrap" style="margin-bottom:10px;">
+          <select id="mat-type" onchange="updateSwatches()">
+            <option value="plain">Plain / Paint</option>
+            <option value="wood">Wood</option>
+            <option value="tile">Tile</option>
+            <option value="brick">Brick</option>
+            <option value="concrete">Concrete</option>
+          </select>
+        </div>
         <div class="section-head">Colour</div>
         <div class="swatch-grid" id="swatch-grid"></div>
-
-        <div class="field-group" style="margin-top:8px;">
-          <label class="field-label">Custom colour</label>
-          <input type="color" id="custom-color" value="#c8a96e" onchange="selectCustomColor(this.value)">
+        <div class="input-wrap" style="margin-top:6px;">
+          <label class="field-label">Custom</label>
+          <input type="color" id="custom-color" value="#c8a96e" oninput="selectCustomColor(this.value)">
         </div>
-
-        <div class="field-group">
+        <div style="margin-top:8px;">
           <label class="field-label">Roughness</label>
           <input type="range" id="roughness" min="0" max="1" step="0.05" value="0.7" oninput="applyCurrentSurface()">
         </div>
+        <button class="apply-btn" onclick="applyCurrentSurface()">Apply</button>
+        <button class="apply-btn secondary" style="margin-top:5px;" onclick="applyToAll()">Apply to All Walls</button>
+      </div>
 
-        <button class="apply-btn" onclick="applyCurrentSurface()">Apply to Surface</button>
-        <button class="apply-btn secondary" style="margin-top:6px;" onclick="applyToAll()">Apply to All Walls</button>
+      <!-- FURNITURE TAB -->
+      <div class="tab-pane" id="tab-furniture">
+        <div class="section-head">Room Type</div>
+        <div class="room-type-sel">
+          <button class="room-type-btn active" onclick="setRoomType('bathroom',this)">Bathroom</button>
+          <button class="room-type-btn" onclick="setRoomType('kitchen',this)">Kitchen</button>
+          <button class="room-type-btn" onclick="setRoomType('living',this)">Living</button>
+          <button class="room-type-btn" onclick="setRoomType('bedroom',this)">Bedroom</button>
+        </div>
+        <div class="section-head">Add Furniture</div>
+        <div class="furniture-grid" id="furn-grid"></div>
+        <p class="furn-hint">Click item to add · Drag to position · R to rotate · Del to remove</p>
+        <div class="section-head">Placed Items</div>
+        <div id="furn-list"><span style="font-size:11px;color:var(--muted);">None placed.</span></div>
+      </div>
 
-      </div><!-- end tab-surfaces -->
-
-    </div><!-- panel-content -->
-  </div><!-- left-panel -->
+    </div>
+  </div>
 
   <!-- CANVAS AREA -->
-  <div class="canvas-area" id="canvas-area">
-    <div class="canvas-toolbar">
+  <div class="canvas-area">
+    <div class="canvas-toolbar" id="toolbar2d">
       <button class="tool-btn active" id="tool-select" onclick="setTool('select')">Select</button>
       <button class="tool-btn" id="tool-pan" onclick="setTool('pan')">Pan</button>
+      <button class="tool-btn" id="tool-wall" onclick="setTool('wall')">Draw Wall</button>
       <div class="tool-sep"></div>
       <button class="tool-btn" onclick="resetView()">Reset View</button>
-      <div class="tool-sep"></div>
       <button class="tool-btn" id="tool-grid" onclick="toggleGrid()">Grid: On</button>
-      <span class="tool-info" id="tool-info">Click to select · Scroll to zoom</span>
+      <span class="snap-badge" id="snap-badge">⊙ Snapped</span>
+      <span class="tool-info" id="tool-info">Select tool active</span>
     </div>
-
-    <!-- 2D VIEW -->
     <div class="view-2d" id="view2d">
       <canvas id="canvas2d"></canvas>
-      <div class="canvas-hint" id="hint2d">Scroll to zoom · Right-click drag or Pan tool to move</div>
+      <div class="canvas-hint" id="hint2d">Drag corners to reshape · Right-click wall to add corner · Scroll to zoom</div>
     </div>
-
-    <!-- 3D VIEW -->
     <div class="view-3d" id="view3d">
       <div id="canvas3d"></div>
-      <div class="canvas-hint">Left-click drag to orbit · Scroll to zoom · Right-click drag to pan</div>
+      <div class="canvas-hint">Left-drag: orbit · Scroll: zoom · Right-drag: pan</div>
     </div>
   </div>
 
@@ -667,378 +288,779 @@ input[type="range"] {
   <div class="right-panel">
     <div class="right-panel-head">Room Info</div>
     <div class="right-panel-body">
-      <div class="room-prop">
-        <div class="room-prop-label">Dimensions</div>
-        <div class="room-prop-value" id="info-dims">5 × 4 m</div>
-      </div>
-      <div class="room-prop">
-        <div class="room-prop-label">Ceiling Height</div>
-        <div class="room-prop-value" id="info-height">2.6 <span class="room-prop-unit">m</span></div>
-      </div>
-      <div class="room-prop">
-        <div class="room-prop-label">Floor Area</div>
-        <div class="room-prop-value" id="info-area">20.0 <span class="room-prop-unit">m²</span></div>
-      </div>
-      <div class="room-prop">
-        <div class="room-prop-label">Wall Area</div>
-        <div class="room-prop-value" id="info-wallarea">46.8 <span class="room-prop-unit">m²</span></div>
-      </div>
-      <div class="room-prop" style="border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:12px;">
-        <div class="room-prop-label">Openings</div>
-        <div class="room-prop-value" id="info-openings">0</div>
-      </div>
-
-      <div style="font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;">Surfaces</div>
+      <div class="room-prop"><div class="room-prop-label">Floor Area</div><div class="room-prop-value" id="info-area">20.0 <span class="room-prop-unit">m²</span></div></div>
+      <div class="room-prop"><div class="room-prop-label">Perimeter</div><div class="room-prop-value" id="info-perim">18.0 <span class="room-prop-unit">m</span></div></div>
+      <div class="room-prop"><div class="room-prop-label">Height</div><div class="room-prop-value" id="info-height">2.60 <span class="room-prop-unit">m</span></div></div>
+      <div class="room-prop"><div class="room-prop-label">Wall Area</div><div class="room-prop-value" id="info-wallarea">46.8 <span class="room-prop-unit">m²</span></div></div>
+      <div class="room-prop"><div class="room-prop-label">Openings</div><div class="room-prop-value" id="info-openings">0</div></div>
+      <div class="room-prop"><div class="room-prop-label">Furniture</div><div class="room-prop-value" id="info-furn">0</div></div>
+      <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:8px 0 6px;">Surfaces</div>
       <div class="surface-preview-list" id="surface-list"></div>
     </div>
   </div>
+</div>
 
-</div><!-- app-body -->
-
-<div class="tooltip" id="tooltip"></div>
+<!-- CONTEXT MENU -->
+<div class="ctx-menu" id="ctx-menu">
+  <div class="ctx-item" id="ctx-add-corner" onclick="ctxAddCorner()">✂ Split wall here</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item danger" id="ctx-del-corner" onclick="ctxDelCorner()">× Remove corner</div>
+</div>
 
 <script>
-// =============================================
+// ================================================
 // STATE
-// =============================================
-const state = {
-  room: { w: 5, d: 4, h: 2.6 },
-  openings: [],
-  surfaces: {
-    floor:      { color: '#c8b89a', material: 'wood',     roughness: 0.8 },
-    ceiling:    { color: '#f0ede8', material: 'plain',    roughness: 0.9 },
-    'wall-north': { color: '#e8e4dc', material: 'plain',  roughness: 0.85 },
-    'wall-south': { color: '#e8e4dc', material: 'plain',  roughness: 0.85 },
-    'wall-east':  { color: '#e8e4dc', material: 'plain',  roughness: 0.85 },
-    'wall-west':  { color: '#e8e4dc', material: 'plain',  roughness: 0.85 },
-  },
-  activeSurface: 'floor',
-  selectedColor: '#c8b89a',
-  currentView: '2d',
-  tool: 'select',
-  showGrid: true,
-  doorWall: 'north',
-  windowWall: 'north',
-};
+// ================================================
+var H_CEIL = 2.6;
 
-// =============================================
-// 2D CANVAS
-// =============================================
-const c2d = document.getElementById('canvas2d');
-const ctx = c2d.getContext('2d');
-let view = { x: 0, y: 0, scale: 70 }; // pixels per meter
-let isPanning = false, panStart = { x:0, y:0 };
-let animFrame = null;
+// Room polygon — array of {x,y} in metres
+var corners = [
+  {x:0, y:0}, {x:5, y:0}, {x:5, y:4}, {x:0, y:4}
+];
+
+var openings   = [];   // {wallIdx, type, width, height, sill, position, id}
+var innerWalls = [];   // {ax,ay,bx,by}
+var furniture  = [];   // {type,x,y,rot,w,d, id, label}
+
+var surfaces = {
+  floor:   {color:'#c8b89a', material:'wood',  roughness:0.8},
+  ceiling: {color:'#f0ede8', material:'plain', roughness:0.9},
+};
+// wall-0 .. wall-N generated dynamically
+function ensureWallSurfaces() {
+  for (var i = 0; i < corners.length; i++) {
+    var k = 'wall-' + i;
+    if (!surfaces[k]) surfaces[k] = {color:'#e8e4dc', material:'plain', roughness:0.85};
+  }
+}
+
+var activeSurface  = 'floor';
+var selectedColor  = '#c8b89a';
+var currentView    = '2d';
+var tool           = 'select';
+var showGrid       = true;
+var doorWallIdx    = 0;
+var windowWallIdx  = 0;
+var selectedFurnId = null;
+var roomType       = 'bathroom';
+
+// View transform
+var view = {x:0, y:0, scale:70};
+
+// Interaction state
+var draggingCornerIdx  = -1;
+var draggingFurnId     = null;
+var furnDragOffset      = {x:0, y:0};
+var isRightDrag         = false;
+var rightDragStart      = {x:0, y:0};
+var wallDrawStart       = null;   // {x,y} in world when drawing inner wall
+var snapActive          = false;
+var ctxCornerIdx        = -1;
+var ctxWallIdx          = -1;
+var ctxWallT            = 0;
+
+// ================================================
+// CANVAS SETUP
+// ================================================
+var c2d = document.getElementById('canvas2d');
+var ctx = c2d.getContext('2d');
 
 function resizeCanvas() {
-  const area = document.getElementById('view2d');
-  c2d.width = area.clientWidth;
+  var area = document.getElementById('view2d');
+  c2d.width  = area.clientWidth;
   c2d.height = area.clientHeight;
   draw2D();
 }
 
-function worldToScreen(wx, wy) {
+function W2S(wx, wy) {  // world → screen
   return {
-    x: c2d.width / 2 + (wx - state.room.w / 2) * view.scale + view.x,
-    y: c2d.height / 2 + (wy - state.room.d / 2) * view.scale + view.y
+    x: c2d.width  / 2 + wx * view.scale + view.x,
+    y: c2d.height / 2 + wy * view.scale + view.y
   };
 }
+function S2W(sx, sy) {  // screen → world
+  return {
+    x: (sx - c2d.width /2 - view.x) / view.scale,
+    y: (sy - c2d.height/2 - view.y) / view.scale
+  };
+}
+function px(v) { return v * view.scale; }
 
+// ================================================
+// SNAPPING
+// ================================================
+var SNAP_ANGLE_DEG = 5;   // snap to 90° increments if within 5°
+var SNAP_LEN_CM    = 5;   // snap to nearest 0.5m if within 5cm
+
+function snapPoint(wx, wy, refIdx) {
+  snapActive = false;
+  var sx = wx, sy = wy;
+
+  // Snap to grid (0.5m)
+  var gs = 0.5;
+  var nx = Math.round(wx / gs) * gs;
+  var ny = Math.round(wy / gs) * gs;
+  if (Math.abs(wx - nx) < SNAP_LEN_CM/100) { sx = nx; snapActive = true; }
+  if (Math.abs(wy - ny) < SNAP_LEN_CM/100) { sy = ny; snapActive = true; }
+
+  // Snap angle to 90° relative to neighbours
+  if (refIdx >= 0) {
+    var n = corners.length;
+    var prev = corners[(refIdx - 1 + n) % n];
+    var next = corners[(refIdx + 1) % n];
+
+    // Try to make right angle with prev
+    var dx = sx - prev.x, dy = sy - prev.y;
+    var angle = Math.atan2(dy, dx);
+    var snapped = Math.round(angle / (Math.PI/2)) * (Math.PI/2);
+    if (Math.abs(angle - snapped) < (SNAP_ANGLE_DEG * Math.PI / 180)) {
+      var len = Math.sqrt(dx*dx + dy*dy);
+      sx = prev.x + Math.cos(snapped) * len;
+      sy = prev.y + Math.sin(snapped) * len;
+      snapActive = true;
+    }
+  }
+
+  document.getElementById('snap-badge').classList.toggle('visible', snapActive);
+  return {x: sx, y: sy};
+}
+
+// ================================================
+// 2D DRAW
+// ================================================
 function draw2D() {
   ctx.clearRect(0, 0, c2d.width, c2d.height);
-
-  const { w, d } = state.room;
-  const origin = worldToScreen(0, 0);
-  const px = v => v * view.scale;
+  ensureWallSurfaces();
 
   // Grid
-  if (state.showGrid) {
-    ctx.strokeStyle = '#2a2a26';
-    ctx.lineWidth = 0.5;
-    const step = view.scale; // 1m grid
-    const startX = ((origin.x % step) + c2d.width * 2) % step - c2d.width;
-    const startY = ((origin.y % step) + c2d.height * 2) % step - c2d.height;
-    for (let x = startX; x < c2d.width + c2d.width; x += step) {
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, c2d.height); ctx.stroke();
+  if (showGrid) {
+    ctx.strokeStyle = '#242420'; ctx.lineWidth = 0.5;
+    var step = view.scale;
+    var ox0 = ((c2d.width/2 + view.x) % step + c2d.width * 3) % step;
+    var oy0 = ((c2d.height/2 + view.y) % step + c2d.height * 3) % step;
+    for (var gx = ox0 - step; gx < c2d.width + step; gx += step) {
+      ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx, c2d.height); ctx.stroke();
     }
-    for (let y = startY; y < c2d.height + c2d.height; y += step) {
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(c2d.width, y); ctx.stroke();
+    for (var gy = oy0 - step; gy < c2d.height + step; gy += step) {
+      ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(c2d.width, gy); ctx.stroke();
     }
   }
+
+  if (corners.length < 3) return;
 
   // Floor fill
-  const floorColor = state.surfaces.floor.color;
-  ctx.fillStyle = floorColor + 'dd';
-  ctx.fillRect(origin.x, origin.y, px(w), px(d));
+  ctx.beginPath();
+  var s0 = W2S(corners[0].x, corners[0].y);
+  ctx.moveTo(s0.x, s0.y);
+  for (var i = 1; i < corners.length; i++) {
+    var si = W2S(corners[i].x, corners[i].y);
+    ctx.lineTo(si.x, si.y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = surfaces.floor.color + 'cc';
+  ctx.fill();
 
-  // Floor texture hint
-  const mat = state.surfaces.floor.material;
-  if (mat === 'wood') {
-    ctx.strokeStyle = floorColor;
-    ctx.globalAlpha = 0.35;
-    const plankW = px(0.12);
-    for (let x = origin.x; x < origin.x + px(w); x += plankW) {
-      ctx.beginPath(); ctx.moveTo(x, origin.y); ctx.lineTo(x, origin.y + px(d)); ctx.lineWidth = 1;
-      ctx.strokeStyle = 'rgba(0,0,0,0.2)'; ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-  } else if (mat === 'tile') {
-    const tileS = px(0.3);
-    ctx.globalAlpha = 0.2;
-    ctx.strokeStyle = '#000';
-    ctx.lineWidth = 0.5;
-    for (let x = origin.x; x <= origin.x + px(w); x += tileS) {
-      ctx.beginPath(); ctx.moveTo(x, origin.y); ctx.lineTo(x, origin.y + px(d)); ctx.stroke();
-    }
-    for (let y = origin.y; y <= origin.y + px(d); y += tileS) {
-      ctx.beginPath(); ctx.moveTo(origin.x, y); ctx.lineTo(origin.x + px(w), y); ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
+  // Floor texture lines
+  drawFloorTexture();
+
+  // Walls (thick stroke)
+  var wt = Math.max(6, px(0.18));
+  for (var wi = 0; wi < corners.length; wi++) {
+    var A = W2S(corners[wi].x, corners[wi].y);
+    var B = W2S(corners[(wi+1)%corners.length].x, corners[(wi+1)%corners.length].y);
+    var wsurf = surfaces['wall-' + wi] || surfaces['wall-0'];
+    ctx.strokeStyle = wsurf.color;
+    ctx.lineWidth = wt;
+    ctx.lineCap = 'square';
+    ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
+    ctx.strokeStyle = '#3a3a36'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
   }
 
-  // Walls
-  const wallThk = Math.max(4, px(0.15));
-  const walls = [
-    { id: 'wall-north', x: origin.x - wallThk, y: origin.y - wallThk, width: px(w) + 2 * wallThk, height: wallThk },
-    { id: 'wall-south', x: origin.x - wallThk, y: origin.y + px(d), width: px(w) + 2 * wallThk, height: wallThk },
-    { id: 'wall-west',  x: origin.x - wallThk, y: origin.y, width: wallThk, height: px(d) },
-    { id: 'wall-east',  x: origin.x + px(w),   y: origin.y, width: wallThk, height: px(d) },
-  ];
+  // Openings
+  drawOpenings2D(wt);
 
-  walls.forEach(wall => {
-    const surf = state.surfaces[wall.id];
-    ctx.fillStyle = surf.color;
-    ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
-    ctx.strokeStyle = '#3a3a36';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(wall.x, wall.y, wall.width, wall.height);
+  // Inner walls
+  innerWalls.forEach(function(iw) {
+    var A = W2S(iw.ax, iw.ay), B = W2S(iw.bx, iw.by);
+    ctx.strokeStyle = '#888'; ctx.lineWidth = wt * 0.7; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
+    ctx.strokeStyle = '#3a3a36'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
   });
 
-  // Openings on 2D plan
-  state.openings.forEach(op => {
-    const opPx = op.width * view.scale;
-    let ox, oy, ow, oh;
-    const offset = (op.wallLen - op.width) / 2 * view.scale; // centered
-    if (op.wall === 'north') {
-      ox = origin.x + offset; oy = origin.y - wallThk; ow = opPx; oh = wallThk;
-    } else if (op.wall === 'south') {
-      ox = origin.x + offset; oy = origin.y + px(d); ow = opPx; oh = wallThk;
-    } else if (op.wall === 'west') {
-      ox = origin.x - wallThk; oy = origin.y + offset; ow = wallThk; oh = opPx;
-    } else {
-      ox = origin.x + px(w); oy = origin.y + offset; ow = wallThk; oh = opPx;
-    }
+  // Furniture
+  drawFurniture2D();
 
-    ctx.fillStyle = op.type === 'door' ? '#0e0e0d' : '#4a9fb5aa';
-    ctx.fillRect(ox, oy, ow, oh);
-
-    if (op.type === 'door') {
-      // Door swing arc
-      ctx.strokeStyle = 'rgba(200,169,110,0.5)';
-      ctx.lineWidth = 1;
-      ctx.setLineDash([3,3]);
-      ctx.beginPath();
-      if (op.wall === 'north' || op.wall === 'south') {
-        ctx.arc(ox, oy + oh/2, opPx, -Math.PI/2, 0);
-      } else {
-        ctx.arc(ox + ow/2, oy, opPx, 0, Math.PI/2);
-      }
-      ctx.stroke();
-      ctx.setLineDash([]);
-    } else {
-      // Window lines
-      ctx.strokeStyle = '#4a9fb5';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      if (op.wall === 'north' || op.wall === 'south') {
-        const mx = ox + ow/2; ctx.moveTo(mx, oy); ctx.lineTo(mx, oy+oh);
-      } else {
-        const my = oy + oh/2; ctx.moveTo(ox, my); ctx.lineTo(ox+ow, my);
-      }
-      ctx.stroke();
-    }
+  // Corner handles
+  corners.forEach(function(c, idx) {
+    var sp = W2S(c.x, c.y);
+    ctx.beginPath(); ctx.arc(sp.x, sp.y, 7, 0, Math.PI*2);
+    ctx.fillStyle   = idx === draggingCornerIdx ? '#c8a96e' : '#1e1e1b';
+    ctx.strokeStyle = '#c8a96e'; ctx.lineWidth = 2;
+    ctx.fill(); ctx.stroke();
   });
+
+  // Wall-draw preview
+  if (tool === 'wall' && wallDrawStart) {
+    // drawn in mousemove via drawWallPreview
+  }
 
   // Dimension labels
-  ctx.fillStyle = '#6b6860';
-  ctx.font = `${Math.max(10, px(0.18))}px DM Sans`;
-  ctx.textAlign = 'center';
-  ctx.fillText(`${w.toFixed(1)} m`, origin.x + px(w)/2, origin.y - wallThk - 10);
-  ctx.save();
-  ctx.translate(origin.x - wallThk - 10, origin.y + px(d)/2);
-  ctx.rotate(-Math.PI/2);
-  ctx.fillText(`${d.toFixed(1)} m`, 0, 0);
-  ctx.restore();
+  drawDimensions();
 
   // Compass
   drawCompass();
+
+  updateInfoPanel();
+}
+
+function drawFloorTexture() {
+  var mat = surfaces.floor.material;
+  if (mat !== 'wood' && mat !== 'tile') return;
+  ctx.save();
+  ctx.beginPath();
+  var s0 = W2S(corners[0].x, corners[0].y);
+  ctx.moveTo(s0.x, s0.y);
+  corners.slice(1).forEach(function(c) { var sp = W2S(c.x,c.y); ctx.lineTo(sp.x, sp.y); });
+  ctx.closePath(); ctx.clip();
+  ctx.globalAlpha = 0.18; ctx.strokeStyle = 'rgba(0,0,0,0.6)'; ctx.lineWidth = 0.5;
+  var step = mat === 'wood' ? px(0.12) : px(0.3);
+  var bounds = getBounds();
+  var A = W2S(bounds.minX, bounds.minY), B = W2S(bounds.maxX, bounds.maxY);
+  for (var x = A.x; x < B.x + step; x += step) {
+    ctx.beginPath(); ctx.moveTo(x, A.y); ctx.lineTo(x, B.y); ctx.stroke();
+  }
+  if (mat === 'tile') {
+    for (var y = A.y; y < B.y + step; y += step) {
+      ctx.beginPath(); ctx.moveTo(A.x, y); ctx.lineTo(B.x, y); ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+function getBounds() {
+  var xs = corners.map(function(c){return c.x;}), ys = corners.map(function(c){return c.y;});
+  return {minX:Math.min.apply(null,xs), maxX:Math.max.apply(null,xs), minY:Math.min.apply(null,ys), maxY:Math.max.apply(null,ys)};
+}
+
+function drawOpenings2D(wt) {
+  openings.forEach(function(op) {
+    var wi = op.wallIdx % corners.length;
+    var A = corners[wi], B = corners[(wi+1)%corners.length];
+    var len = dist(A, B);
+    var t = Math.max(op.width/len/2, Math.min(1 - op.width/len/2, op.position));
+    // Centre of opening in world
+    var cx = A.x + (B.x-A.x)*t, cy = A.y + (B.y-A.y)*t;
+    // Wall direction
+    var dx = (B.x-A.x)/len, dy = (B.y-A.y)/len;
+    // Screen positions
+    var pxW = px(op.width);
+    var sA = W2S(cx - dx*op.width/2, cy - dy*op.width/2);
+    var sB = W2S(cx + dx*op.width/2, cy + dy*op.width/2);
+
+    // Erase wall segment
+    ctx.strokeStyle = '#0e0e0d'; ctx.lineWidth = wt + 2; ctx.lineCap = 'butt';
+    ctx.beginPath(); ctx.moveTo(sA.x, sA.y); ctx.lineTo(sB.x, sB.y); ctx.stroke();
+
+    if (op.type === 'door') {
+      ctx.strokeStyle = 'rgba(200,169,110,0.7)'; ctx.lineWidth = 1.5;
+      ctx.setLineDash([3,3]);
+      var swingR = px(op.width);
+      var ang0 = Math.atan2(dy, dx) + Math.PI/2;
+      ctx.beginPath();
+      ctx.moveTo(sA.x, sA.y);
+      ctx.arc(sA.x, sA.y, swingR, ang0, ang0 + Math.PI/2);
+      ctx.stroke(); ctx.setLineDash([]);
+      ctx.strokeStyle = '#c8a96e'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(sA.x, sA.y); ctx.lineTo(sB.x, sB.y); ctx.stroke();
+    } else {
+      ctx.strokeStyle = '#4a9fb5'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(sA.x, sA.y); ctx.lineTo(sB.x, sB.y); ctx.stroke();
+      var mx=(sA.x+sB.x)/2, my=(sA.y+sB.y)/2;
+      var nx=-dy*6, ny=dx*6;
+      ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(mx-nx, my-ny); ctx.lineTo(mx+nx, my+ny); ctx.stroke();
+    }
+  });
+}
+
+function drawFurniture2D() {
+  furniture.forEach(function(f) {
+    var sp = W2S(f.x, f.y);
+    var hw = px(f.w)/2, hd = px(f.d)/2;
+    var isSelected = f.id === selectedFurnId;
+
+    ctx.save();
+    ctx.translate(sp.x, sp.y);
+    ctx.rotate(f.rot * Math.PI/2);
+
+    // Shadow
+    ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = 4; ctx.shadowOffsetY = 2;
+    ctx.fillStyle = isSelected ? 'rgba(200,169,110,0.25)' : 'rgba(30,30,27,0.85)';
+    ctx.strokeStyle = isSelected ? '#c8a96e' : '#555';
+    ctx.lineWidth = isSelected ? 2 : 1;
+    ctx.shadowColor = 'transparent';
+
+    // Draw furniture shape
+    drawFurnShape(ctx, f.type, hw, hd);
+
+    ctx.restore();
+
+    // Label
+    ctx.save();
+    ctx.fillStyle = isSelected ? '#c8a96e' : '#6b6860';
+    ctx.font = Math.max(9, px(0.14)) + 'px DM Sans';
+    ctx.textAlign = 'center';
+    ctx.fillText(f.label, sp.x, sp.y + hd + 12);
+    ctx.restore();
+  });
+}
+
+function drawFurnShape(ctx, type, hw, hd) {
+  ctx.beginPath();
+  ctx.rect(-hw, -hd, hw*2, hd*2);
+  ctx.fill(); ctx.stroke();
+
+  ctx.strokeStyle = 'rgba(200,169,110,0.4)'; ctx.lineWidth = 0.5;
+
+  // Interior detail per type
+  if (type === 'toilet') {
+    ctx.beginPath(); ctx.ellipse(0, hd*0.15, hw*0.7, hd*0.55, 0, 0, Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.rect(-hw*0.85, -hd, hw*1.7, hd*0.4); ctx.stroke();
+  } else if (type === 'sink') {
+    ctx.beginPath(); ctx.ellipse(0, 0, hw*0.65, hd*0.65, 0, 0, Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, 0, hw*0.12, 0, Math.PI*2); ctx.stroke();
+  } else if (type === 'bath') {
+    ctx.beginPath(); ctx.roundRect(-hw*0.85, -hd*0.8, hw*1.7, hd*1.5, 8); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, hd*0.4, hw*0.2, 0, Math.PI*2); ctx.stroke();
+  } else if (type === 'shower') {
+    ctx.beginPath(); ctx.rect(-hw*0.9,-hd*0.9,hw*1.8,hd*1.8); ctx.stroke();
+    for (var r=-1;r<=1;r+=1) { for (var c=-1;c<=1;c+=1) { ctx.beginPath(); ctx.arc(r*hw*0.35,c*hd*0.35,1.5,0,Math.PI*2); ctx.fill(); }}
+  } else if (type === 'fridge') {
+    ctx.beginPath(); ctx.rect(-hw*0.85, -hd+4, hw*1.7, hd*0.5); ctx.stroke();
+    ctx.beginPath(); ctx.rect(-hw*0.85, -hd*0.4, hw*1.7, hd*1.25); ctx.stroke();
+  } else if (type === 'oven') {
+    ctx.beginPath(); ctx.rect(-hw*0.8, -hd*0.8, hw*1.6, hd*0.7); ctx.stroke();
+    [-0.35, 0.35].forEach(function(ox) { [-0.35, 0.35].forEach(function(oy) {
+      ctx.beginPath(); ctx.arc(ox*hw, oy*hd, hw*0.15, 0, Math.PI*2); ctx.stroke();
+    }); });
+  } else if (type === 'base-unit') {
+    ctx.beginPath(); ctx.moveTo(0,-hd); ctx.lineTo(0, hd); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-hw,0); ctx.lineTo(hw,0); ctx.stroke();
+  } else if (type === 'sofa') {
+    ctx.beginPath(); ctx.rect(-hw*0.9, -hd*0.9, hw*1.8, hd*0.55); ctx.stroke();
+    [-0.55, 0, 0.55].forEach(function(ox) {
+      ctx.beginPath(); ctx.rect(ox*hw - hw*0.28, -hd*0.2, hw*0.56, hd*0.9); ctx.stroke();
+    });
+  } else if (type === 'bed-double') {
+    ctx.beginPath(); ctx.rect(-hw*0.9, -hd*0.9, hw*1.8, hd*0.55); ctx.stroke();
+    ctx.beginPath(); ctx.rect(-hw*0.85, -hd*0.25, hw*0.8, hd*1.1); ctx.stroke();
+    ctx.beginPath(); ctx.rect(hw*0.05, -hd*0.25, hw*0.8, hd*1.1); ctx.stroke();
+  } else if (type === 'bed-single') {
+    ctx.beginPath(); ctx.rect(-hw*0.9, -hd*0.9, hw*1.8, hd*0.5); ctx.stroke();
+    ctx.beginPath(); ctx.rect(-hw*0.85, -hd*0.3, hw*1.7, hd*1.15); ctx.stroke();
+  } else if (type === 'desk') {
+    ctx.beginPath(); ctx.moveTo(-hw*0.8, hd*0.6); ctx.lineTo(-hw*0.8, -hd*0.6); ctx.stroke();
+  } else if (type === 'wardrobe') {
+    ctx.beginPath(); ctx.moveTo(0, -hd); ctx.lineTo(0, hd); ctx.stroke();
+    ctx.beginPath(); ctx.arc(-hw*0.5, 0, hw*0.08, 0, Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.arc( hw*0.5, 0, hw*0.08, 0, Math.PI*2); ctx.stroke();
+  } else if (type === 'dining-table') {
+    ctx.beginPath(); ctx.ellipse(0,0,hw*0.85,hd*0.85,0,0,Math.PI*2); ctx.stroke();
+  } else if (type === 'island') {
+    ctx.beginPath(); ctx.moveTo(-hw*0.9,-hd*0.9); ctx.lineTo(hw*0.9,-hd*0.9); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-hw*0.9, hd*0.9); ctx.lineTo(hw*0.9, hd*0.9); ctx.stroke();
+  } else if (type === 'armchair') {
+    ctx.beginPath(); ctx.rect(-hw*0.9, -hd*0.9, hw*1.8, hd*0.4); ctx.stroke();
+    ctx.beginPath(); ctx.rect(-hw*0.9, -hd*0.9, hw*0.35, hd*1.8); ctx.stroke();
+    ctx.beginPath(); ctx.rect( hw*0.55, -hd*0.9, hw*0.35, hd*1.8); ctx.stroke();
+  }
+}
+
+function drawDimensions() {
+  ctx.fillStyle = '#5a5854';
+  ctx.font = Math.max(10, px(0.16)) + 'px DM Sans';
+  ctx.textAlign = 'center';
+  for (var i = 0; i < corners.length; i++) {
+    var A = corners[i], B = corners[(i+1)%corners.length];
+    var len = dist(A,B);
+    if (len < 0.3) continue;
+    var mx = (A.x+B.x)/2, my = (A.y+B.y)/2;
+    var dx = B.x-A.x, dy = B.y-A.y;
+    var nx = -dy/len * 0.4, ny = dx/len * 0.4; // offset outward
+    var sp = W2S(mx + nx, my + ny);
+    ctx.save();
+    var angle = Math.atan2(dy, dx);
+    if (angle > Math.PI/2 || angle < -Math.PI/2) angle += Math.PI;
+    ctx.translate(sp.x, sp.y);
+    ctx.rotate(angle);
+    ctx.fillText(len.toFixed(2) + ' m', 0, 0);
+    ctx.restore();
+  }
 }
 
 function drawCompass() {
-  const cx = c2d.width - 36, cy = 60;
+  var cx = c2d.width - 34, cy = 54;
   ctx.save();
-  ctx.fillStyle = 'rgba(22,22,20,0.8)';
-  ctx.beginPath(); ctx.arc(cx, cy, 24, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = 'rgba(22,22,20,0.85)';
+  ctx.beginPath(); ctx.arc(cx, cy, 22, 0, Math.PI*2); ctx.fill();
   ctx.strokeStyle = '#2a2a26'; ctx.lineWidth = 1; ctx.stroke();
-  ['N','E','S','W'].forEach((d, i) => {
-    const angle = i * Math.PI/2 - Math.PI/2;
-    const tx = cx + Math.cos(angle) * 14;
-    const ty = cy + Math.sin(angle) * 14 + 4;
-    ctx.fillStyle = d === 'N' ? '#c8a96e' : '#6b6860';
-    ctx.font = `${d === 'N' ? 'bold ' : ''}10px DM Sans`;
+  ['N','E','S','W'].forEach(function(d,i) {
+    var a = i*Math.PI/2 - Math.PI/2;
+    ctx.fillStyle = d==='N' ? '#c8a96e' : '#6b6860';
+    ctx.font = (d==='N'?'bold ':'') + '10px DM Sans';
     ctx.textAlign = 'center';
-    ctx.fillText(d, tx, ty);
+    ctx.fillText(d, cx + Math.cos(a)*13, cy + Math.sin(a)*13 + 4);
   });
   ctx.restore();
 }
 
-// Pan & zoom
-c2d.addEventListener('wheel', e => {
-  e.preventDefault();
-  const factor = e.deltaY > 0 ? 0.9 : 1.1;
-  view.scale = Math.max(20, Math.min(300, view.scale * factor));
-  draw2D();
-}, { passive: false });
+// ================================================
+// DISTANCE HELPER
+// ================================================
+function dist(A, B) { return Math.sqrt((B.x-A.x)**2 + (B.y-A.y)**2); }
+function distPtSeg(P, A, B) {
+  var dx=B.x-A.x, dy=B.y-A.y, l2=dx*dx+dy*dy;
+  if (l2===0) return dist(P,A);
+  var t=Math.max(0,Math.min(1,((P.x-A.x)*dx+(P.y-A.y)*dy)/l2));
+  return dist(P, {x:A.x+t*dx, y:A.y+t*dy});
+}
 
-let isRightDrag = false, rightDragStart = {x:0, y:0};
-c2d.addEventListener('mousedown', e => {
-  if (e.button === 2 || state.tool === 'pan') {
+// ================================================
+// POLY AREA (shoelace)
+// ================================================
+function polyArea() {
+  var s=0, n=corners.length;
+  for(var i=0;i<n;i++){var j=(i+1)%n; s+=corners[i].x*corners[j].y - corners[j].x*corners[i].y;}
+  return Math.abs(s/2);
+}
+function polyPerimeter() {
+  var s=0;
+  for(var i=0;i<corners.length;i++) s+=dist(corners[i],corners[(i+1)%corners.length]);
+  return s;
+}
+
+// ================================================
+// MOUSE / TOUCH INTERACTION
+// ================================================
+var HANDLE_RADIUS = 10; // px
+
+function getEventWorld(e) {
+  var r = c2d.getBoundingClientRect();
+  return S2W(e.clientX - r.left, e.clientY - r.top);
+}
+function getEventScreen(e) {
+  var r = c2d.getBoundingClientRect();
+  return {x: e.clientX - r.left, y: e.clientY - r.top};
+}
+
+function cornerAtScreen(sx, sy) {
+  for (var i = 0; i < corners.length; i++) {
+    var sp = W2S(corners[i].x, corners[i].y);
+    if (Math.hypot(sp.x - sx, sp.y - sy) < HANDLE_RADIUS + 4) return i;
+  }
+  return -1;
+}
+
+function furnAtWorld(wx, wy) {
+  for (var i = furniture.length - 1; i >= 0; i--) {
+    var f = furniture[i];
+    // Transform point into furniture local space
+    var dx = wx - f.x, dy = wy - f.y;
+    var cos = Math.cos(-f.rot * Math.PI/2), sin = Math.sin(-f.rot * Math.PI/2);
+    var lx = dx*cos - dy*sin, ly = dx*sin + dy*cos;
+    if (Math.abs(lx) <= f.w/2 + 0.05 && Math.abs(ly) <= f.d/2 + 0.05) return i;
+  }
+  return -1;
+}
+
+c2d.addEventListener('mousedown', function(e) {
+  var ss = getEventScreen(e);
+  var ww = S2W(ss.x, ss.y);
+
+  if (e.button === 2 || tool === 'pan') {
     isRightDrag = true;
-    rightDragStart = { x: e.clientX - view.x, y: e.clientY - view.y };
-    c2d.classList.add('panning');
+    rightDragStart = {x: e.clientX - view.x, y: e.clientY - view.y};
+    e.preventDefault(); return;
+  }
+
+  if (tool === 'wall') {
+    if (!wallDrawStart) {
+      wallDrawStart = ww;
+    } else {
+      innerWalls.push({ax:wallDrawStart.x, ay:wallDrawStart.y, bx:ww.x, by:ww.y});
+      wallDrawStart = null;
+      draw2D();
+      renderInnerWallsList();
+    }
+    return;
+  }
+
+  if (tool === 'select') {
+    // Check corner handles first
+    var ci = cornerAtScreen(ss.x, ss.y);
+    if (ci >= 0) { draggingCornerIdx = ci; return; }
+
+    // Check furniture
+    var fi = furnAtWorld(ww.x, ww.y);
+    if (fi >= 0) {
+      selectedFurnId = furniture[fi].id;
+      draggingFurnId  = furniture[fi].id;
+      furnDragOffset  = {x: ww.x - furniture[fi].x, y: ww.y - furniture[fi].y};
+      draw2D(); return;
+    }
+
+    selectedFurnId = null; draw2D();
   }
 });
-window.addEventListener('mousemove', e => {
+
+window.addEventListener('mousemove', function(e) {
   if (isRightDrag) {
     view.x = e.clientX - rightDragStart.x;
     view.y = e.clientY - rightDragStart.y;
+    draw2D(); return;
+  }
+
+  var ww = getEventWorld(e);
+
+  if (draggingCornerIdx >= 0) {
+    var snapped = snapPoint(ww.x, ww.y, draggingCornerIdx);
+    corners[draggingCornerIdx] = snapped;
+    draw2D(); return;
+  }
+
+  if (draggingFurnId !== null) {
+    var f = furniture.find(function(x){return x.id===draggingFurnId;});
+    if (f) {
+      f.x = ww.x - furnDragOffset.x;
+      f.y = ww.y - furnDragOffset.y;
+      draw2D();
+    }
+    return;
+  }
+
+  if (tool === 'wall' && wallDrawStart) {
+    draw2D();
+    var sp = W2S(wallDrawStart.x, wallDrawStart.y);
+    var ep = W2S(ww.x, ww.y);
+    ctx.strokeStyle = 'rgba(200,169,110,0.7)'; ctx.lineWidth = 3; ctx.setLineDash([6,4]);
+    ctx.beginPath(); ctx.moveTo(sp.x, sp.y); ctx.lineTo(ep.x, ep.y); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.beginPath(); ctx.arc(sp.x, sp.y, 5, 0, Math.PI*2);
+    ctx.fillStyle = '#c8a96e'; ctx.fill();
+  }
+});
+
+window.addEventListener('mouseup', function(e) {
+  if (e.button === 2) { isRightDrag = false; return; }
+  isRightDrag = false;
+  draggingCornerIdx = -1;
+  draggingFurnId = null;
+});
+
+// Right-click on canvas: context menu on wall
+c2d.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+  var ss = getEventScreen(e);
+  var ww = S2W(ss.x, ss.y);
+
+  // Check if near a corner
+  var ci = cornerAtScreen(ss.x, ss.y);
+  if (ci >= 0) {
+    ctxCornerIdx = ci; ctxWallIdx = -1;
+    var menu = document.getElementById('ctx-menu');
+    document.getElementById('ctx-add-corner').style.display = 'none';
+    document.getElementById('ctx-del-corner').style.display = corners.length > 3 ? 'block' : 'none';
+    menu.style.left = e.clientX + 'px'; menu.style.top = e.clientY + 'px';
+    menu.classList.add('visible'); return;
+  }
+
+  // Check if near a wall segment
+  for (var wi = 0; wi < corners.length; wi++) {
+    var A = corners[wi], B = corners[(wi+1)%corners.length];
+    var d = distPtSeg(ww, A, B);
+    if (d * view.scale < 10) {
+      ctxWallIdx = wi; ctxCornerIdx = -1;
+      // Compute t along segment
+      var dx=B.x-A.x, dy=B.y-A.y, l2=dx*dx+dy*dy;
+      ctxWallT = Math.max(0.1, Math.min(0.9, ((ww.x-A.x)*dx+(ww.y-A.y)*dy)/l2));
+      var menu = document.getElementById('ctx-menu');
+      document.getElementById('ctx-add-corner').style.display = 'block';
+      document.getElementById('ctx-del-corner').style.display = 'none';
+      menu.style.left = e.clientX + 'px'; menu.style.top = e.clientY + 'px';
+      menu.classList.add('visible'); return;
+    }
+  }
+});
+
+document.addEventListener('mousedown', function(e) {
+  if (!e.target.closest('#ctx-menu')) document.getElementById('ctx-menu').classList.remove('visible');
+});
+
+function ctxAddCorner() {
+  document.getElementById('ctx-menu').classList.remove('visible');
+  if (ctxWallIdx < 0) return;
+  var A = corners[ctxWallIdx], B = corners[(ctxWallIdx+1)%corners.length];
+  var nx = {x: A.x + (B.x-A.x)*ctxWallT, y: A.y + (B.y-A.y)*ctxWallT};
+  corners.splice(ctxWallIdx+1, 0, nx);
+  ensureWallSurfaces();
+  draw2D();
+}
+
+function ctxDelCorner() {
+  document.getElementById('ctx-menu').classList.remove('visible');
+  if (ctxCornerIdx < 0 || corners.length <= 3) return;
+  corners.splice(ctxCornerIdx, 1);
+  openings = openings.filter(function(o){return o.wallIdx < corners.length;});
+  ensureWallSurfaces();
+  draw2D();
+}
+
+// Keyboard shortcuts
+window.addEventListener('keydown', function(e) {
+  if (e.target.tagName === 'INPUT') return;
+  if ((e.key === 'Delete' || e.key === 'Backspace') && selectedFurnId !== null) {
+    furniture = furniture.filter(function(f){return f.id !== selectedFurnId;});
+    selectedFurnId = null;
+    draw2D(); renderFurnList(); return;
+  }
+  if (e.key === 'r' || e.key === 'R') {
+    if (selectedFurnId !== null) {
+      var f = furniture.find(function(x){return x.id===selectedFurnId;});
+      if (f) { f.rot = (f.rot + 1) % 4; draw2D(); }
+    }
+  }
+  if (e.key === 'Escape') {
+    wallDrawStart = null;
+    selectedFurnId = null;
     draw2D();
   }
 });
-window.addEventListener('mouseup', e => {
-  if (e.button === 2 || isRightDrag) {
-    isRightDrag = false;
-    c2d.classList.remove('panning');
-  }
-});
-c2d.addEventListener('contextmenu', e => e.preventDefault());
 
-function resetView() {
-  view.x = 0; view.y = 0; view.scale = 70;
+// Scroll zoom
+c2d.addEventListener('wheel', function(e) {
+  e.preventDefault();
+  var factor = e.deltaY > 0 ? 0.9 : 1.1;
+  view.scale = Math.max(20, Math.min(300, view.scale * factor));
   draw2D();
-  if (state.currentView === '3d') rebuild3D();
+}, {passive: false});
+
+// ================================================
+// ROOM OPERATIONS
+// ================================================
+function resetToRect() {
+  corners = [{x:0,y:0},{x:5,y:0},{x:5,y:4},{x:0,y:4}];
+  openings = []; innerWalls = []; furniture = [];
+  surfaces = {
+    floor:{color:'#c8b89a',material:'wood',roughness:0.8},
+    ceiling:{color:'#f0ede8',material:'plain',roughness:0.9},
+  };
+  ensureWallSurfaces();
+  renderOpeningsList(); renderInnerWallsList(); renderFurnList();
+  draw2D();
+  if (currentView === '3d') buildRoom3D();
 }
 
-// =============================================
-// ROOM STATE UPDATES
-// =============================================
-function updateRoom() {
-  state.room.w = parseFloat(document.getElementById('roomW').value) || 5;
-  state.room.d = parseFloat(document.getElementById('roomD').value) || 4;
-  state.room.h = parseFloat(document.getElementById('roomH').value) || 2.6;
+function updateHeight() {
+  H_CEIL = parseFloat(document.getElementById('roomH').value) || 2.6;
   updateInfoPanel();
-  draw2D();
-  if (state.currentView === '3d') rebuild3D();
+  if (currentView === '3d') buildRoom3D();
 }
 
 function updateInfoPanel() {
-  const { w, d, h } = state.room;
-  document.getElementById('info-dims').textContent = `${w.toFixed(1)} × ${d.toFixed(1)} m`;
-  document.getElementById('info-height').innerHTML = `${h.toFixed(2)} <span class="room-prop-unit">m</span>`;
-  const area = (w * d).toFixed(1);
-  document.getElementById('info-area').innerHTML = `${area} <span class="room-prop-unit">m²</span>`;
-  const wallArea = (2 * (w + d) * h).toFixed(1);
-  document.getElementById('info-wallarea').innerHTML = `${wallArea} <span class="room-prop-unit">m²</span>`;
-  document.getElementById('info-openings').textContent = state.openings.length;
+  var area  = polyArea();
+  var perim = polyPerimeter();
+  document.getElementById('info-area').innerHTML   = area.toFixed(1)  + ' <span class="room-prop-unit">m²</span>';
+  document.getElementById('info-perim').innerHTML  = perim.toFixed(1) + ' <span class="room-prop-unit">m</span>';
+  document.getElementById('info-height').innerHTML = H_CEIL.toFixed(2)+ ' <span class="room-prop-unit">m</span>';
+  document.getElementById('info-wallarea').innerHTML = (perim * H_CEIL).toFixed(1) + ' <span class="room-prop-unit">m²</span>';
+  document.getElementById('info-openings').textContent = openings.length;
+  document.getElementById('info-furn').textContent     = furniture.length;
   updateSurfaceList();
 }
 
 function updateSurfaceList() {
-  const container = document.getElementById('surface-list');
-  const names = { floor:'Floor', ceiling:'Ceiling', 'wall-north':'N Wall', 'wall-south':'S Wall', 'wall-east':'E Wall', 'wall-west':'W Wall' };
-  container.innerHTML = Object.entries(state.surfaces).map(([k, v]) => `
-    <div class="surface-item">
-      <div class="surface-dot" style="background:${v.color}; ${getSwatchBg(v.material, v.color)}"></div>
-      <div>
-        <div class="surface-name">${names[k]}</div>
-        <div class="surface-mat">${v.material}</div>
-      </div>
-    </div>
-  `).join('');
+  var names = {floor:'Floor',ceiling:'Ceiling'};
+  for (var i=0;i<corners.length;i++) names['wall-'+i]='Wall '+(i+1);
+  document.getElementById('surface-list').innerHTML = Object.entries(surfaces).map(function(e) {
+    var k=e[0],v=e[1];
+    return '<div class="surface-item"><div class="surface-dot" style="background:'+v.color+'"></div><div><div class="surface-name">'+(names[k]||k)+'</div><div class="surface-mat">'+v.material+'</div></div></div>';
+  }).join('');
 }
 
-function getSwatchBg(mat, color) {
-  if (mat === 'wood') return `background: repeating-linear-gradient(90deg, ${color} 0px, ${color} 6px, ${lighten(color, -20)} 6px, ${lighten(color, -20)} 8px)`;
-  if (mat === 'tile') return `background: repeating-conic-gradient(${color} 0% 25%, ${lighten(color,-10)} 0% 50%) 0 0 / 10px 10px`;
-  return `background:${color}`;
-}
-function lighten(hex, amt) {
-  const num = parseInt(hex.slice(1), 16);
-  const r = Math.min(255, Math.max(0, (num >> 16) + amt));
-  const g = Math.min(255, Math.max(0, ((num >> 8) & 0xff) + amt));
-  const b = Math.min(255, Math.max(0, (num & 0xff) + amt));
-  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-}
+function resetView() { view = {x:0,y:0,scale:70}; draw2D(); }
 
-// =============================================
+// ================================================
 // OPENINGS
-// =============================================
-function selectOpeningWall(type, wall, btn) {
-  const group = document.getElementById(`${type}-wall-selector`);
-  group.querySelectorAll('.wall-btn').forEach(b => b.classList.remove('active'));
+// ================================================
+function selWall(type, idx, btn) {
+  var sel = document.getElementById(type+'-wall-sel');
+  sel.querySelectorAll('.wall-btn').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
-  if (type === 'door') state.doorWall = wall;
-  else state.windowWall = wall;
+  if (type==='door') doorWallIdx=idx; else windowWallIdx=idx;
 }
 
 function addOpening(type) {
-  const wall = type === 'door' ? state.doorWall : state.windowWall;
-  const wallLen = (wall === 'north' || wall === 'south') ? state.room.w : state.room.d;
-
-  let width, height, sill = 0;
-  if (type === 'door') {
-    width = parseFloat(document.getElementById('doorW').value);
-    height = parseFloat(document.getElementById('doorH').value);
+  var wi  = (type==='door' ? doorWallIdx : windowWallIdx) % corners.length;
+  var A   = corners[wi], B = corners[(wi+1)%corners.length];
+  var len = dist(A,B);
+  var w, h, sill=0, pos;
+  if (type==='door') {
+    w=parseFloat(document.getElementById('doorW').value);
+    h=parseFloat(document.getElementById('doorH').value);
+    pos=parseFloat(document.getElementById('doorPos').value)/100;
   } else {
-    width = parseFloat(document.getElementById('winW').value);
-    height = parseFloat(document.getElementById('winH').value);
-    sill = parseFloat(document.getElementById('winSill').value);
+    w=parseFloat(document.getElementById('winW').value);
+    h=parseFloat(document.getElementById('winH').value);
+    sill=parseFloat(document.getElementById('winSill').value);
+    pos=parseFloat(document.getElementById('winPos').value)/100;
   }
-
-  state.openings.push({ type, wall, width, height, sill, wallLen, id: Date.now() });
-  renderOpeningsList();
-  updateInfoPanel();
-  draw2D();
-  if (state.currentView === '3d') rebuild3D();
+  if (w >= len) { alert('Opening wider than wall!'); return; }
+  openings.push({type:type,wallIdx:wi,width:w,height:h,sill:sill,position:pos,id:Date.now()});
+  renderOpeningsList(); draw2D();
+  if (currentView==='3d') buildRoom3D();
 }
 
 function removeOpening(id) {
-  state.openings = state.openings.filter(o => o.id !== id);
-  renderOpeningsList();
-  updateInfoPanel();
-  draw2D();
-  if (state.currentView === '3d') rebuild3D();
+  openings=openings.filter(function(o){return o.id!==id;});
+  renderOpeningsList(); draw2D();
+  if (currentView==='3d') buildRoom3D();
 }
 
 function renderOpeningsList() {
-  const el = document.getElementById('openings-list');
-  if (state.openings.length === 0) {
-    el.innerHTML = '<span style="color:var(--muted); font-size:12px;">No openings added yet.</span>';
-    return;
-  }
-  el.innerHTML = state.openings.map(op => `
-    <div style="display:flex; align-items:center; justify-content:space-between; padding:6px 8px; background:var(--panel2); border:1px solid var(--border); border-radius:3px; margin-bottom:6px; font-size:12px;">
-      <span style="color:${op.type==='door'?'var(--accent)':'var(--accent2)'}">■</span>
-      <span style="flex:1; padding:0 8px; color:var(--text);">${op.type} · ${op.wall} · ${op.width}m×${op.height}m</span>
-      <button onclick="removeOpening(${op.id})" style="background:none; border:none; color:var(--red); cursor:pointer; font-size:14px; padding:0 4px;">×</button>
-    </div>
-  `).join('');
+  var el=document.getElementById('openings-list');
+  if (!openings.length){el.innerHTML='<span style="font-size:11px;color:var(--muted)">None yet.</span>';return;}
+  el.innerHTML=openings.map(function(op){
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 7px;background:var(--panel2);border:1px solid var(--border);border-radius:3px;margin-bottom:5px;font-size:11px;">'
+      +'<span style="color:'+(op.type==='door'?'var(--accent)':'var(--accent2)')+'">■</span>'
+      +'<span style="flex:1;padding:0 7px;color:var(--text);">'+op.type+' W'+(op.wallIdx+1)+' '+op.width.toFixed(1)+'m</span>'
+      +'<button onclick="removeOpening('+op.id+')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:15px;padding:0 3px;">×</button>'
+      +'</div>';
+  }).join('');
 }
 
-// =============================================
+function renderInnerWallsList() {
+  var el=document.getElementById('inner-walls-list');
+  if (!innerWalls.length){el.innerHTML='<span style="font-size:11px;color:var(--muted)">None yet.</span>';return;}
+  el.innerHTML=innerWalls.map(function(iw,i){
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 7px;background:var(--panel2);border:1px solid var(--border);border-radius:3px;margin-bottom:5px;font-size:11px;">'
+      +'<span style="color:var(--muted)">Wall '+dist({x:iw.ax,y:iw.ay},{x:iw.bx,y:iw.by}).toFixed(1)+'m</span>'
+      +'<button onclick="removeInnerWall('+i+')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:15px;padding:0 3px;">×</button>'
+      +'</div>';
+  }).join('');
+}
+
+function removeInnerWall(idx) {
+  innerWalls.splice(idx,1);
+  renderInnerWallsList(); draw2D();
+  if (currentView==='3d') buildRoom3D();
+}
+
+// ================================================
 // SURFACES
-// =============================================
-const PALETTES = {
+// ================================================
+var PALETTES = {
   plain:    ['#f0ede8','#e8e4dc','#d6cfc4','#c4bdb2','#f5f0e8','#e8d8c4','#d4c4b0','#b8a090','#c8d4c0','#b0c4b8','#98b0a8','#8090a0'],
   wood:     ['#c8b89a','#b89870','#a07848','#8B6914','#d4b87c','#c8a050','#a08040','#786030','#9a7860','#7a6050','#6a5040','#5a4030'],
   tile:     ['#e8e4e0','#d4d0cc','#c8c0b8','#e0d8d0','#e8ddd0','#d8c8b8','#c8b8a8','#f0e8e0','#d0e8e0','#c0d8d8','#b0c8c8','#98b8b8'],
@@ -1047,377 +1069,468 @@ const PALETTES = {
 };
 
 function updateSwatches() {
-  const mat = document.getElementById('mat-type').value;
-  const grid = document.getElementById('swatch-grid');
-  const colors = PALETTES[mat];
-  grid.innerHTML = colors.map(c => `
-    <div>
-      <div class="swatch ${c === state.selectedColor ? 'selected' : ''}" 
-           data-texture="${mat}" data-color="${c}"
-           style="--c:${c}; background-color:${c};"
-           onclick="selectSwatch('${c}', this)"></div>
-    </div>
-  `).join('');
+  var mat=document.getElementById('mat-type').value;
+  document.getElementById('swatch-grid').innerHTML=PALETTES[mat].map(function(c){
+    return '<div class="swatch '+(c===selectedColor?'selected':'')+'" data-texture="'+mat+'" style="--c:'+c+';background-color:'+c+';" onclick="selectSwatch(\''+c+'\',this)"></div>';
+  }).join('');
 }
 
 function selectSwatch(color, el) {
-  document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
-  el.classList.add('selected');
-  state.selectedColor = color;
-  document.getElementById('custom-color').value = color;
+  document.querySelectorAll('.swatch').forEach(function(s){s.classList.remove('selected');});
+  el.classList.add('selected'); selectedColor=color;
+  document.getElementById('custom-color').value=color;
 }
-
 function selectCustomColor(color) {
-  document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
-  state.selectedColor = color;
+  document.querySelectorAll('.swatch').forEach(function(s){s.classList.remove('selected');});
+  selectedColor=color;
 }
 
 function selectSurface(surf, btn) {
-  state.activeSurface = surf;
-  document.querySelectorAll('#tab-surfaces .wall-btn').forEach(b => b.classList.remove('active'));
+  activeSurface=surf;
+  document.querySelectorAll('#tab-surfaces .wall-btn').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
-
-  // Load current surface settings
-  const ref = surf === 'all-walls' ? state.surfaces['wall-north'] : state.surfaces[surf];
-  if (ref) {
-    document.getElementById('mat-type').value = ref.material;
-    document.getElementById('roughness').value = ref.roughness;
-    state.selectedColor = ref.color;
-    document.getElementById('custom-color').value = ref.color;
+  var ref=surf==='all-walls'?surfaces['wall-0']:surfaces[surf];
+  if (ref){
+    document.getElementById('mat-type').value=ref.material;
+    document.getElementById('roughness').value=ref.roughness;
+    selectedColor=ref.color;
+    document.getElementById('custom-color').value=ref.color;
     updateSwatches();
   }
 }
 
 function applyCurrentSurface() {
-  const mat = document.getElementById('mat-type').value;
-  const roughness = parseFloat(document.getElementById('roughness').value);
-  const color = state.selectedColor;
-
-  const targets = state.activeSurface === 'all-walls'
-    ? ['wall-north','wall-south','wall-east','wall-west']
-    : [state.activeSurface];
-
-  targets.forEach(t => {
-    state.surfaces[t] = { color, material: mat, roughness };
-  });
-
-  updateSurfaceList();
-  draw2D();
-  if (state.currentView === '3d') rebuild3D();
+  var mat=document.getElementById('mat-type').value;
+  var rgh=parseFloat(document.getElementById('roughness').value);
+  var targets=activeSurface==='all-walls'
+    ? Object.keys(surfaces).filter(function(k){return k.startsWith('wall-');})
+    : [activeSurface];
+  targets.forEach(function(t){surfaces[t]={color:selectedColor,material:mat,roughness:rgh};});
+  updateSurfaceList(); draw2D();
+  if (currentView==='3d') buildRoom3D();
 }
 
 function applyToAll() {
-  const mat = document.getElementById('mat-type').value;
-  const roughness = parseFloat(document.getElementById('roughness').value);
-  const color = state.selectedColor;
-  ['wall-north','wall-south','wall-east','wall-west'].forEach(t => {
-    state.surfaces[t] = { color, material: mat, roughness };
+  var mat=document.getElementById('mat-type').value, rgh=parseFloat(document.getElementById('roughness').value);
+  Object.keys(surfaces).filter(function(k){return k.startsWith('wall-');}).forEach(function(t){
+    surfaces[t]={color:selectedColor,material:mat,roughness:rgh};
   });
-  updateSurfaceList();
-  draw2D();
-  if (state.currentView === '3d') rebuild3D();
+  updateSurfaceList(); draw2D();
+  if (currentView==='3d') buildRoom3D();
 }
 
-// =============================================
-// 3D
-// =============================================
-let renderer, scene, camera, orbitControls3d;
+// ================================================
+// FURNITURE CATALOGUE
+// ================================================
+var CATALOGUE = {
+  bathroom: [
+    {type:'toilet',      label:'Toilet',      w:0.38, d:0.65},
+    {type:'sink',        label:'Sink',        w:0.50, d:0.40},
+    {type:'bath',        label:'Bathtub',     w:0.75, d:1.70},
+    {type:'shower',      label:'Shower',      w:0.90, d:0.90},
+  ],
+  kitchen: [
+    {type:'base-unit',   label:'Base Unit',   w:0.60, d:0.60},
+    {type:'island',      label:'Island',      w:1.20, d:0.80},
+    {type:'fridge',      label:'Fridge',      w:0.70, d:0.70},
+    {type:'oven',        label:'Oven/Hob',    w:0.60, d:0.60},
+    {type:'sink',        label:'Kitchen Sink',w:0.60, d:0.50},
+    {type:'dining-table',label:'Table',       w:1.00, d:0.80},
+  ],
+  living: [
+    {type:'sofa',        label:'Sofa',        w:2.20, d:0.90},
+    {type:'armchair',    label:'Armchair',    w:0.85, d:0.85},
+    {type:'dining-table',label:'Table',       w:1.20, d:0.80},
+    {type:'desk',        label:'Desk',        w:1.40, d:0.70},
+  ],
+  bedroom: [
+    {type:'bed-double',  label:'Double Bed',  w:1.60, d:2.00},
+    {type:'bed-single',  label:'Single Bed',  w:0.90, d:2.00},
+    {type:'wardrobe',    label:'Wardrobe',    w:1.80, d:0.60},
+    {type:'desk',        label:'Desk',        w:1.20, d:0.60},
+  ],
+};
+
+var FURN_ICONS = {
+  toilet:'🚽', sink:'🚰', bath:'🛁', shower:'🚿',
+  'base-unit':'🗄️', island:'▭', fridge:'🧊', oven:'🍳',
+  sofa:'🛋️', armchair:'💺', 'dining-table':'⬤', desk:'🪑',
+  'bed-double':'🛏️', 'bed-single':'🛏️', wardrobe:'🚪',
+  'island':'▬', 'sink':'🚰',
+};
+
+function setRoomType(type, btn) {
+  roomType=type;
+  document.querySelectorAll('.room-type-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderFurnCatalogue();
+}
+
+function renderFurnCatalogue() {
+  var items=CATALOGUE[roomType]||[];
+  document.getElementById('furn-grid').innerHTML=items.map(function(item){
+    return '<div class="furn-item" onclick="addFurniture(\''+item.type+'\',\''+item.label+'\','+item.w+','+item.d+')">'
+      +'<span class="furn-icon">'+(FURN_ICONS[item.type]||'▪')+'</span>'
+      +'<span class="furn-label">'+item.label+'</span>'
+      +'</div>';
+  }).join('');
+}
+
+function addFurniture(type, label, w, d) {
+  // Place near centre
+  var bounds=getBounds();
+  furniture.push({type:type, label:label, w:w, d:d,
+    x: (bounds.minX+bounds.maxX)/2, y: (bounds.minY+bounds.maxY)/2,
+    rot:0, id:Date.now()});
+  renderFurnList(); draw2D();
+}
+
+function renderFurnList() {
+  var el=document.getElementById('furn-list');
+  if (!furniture.length){el.innerHTML='<span style="font-size:11px;color:var(--muted)">None placed.</span>';return;}
+  el.innerHTML=furniture.map(function(f){
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 7px;background:var(--panel2);border:1px solid var(--border);border-radius:3px;margin-bottom:5px;font-size:11px;cursor:pointer;" onclick="selectFurn('+f.id+')">'
+      +'<span style="color:var(--text)">'+f.label+'</span>'
+      +'<button onclick="event.stopPropagation();removeFurn('+f.id+')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;padding:0 3px;">×</button>'
+      +'</div>';
+  }).join('');
+}
+
+function selectFurn(id) { selectedFurnId=id; draw2D(); }
+function removeFurn(id) {
+  furniture=furniture.filter(function(f){return f.id!==id;});
+  if (selectedFurnId===id) selectedFurnId=null;
+  renderFurnList(); draw2D();
+}
+
+// ================================================
+// 3D ENGINE
+// ================================================
+var renderer3d=null, scene3d=null, camera3d=null, roomGroup=null;
+var isOrbiting=false, orbitStart={x:0,y:0};
+var isPan3d=false, pan3dStart={x:0,y:0};
+var spherical={theta:0.8, phi:0.65, radius:12};
+var animRunning=false;
+var outerWallMeshes=[];  // [{mesh, outwardNormal (THREE.Vector3)}]
+
+function hexToColor(hex){ return new THREE.Color(parseInt(hex.replace('#',''),16)); }
+function makeMat(surf) {
+  return new THREE.MeshStandardMaterial({
+    color:hexToColor(surf.color), roughness:surf.roughness, metalness:0,
+    side:THREE.FrontSide, transparent:true, opacity:1.0,
+  });
+}
 
 function init3D() {
-  const container = document.getElementById('canvas3d');
-  const w = container.clientWidth, h = container.clientHeight;
+  var container=document.getElementById('canvas3d');
+  var W=container.clientWidth, H=container.clientHeight;
+  renderer3d=new THREE.WebGLRenderer({antialias:true});
+  renderer3d.setSize(W,H);
+  renderer3d.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer3d.shadowMap.enabled=true;
+  renderer3d.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer3d.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer3d.toneMappingExposure=1.1;
+  container.appendChild(renderer3d.domElement);
 
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(w, h);
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.0;
-  container.appendChild(renderer.domElement);
+  scene3d=new THREE.Scene();
+  scene3d.background=new THREE.Color(0x0e0e0d);
+  scene3d.fog=new THREE.FogExp2(0x0e0e0d, 0.035);
 
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0e0e0d);
-  scene.fog = new THREE.Fog(0x0e0e0d, 20, 60);
+  camera3d=new THREE.PerspectiveCamera(55,W/H,0.1,100);
 
-  camera = new THREE.PerspectiveCamera(55, w/h, 0.1, 100);
-  camera.position.set(6, 4, 8);
-  camera.lookAt(0, 1, 0);
+  scene3d.add(new THREE.AmbientLight(0xfff5e0,0.5));
+  var sun=new THREE.DirectionalLight(0xffe8b0,1.4);
+  sun.position.set(6,9,5); sun.castShadow=true;
+  sun.shadow.mapSize.set(2048,2048);
+  sun.shadow.camera.near=0.1; sun.shadow.camera.far=50;
+  sun.shadow.camera.left=-15; sun.shadow.camera.right=15;
+  sun.shadow.camera.top=15;   sun.shadow.camera.bottom=-15;
+  scene3d.add(sun);
+  var fill=new THREE.PointLight(0xe0f0ff,0.3,25);
+  fill.position.set(-5,3,-5); scene3d.add(fill);
 
-  // Lights
-  const ambient = new THREE.AmbientLight(0xfff5e0, 0.6);
-  scene.add(ambient);
-
-  const sun = new THREE.DirectionalLight(0xffe8b0, 1.2);
-  sun.position.set(5, 8, 4);
-  sun.castShadow = true;
-  sun.shadow.mapSize.width = 2048;
-  sun.shadow.mapSize.height = 2048;
-  sun.shadow.camera.near = 0.1;
-  sun.shadow.camera.far = 50;
-  sun.shadow.camera.left = -10;
-  sun.shadow.camera.right = 10;
-  sun.shadow.camera.top = 10;
-  sun.shadow.camera.bottom = -10;
-  scene.add(sun);
-
-  const fillLight = new THREE.PointLight(0xe0f0ff, 0.4, 20);
-  fillLight.position.set(-3, 2, -3);
-  scene.add(fillLight);
-
-  // Simple orbit controls
-  setupOrbit();
-
+  setupOrbit3D();
   buildRoom3D();
-  animate3D();
+  startAnimate3D();
 }
-
-function hexToThreeColor(hex) {
-  return new THREE.Color(parseInt(hex.replace('#',''), 16));
-}
-
-function makeMaterial(surf) {
-  const color = hexToThreeColor(surf.color);
-  return new THREE.MeshStandardMaterial({
-    color,
-    roughness: surf.roughness,
-    metalness: 0.0,
-    side: THREE.FrontSide,
-  });
-}
-
-let roomGroup = null;
 
 function buildRoom3D() {
-  if (roomGroup) { scene.remove(roomGroup); roomGroup.traverse(o => { if (o.geometry) o.geometry.dispose(); }); }
-  roomGroup = new THREE.Group();
+  if (!scene3d) return;
+  if (roomGroup) {
+    scene3d.remove(roomGroup);
+    roomGroup.traverse(function(o){if(o.geometry)o.geometry.dispose();if(o.material){if(Array.isArray(o.material))o.material.forEach(function(m){m.dispose();});else o.material.dispose();}});
+  }
+  roomGroup=new THREE.Group();
+  outerWallMeshes=[];
+  ensureWallSurfaces();
 
-  const { w, d, h } = state.room;
-  const hw = w/2, hd = d/2;
+  var H=H_CEIL;
 
-  function plane(geo, mat, rx, ry, rz, px, py, pz, castShadow, receiveShadow) {
-    const m = new THREE.Mesh(geo, mat);
-    m.rotation.set(rx, ry, rz);
-    m.position.set(px, py, pz);
-    m.receiveShadow = receiveShadow !== false;
-    m.castShadow = castShadow !== false;
-    return m;
+  // Centre polygon for Three.js (centred at 0,0)
+  var bounds=getBounds();
+  var cx=(bounds.minX+bounds.maxX)/2, cy=(bounds.minY+bounds.maxY)/2;
+  var poly=corners.map(function(c){return {x:c.x-cx, y:c.y-cy};});
+
+  // Floor & Ceiling via ShapeGeometry
+  var floorShape=new THREE.Shape();
+  floorShape.moveTo(poly[0].x, poly[0].y);
+  poly.slice(1).forEach(function(p){floorShape.lineTo(p.x,p.y);});
+  floorShape.closePath();
+
+  var floorGeo=new THREE.ShapeGeometry(floorShape,1);
+  // Rotate flat shape to lie on XZ
+  var floor=new THREE.Mesh(floorGeo, makeMat(surfaces.floor));
+  floor.rotation.x=-Math.PI/2; floor.receiveShadow=true;
+  roomGroup.add(floor);
+
+  var ceilGeo=new THREE.ShapeGeometry(floorShape.clone(),1);
+  var ceil=new THREE.Mesh(ceilGeo, makeMat(surfaces.ceiling));
+  ceil.rotation.x=Math.PI/2; ceil.position.y=H;
+  roomGroup.add(ceil);
+
+  // Walls — one per edge
+  for (var i=0;i<poly.length;i++) {
+    var A=poly[i], B=poly[(i+1)%poly.length];
+    var dx=B.x-A.x, dz=B.y-A.y;
+    var len=Math.sqrt(dx*dx+dz*dz);
+    if (len<0.01) continue;
+
+    var wsurf=surfaces['wall-'+i]||surfaces['wall-0'];
+    var ops=openings.filter(function(o){return o.wallIdx===i;});
+
+    if (ops.length===0) {
+      var wGeo=new THREE.PlaneGeometry(len,H);
+      var wMesh=new THREE.Mesh(wGeo, makeMat(wsurf));
+      wMesh.position.set((A.x+B.x)/2, H/2, (A.y+B.y)/2);
+      wMesh.rotation.y=-Math.atan2(dz,dx);
+      wMesh.receiveShadow=true;
+      roomGroup.add(wMesh);
+      // outward normal: perpendicular to wall, pointing away from room centre
+      var nx=-dz/len, nz=dx/len;  // rotate wall dir 90° left = inward, so use right
+      // check which side faces outward by comparing to centroid
+      var midX=(A.x+B.x)/2, midZ=(A.y+B.y)/2;
+      if (nx*midX + nz*midZ > 0) { nx=-nx; nz=-nz; }  // ensure points outward
+      outerWallMeshes.push({mesh:wMesh, normal:new THREE.Vector3(nx,0,nz)});
+    } else {
+      // Wall with holes
+      var wShape=new THREE.Shape();
+      wShape.moveTo(-len/2,0); wShape.lineTo(len/2,0);
+      wShape.lineTo(len/2,H); wShape.lineTo(-len/2,H); wShape.closePath();
+
+      ops.forEach(function(op){
+        var maxOff=len-op.width;
+        var off=Math.max(0,Math.min(maxOff, op.position*len - op.width/2));
+        var hx=-len/2+off;
+        var hy=op.sill||0;
+        var hole=new THREE.Path();
+        hole.moveTo(hx,hy); hole.lineTo(hx+op.width,hy);
+        hole.lineTo(hx+op.width,hy+op.height); hole.lineTo(hx,hy+op.height);
+        hole.closePath();
+        wShape.holes.push(hole);
+
+        if (op.type==='window') {
+          var gGeo=new THREE.PlaneGeometry(op.width-0.04,op.height-0.04);
+          var gMat=new THREE.MeshStandardMaterial({color:0x88bbdd,transparent:true,opacity:0.22,roughness:0.05,side:THREE.DoubleSide});
+          var gMesh=new THREE.Mesh(gGeo,gMat);
+          var rotY=-Math.atan2(dz,dx);
+          var midX=A.x+(B.x-A.x)*(off+op.width/2)/len;
+          var midZ=A.y+(B.y-A.y)*(off+op.width/2)/len;
+          gMesh.position.set(midX, (hy+op.height/2), midZ);
+          gMesh.rotation.y=rotY;
+          roomGroup.add(gMesh);
+        }
+      });
+
+      var sGeo=new THREE.ShapeGeometry(wShape,4);
+      var sMesh=new THREE.Mesh(sGeo, makeMat(wsurf));
+      sMesh.position.set((A.x+B.x)/2, 0, (A.y+B.y)/2);
+      sMesh.rotation.y=-Math.atan2(dz,dx);
+      sMesh.receiveShadow=true;
+      roomGroup.add(sMesh);
+      var nx2=-dz/len, nz2=dx/len;
+      var midX2=(A.x+B.x)/2, midZ2=(A.y+B.y)/2;
+      if (nx2*midX2 + nz2*midZ2 > 0) { nx2=-nx2; nz2=-nz2; }
+      outerWallMeshes.push({mesh:sMesh, normal:new THREE.Vector3(nx2,0,nz2)});
+    }
   }
 
-  // Floor
-  const floorGeo = new THREE.PlaneGeometry(w, d, 20, 20);
-  const floorMat = makeMaterial(state.surfaces.floor);
-  roomGroup.add(plane(floorGeo, floorMat, -Math.PI/2, 0, 0, 0, 0, 0, false, true));
-
-  // Ceiling
-  const ceilGeo = new THREE.PlaneGeometry(w, d, 4, 4);
-  const ceilMat = makeMaterial(state.surfaces.ceiling);
-  roomGroup.add(plane(ceilGeo, ceilMat, Math.PI/2, 0, 0, 0, h, 0, false, false));
-
-  // Walls — build with openings cut out
-  buildWall3D('north', 0, h/2, -hd, w, h, 0, roomGroup);
-  buildWall3D('south', 0, h/2, hd, w, h, Math.PI, roomGroup);
-  buildWall3D('east', hw, h/2, 0, d, h, Math.PI/2, roomGroup);
-  buildWall3D('west', -hw, h/2, 0, d, h, -Math.PI/2, roomGroup);
-
-  scene.add(roomGroup);
-}
-
-function buildWall3D(wallName, px, py, pz, wallW, wallH, rotY, group) {
-  const surf = state.surfaces[`wall-${wallName}`];
-  const mat = makeMaterial(surf);
-  mat.side = THREE.DoubleSide;
-
-  // Find openings on this wall
-  const ops = state.openings.filter(o => o.wall === wallName);
-
-  if (ops.length === 0) {
-    const geo = new THREE.PlaneGeometry(wallW, wallH);
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.set(px, py, pz);
-    mesh.rotation.y = rotY;
-    mesh.receiveShadow = true;
-    group.add(mesh);
-    return;
-  }
-
-  // Build wall with holes using shapes
-  const shape = new THREE.Shape();
-  shape.moveTo(-wallW/2, 0);
-  shape.lineTo(wallW/2, 0);
-  shape.lineTo(wallW/2, wallH);
-  shape.lineTo(-wallW/2, wallH);
-  shape.closePath();
-
-  ops.forEach(op => {
-    const hole = new THREE.Path();
-    const ox = -op.width/2;
-    const oy = op.sill || 0;
-    hole.moveTo(ox, oy);
-    hole.lineTo(ox + op.width, oy);
-    hole.lineTo(ox + op.width, oy + op.height);
-    hole.lineTo(ox, oy + op.height);
-    hole.closePath();
-    shape.holes.push(hole);
+  // Inner walls in 3D
+  innerWalls.forEach(function(iw){
+    var ax=iw.ax-cx, ay=iw.ay-cy, bx=iw.bx-cx, by=iw.by-cy;
+    var dx=bx-ax, dz=by-ay, len=Math.sqrt(dx*dx+dz*dz);
+    if (len<0.01) return;
+    var iGeo=new THREE.PlaneGeometry(len,H);
+    var iMat=new THREE.MeshStandardMaterial({color:hexToColor('#e8e4dc'),roughness:0.85,side:THREE.DoubleSide});
+    var iMesh=new THREE.Mesh(iGeo,iMat);
+    iMesh.position.set((ax+bx)/2, H/2, (ay+by)/2);
+    iMesh.rotation.y=-Math.atan2(dz,dx);
+    iMesh.receiveShadow=true;
+    roomGroup.add(iMesh);
   });
 
-  const geo = new THREE.ShapeGeometry(shape, 8);
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.set(px, 0, pz);
-  mesh.rotation.y = rotY;
-  mesh.receiveShadow = true;
-  group.add(mesh);
-
-  // Window frame glow
-  ops.filter(o => o.type === 'window').forEach(op => {
-    const glowGeo = new THREE.PlaneGeometry(op.width, op.height);
-    const glowMat = new THREE.MeshBasicMaterial({
-      color: 0xaaddff,
-      transparent: true,
-      opacity: 0.15,
-      side: THREE.DoubleSide,
-    });
-    const glow = new THREE.Mesh(glowGeo, glowMat);
-    const localY = (op.sill || 0) + op.height/2;
-    const pos = new THREE.Vector3(px, localY, pz);
-    glow.position.copy(pos);
-    glow.rotation.y = rotY;
-    group.add(glow);
-  });
-}
-
-function rebuild3D() {
-  if (renderer) buildRoom3D();
-}
-
-function animate3D() {
-  if (state.currentView !== '3d') return;
-  requestAnimationFrame(animate3D);
-  renderer.render(scene, camera);
-}
-
-// Simple orbit
-let isOrbiting = false, orbitStart = {x:0, y:0};
-let spherical = { theta: 0.8, phi: 0.7, radius: 11 };
-
-function updateCameraOrbit() {
-  const { theta, phi, radius } = spherical;
-  camera.position.set(
-    radius * Math.sin(phi) * Math.sin(theta),
-    radius * Math.cos(phi),
-    radius * Math.sin(phi) * Math.cos(theta)
-  );
-  camera.lookAt(0, state.room.h/2 * 0.6, 0);
-}
-
-let isPanOrbit = false, panOrbitStart = {x:0, y:0};
-let orbitTarget = new THREE.Vector3(0, 0.8, 0);
-
-function setupOrbit() {
-  const container = document.getElementById('canvas3d');
-
-  container.addEventListener('mousedown', e => {
-    if (e.button === 0) { isOrbiting = true; orbitStart = {x: e.clientX, y: e.clientY}; }
-    if (e.button === 2) { isPanOrbit = true; panOrbitStart = {x: e.clientX, y: e.clientY}; }
+  // Furniture in 3D (simple boxes)
+  furniture.forEach(function(f){
+    var fGeo=new THREE.BoxGeometry(f.w, 0.75, f.d);
+    var fMat=new THREE.MeshStandardMaterial({color:0x2a2a28,roughness:0.7,metalness:0.05});
+    var fMesh=new THREE.Mesh(fGeo,fMat);
+    fMesh.position.set(f.x-cx, 0.375, f.y-cy);
+    fMesh.rotation.y=f.rot*Math.PI/2;
+    fMesh.castShadow=true; fMesh.receiveShadow=true;
+    roomGroup.add(fMesh);
   });
 
-  window.addEventListener('mousemove', e => {
-    if (isOrbiting) {
-      const dx = (e.clientX - orbitStart.x) * 0.005;
-      const dy = (e.clientY - orbitStart.y) * 0.005;
-      spherical.theta -= dx;
-      spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi + dy));
-      updateCameraOrbit();
-      orbitStart = {x: e.clientX, y: e.clientY};
-    }
-    if (isPanOrbit) {
-      const dx = (e.clientX - panOrbitStart.x) * 0.01;
-      const dy = (e.clientY - panOrbitStart.y) * 0.01;
-      camera.position.y -= dy;
-      panOrbitStart = {x: e.clientX, y: e.clientY};
-    }
-  });
-
-  window.addEventListener('mouseup', () => { isOrbiting = false; isPanOrbit = false; });
-
-  container.addEventListener('wheel', e => {
-    spherical.radius = Math.max(2, Math.min(25, spherical.radius + e.deltaY * 0.01));
-    updateCameraOrbit();
-  }, { passive: true });
-
-  container.addEventListener('contextmenu', e => e.preventDefault());
-
+  scene3d.add(roomGroup);
   updateCameraOrbit();
 }
 
-// =============================================
-// VIEW SWITCH
-// =============================================
-function switchView(v) {
-  state.currentView = v;
-  document.getElementById('btn2d').classList.toggle('active', v === '2d');
-  document.getElementById('btn3d').classList.toggle('active', v === '3d');
-  document.getElementById('view2d').style.display = v === '2d' ? 'block' : 'none';
-  document.getElementById('view3d').style.display = v === '3d' ? 'block' : 'none';
-
-  if (v === '3d') {
-    if (!renderer) {
-      setTimeout(() => { init3D(); }, 50);
-    } else {
-      rebuild3D();
-      animate3D();
-    }
-    document.querySelector('.canvas-toolbar').style.display = 'none';
-  } else {
-    document.querySelector('.canvas-toolbar').style.display = 'flex';
-    resizeCanvas();
-  }
+function updateCameraOrbit() {
+  if (!camera3d) return;
+  var t=spherical.theta, p=spherical.phi, r=spherical.radius;
+  camera3d.position.set(r*Math.sin(p)*Math.sin(t), r*Math.cos(p), r*Math.sin(p)*Math.cos(t));
+  camera3d.lookAt(0, H_CEIL*0.4, 0);
 }
 
-// =============================================
-// TOOLS & TABS
-// =============================================
-function switchTab(tab) {
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(`tab-${tab}`).classList.add('active');
-  event.target.classList.add('active');
+function setupOrbit3D() {
+  var cont=document.getElementById('canvas3d');
+  cont.addEventListener('mousedown',function(e){
+    if(e.button===0){isOrbiting=true;orbitStart={x:e.clientX,y:e.clientY};}
+    if(e.button===2){isPan3d=true;pan3dStart={x:e.clientX,y:e.clientY};}
+  });
+  window.addEventListener('mousemove',function(e){
+    if(isOrbiting){
+      spherical.theta-=(e.clientX-orbitStart.x)*0.005;
+      spherical.phi=Math.max(0.08,Math.min(Math.PI-0.08,spherical.phi+(e.clientY-orbitStart.y)*0.005));
+      updateCameraOrbit(); orbitStart={x:e.clientX,y:e.clientY};
+    }
+    if(isPan3d){
+      camera3d.position.y-=(e.clientY-pan3dStart.y)*0.012;
+      pan3dStart={x:e.clientX,y:e.clientY};
+    }
+  });
+  window.addEventListener('mouseup',function(){isOrbiting=false;isPan3d=false;});
+  cont.addEventListener('wheel',function(e){
+    spherical.radius=Math.max(2,Math.min(35,spherical.radius+e.deltaY*0.02));
+    updateCameraOrbit();
+  },{passive:true});
+  cont.addEventListener('contextmenu',function(e){e.preventDefault();});
+}
+
+function startAnimate3D() {
+  if (animRunning) return; animRunning=true;
+  var _camDir=new THREE.Vector3();
+  (function loop(){
+    if (!animRunning) return;
+    requestAnimationFrame(loop);
+    // Per-wall camera-facing transparency
+    if (camera3d && outerWallMeshes.length) {
+      outerWallMeshes.forEach(function(w){
+        // Vector from wall to camera
+        _camDir.copy(camera3d.position).sub(w.mesh.position).normalize();
+        var dot=_camDir.dot(w.normal);
+        // dot > 0 → camera on outward side (wall faces us) → solid
+        // dot < 0 → camera on inward side (we're inside) → transparent
+        var targetOp = dot > 0.15 ? 1.0 : dot > -0.15 ? 0.35 : 0.08;
+        w.mesh.material.opacity=targetOp;
+      });
+    }
+    if (renderer3d&&scene3d&&camera3d) renderer3d.render(scene3d,camera3d);
+  })();
+}
+
+// ================================================
+// VIEW / TOOL SWITCH
+// ================================================
+function switchView(v) {
+  currentView=v;
+  document.getElementById('btn2d').classList.toggle('active',v==='2d');
+  document.getElementById('btn3d').classList.toggle('active',v==='3d');
+  document.getElementById('view2d').style.display  = v==='2d'?'block':'none';
+  document.getElementById('view3d').style.display  = v==='3d'?'block':'none';
+  document.getElementById('toolbar2d').style.display= v==='2d'?'flex':'none';
+  if (v==='3d') {
+    if (!renderer3d) { setTimeout(function(){init3D();},30); }
+    else {
+      buildRoom3D();
+      var cont=document.getElementById('canvas3d');
+      renderer3d.setSize(cont.clientWidth,cont.clientHeight);
+      camera3d.aspect=cont.clientWidth/cont.clientHeight;
+      camera3d.updateProjectionMatrix();
+      startAnimate3D();
+    }
+  } else { animRunning=false; resizeCanvas(); }
+}
+
+function switchTab(tab,btn) {
+  document.querySelectorAll('.tab-pane').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.panel-tab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('tab-'+tab).classList.add('active');
+  btn.classList.add('active');
 }
 
 function setTool(t) {
-  state.tool = t;
-  document.querySelectorAll('.tool-btn[id^="tool-"]').forEach(b => b.classList.remove('active'));
-  const el = document.getElementById(`tool-${t}`);
-  if (el) el.classList.add('active');
-  c2d.style.cursor = t === 'pan' ? 'grab' : 'default';
+  tool=t; wallDrawStart=null;
+  document.querySelectorAll('.tool-btn[id^="tool-"]').forEach(function(b){b.classList.remove('active');});
+  var el=document.getElementById('tool-'+t);
+  if(el) el.classList.add('active');
+  c2d.style.cursor= t==='pan'?'grab':t==='wall'?'crosshair':'default';
+  document.getElementById('tool-info').textContent =
+    t==='select' ? 'Drag corners to reshape · Drag furniture' :
+    t==='pan'    ? 'Drag to pan' :
+    t==='wall'   ? 'Click two points to draw inner wall · Esc to cancel' : '';
 }
 
 function toggleGrid() {
-  state.showGrid = !state.showGrid;
-  document.getElementById('tool-grid').textContent = `Grid: ${state.showGrid ? 'On' : 'Off'}`;
+  showGrid=!showGrid;
+  document.getElementById('tool-grid').textContent='Grid: '+(showGrid?'On':'Off');
   draw2D();
 }
 
-// =============================================
+// ================================================
+// 3D TOOLBAR (injected when switching to 3D)
+// ================================================
+function show3DToolbar() {
+  var tb=document.getElementById('toolbar3d');
+  if (!tb) {
+    tb=document.createElement('div');
+    tb.id='toolbar3d';
+    tb.className='canvas-toolbar';
+    tb.style.display='flex';
+    tb.innerHTML='<button class="tool-btn" onclick="buildRoom3D()">Rebuild</button>'
+      +'<span class="tool-info">Left-drag: orbit · Scroll: zoom · Right-drag: pan · Walls auto-transparent</span>';
+    document.getElementById('view3d').prepend(tb);
+  }
+}
+
+// ================================================
 // RESIZE
-// =============================================
-window.addEventListener('resize', () => {
-  resizeCanvas();
-  if (renderer) {
-    const container = document.getElementById('canvas3d');
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
+// ================================================
+window.addEventListener('resize',function(){
+  if (currentView==='2d') resizeCanvas();
+  if (renderer3d) {
+    var cont=document.getElementById('canvas3d');
+    renderer3d.setSize(cont.clientWidth,cont.clientHeight);
+    camera3d.aspect=cont.clientWidth/cont.clientHeight;
+    camera3d.updateProjectionMatrix();
   }
 });
 
-// =============================================
+// ================================================
 // INIT
-// =============================================
-window.addEventListener('DOMContentLoaded', () => {
+// ================================================
+window.addEventListener('DOMContentLoaded',function(){
+  ensureWallSurfaces();
   resizeCanvas();
   updateSwatches();
   updateInfoPanel();
+  renderFurnCatalogue();
+
+  // Override switchView to also show 3D toolbar
+  var orig=switchView;
+  switchView=function(v){
+    orig(v);
+    if(v==='3d') setTimeout(show3DToolbar, 60);
+  };
 });
 </script>
 </body>
