@@ -1462,13 +1462,14 @@ var isOrbiting=false, orbitStart={x:0,y:0};
 var isPan3d=false, pan3dStart={x:0,y:0};
 var spherical={theta:0.8, phi:0.65, radius:12};
 var animRunning=false;
-var outerWallMeshes=[];  // [{mesh, wallIdx, A, B}] — A,B are Three.js XZ positions
+var outerWallMeshes=[];  // [{mesh, wallIdx, Ax, Az, Bx, Bz}]
+var roomRefX=0, roomRefZ=0;  // polygon centroid in Three.js XZ space — updated each buildRoom3D
 
 function hexToColor(hex){ return new THREE.Color(parseInt(hex.replace('#',''),16)); }
 function makeMat(surf) {
   return new THREE.MeshStandardMaterial({
     color:hexToColor(surf.color), roughness:surf.roughness, metalness:0,
-    side:THREE.FrontSide, transparent:true, opacity:1.0,
+    side:THREE.DoubleSide, transparent:false, opacity:1.0,
   });
 }
 
@@ -1598,6 +1599,23 @@ function buildRoom3D() {
   var bounds=getBounds();
   var cx=(bounds.minX+bounds.maxX)/2, cy=(bounds.minY+bounds.maxY)/2;
 
+  // Compute polygon centroid (area-weighted) in world space.
+  // This is guaranteed to be a sensible interior point for any simple polygon,
+  // unlike the bounding-box centre which can fall outside concave shapes.
+  var _cA = 0, _cX = 0, _cY = 0, _cn = corners.length;
+  for (var _ci = 0; _ci < _cn; _ci++) {
+    var _ci2 = (_ci+1)%_cn;
+    var _cross = corners[_ci].x*corners[_ci2].y - corners[_ci2].x*corners[_ci].y;
+    _cA += _cross;
+    _cX += (corners[_ci].x + corners[_ci2].x) * _cross;
+    _cY += (corners[_ci].y + corners[_ci2].y) * _cross;
+  }
+  _cA /= 2;
+  var worldCentX = _cX / (6*_cA), worldCentY = _cY / (6*_cA);
+  // Convert to Three.js XZ space (same transform as w2t)
+  roomRefX = worldCentX - cx;
+  roomRefZ = -(worldCentY - cy);
+
   // w2t: world(x,y) → Three XZ — world Y maps to -Z (Y-down screen → Z+ is south)
   function w2t(wx, wy) { return {x: wx-cx, z: -(wy-cy)}; }
 
@@ -1639,7 +1657,6 @@ function buildRoom3D() {
     var wallMat = makeMat(wsurf);
     // NOTE: material opacity and colour are set per-frame in the animate loop
     // We always start fully transparent; animate loop sets final opacity
-    wallMat.opacity = 0;
 
     if (ops.length===0) {
       var wGeo=new THREE.PlaneGeometry(len,H);
@@ -1803,7 +1820,7 @@ function startAnimate3D() {
 
         if (isHov) {
           // Hovered wall: always show green regardless of camera side
-          w.mesh.material.opacity = 1.0;
+          w.mesh.visible = true;
           w.mesh.material.color.set(0x5fcf80);
           w.mesh.material.emissive.set(0x1a4a20);
           return;
@@ -1840,20 +1857,19 @@ function startAnimate3D() {
         // ──────────────────────────────────────────────────────────────────
         var Ax = w.Ax, Az = w.Az, Bx = w.Bx, Bz = w.Bz;
         var crossCam      = (Bx-Ax)*(camZ-Az) - (Bz-Az)*(camX-Ax);
-        var crossCentroid = (Bx-Ax)*( 0 -Az) - (Bz-Az)*( 0 -Ax);
+        var crossCentroid = (Bx-Ax)*(roomRefZ-Az) - (Bz-Az)*(roomRefX-Ax);
 
         // camera on exterior side → crossCam and crossCentroid have opposite signs
-        var onExterior = (crossCam * crossCentroid) < 0;
+        var facingCamera = (crossCam * crossCentroid) > 0;
 
-        if (onExterior) {
-          // Camera outside this wall → wall faces us → show it
-          // Restore surface material colour (may have been green before)
+        if (facingCamera) {
+          // Camera on same side as inward normal → wall faces camera → show it
           var wsurf = surfaces['wall-'+w.wallIdx] || surfaces['wall-0'];
           w.mesh.material.color.set(hexToColor(wsurf.color));
-          w.mesh.material.opacity = 1.0;
+          w.mesh.visible = true;
         } else {
-          // Camera inside → wall behind us → hide
-          w.mesh.material.opacity = 0.0;
+          // Camera on interior side → hide this wall
+          w.mesh.visible = false;
         }
       });
     }
