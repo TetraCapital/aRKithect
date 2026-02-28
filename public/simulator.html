@@ -1463,6 +1463,7 @@ var isPan3d=false, pan3dStart={x:0,y:0};
 var spherical={theta:0.8, phi:0.65, radius:12};
 var animRunning=false;
 var outerWallMeshes=[];  // [{mesh, wallIdx, Ax, Az, Bx, Bz}]
+var ceilMesh3d = null;
 var roomRefX=0, roomRefZ=0;  // polygon centroid in Three.js XZ space — updated each buildRoom3D
 
 function hexToColor(hex){ return new THREE.Color(parseInt(hex.replace('#',''),16)); }
@@ -1639,8 +1640,8 @@ function buildRoom3D() {
   flatCeilGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(ceilVerts), 3));
   flatCeilGeo.setIndex(triIndices.slice().reverse());
   flatCeilGeo.computeVertexNormals();
-  var ceil = new THREE.Mesh(flatCeilGeo, makeMat(surfaces.ceiling));
-  roomGroup.add(ceil);
+  ceilMesh3d = new THREE.Mesh(flatCeilGeo, makeMat(surfaces.ceiling));
+  roomGroup.add(ceilMesh3d);
 
   // Walls
   for (var i=0;i<corners.length;i++) {
@@ -1874,6 +1875,7 @@ function startAnimate3D() {
       });
     }
 
+    if (ceilMesh3d) ceilMesh3d.visible = (camera3d.position.y < H_CEIL);
     if (renderer3d&&scene3d&&camera3d) { renderer3d.render(scene3d,camera3d); draw3DCompass(); }
   })();
 }
