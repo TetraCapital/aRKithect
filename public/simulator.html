@@ -1462,13 +1462,14 @@ var isOrbiting=false, orbitStart={x:0,y:0};
 var isPan3d=false, pan3dStart={x:0,y:0};
 var spherical={theta:0.8, phi:0.65, radius:12};
 var animRunning=false;
-var outerWallMeshes=[];  // [{mesh, wallIdx, A, B}] — A,B are Three.js XZ positions
+var outerWallMeshes=[];  // [{mesh, wallIdx, Ax, Az, Bx, Bz}]
+var roomRefX=0, roomRefZ=0;  // polygon centroid in Three.js XZ space — updated each buildRoom3D
 
 function hexToColor(hex){ return new THREE.Color(parseInt(hex.replace('#',''),16)); }
 function makeMat(surf) {
   return new THREE.MeshStandardMaterial({
     color:hexToColor(surf.color), roughness:surf.roughness, metalness:0,
-    side:THREE.FrontSide, transparent:true, opacity:1.0,
+    side:THREE.DoubleSide, transparent:true, opacity:1.0, depthWrite:false,
   });
 }
 
@@ -1597,6 +1598,23 @@ function buildRoom3D() {
   var H=H_CEIL;
   var bounds=getBounds();
   var cx=(bounds.minX+bounds.maxX)/2, cy=(bounds.minY+bounds.maxY)/2;
+
+  // Compute polygon centroid (area-weighted) in world space.
+  // This is guaranteed to be a sensible interior point for any simple polygon,
+  // unlike the bounding-box centre which can fall outside concave shapes.
+  var _cA = 0, _cX = 0, _cY = 0, _cn = corners.length;
+  for (var _ci = 0; _ci < _cn; _ci++) {
+    var _ci2 = (_ci+1)%_cn;
+    var _cross = corners[_ci].x*corners[_ci2].y - corners[_ci2].x*corners[_ci].y;
+    _cA += _cross;
+    _cX += (corners[_ci].x + corners[_ci2].x) * _cross;
+    _cY += (corners[_ci].y + corners[_ci2].y) * _cross;
+  }
+  _cA /= 2;
+  var worldCentX = _cX / (6*_cA), worldCentY = _cY / (6*_cA);
+  // Convert to Three.js XZ space (same transform as w2t)
+  roomRefX = worldCentX - cx;
+  roomRefZ = -(worldCentY - cy);
 
   // w2t: world(x,y) → Three XZ — world Y maps to -Z (Y-down screen → Z+ is south)
   function w2t(wx, wy) { return {x: wx-cx, z: -(wy-cy)}; }
@@ -1840,7 +1858,7 @@ function startAnimate3D() {
         // ──────────────────────────────────────────────────────────────────
         var Ax = w.Ax, Az = w.Az, Bx = w.Bx, Bz = w.Bz;
         var crossCam      = (Bx-Ax)*(camZ-Az) - (Bz-Az)*(camX-Ax);
-        var crossCentroid = (Bx-Ax)*( 0 -Az) - (Bz-Az)*( 0 -Ax);
+        var crossCentroid = (Bx-Ax)*(roomRefZ-Az) - (Bz-Az)*(roomRefX-Ax);
 
         // camera on exterior side → crossCam and crossCentroid have opposite signs
         var onExterior = (crossCam * crossCentroid) < 0;
