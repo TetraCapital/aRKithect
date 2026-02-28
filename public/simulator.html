@@ -1843,7 +1843,7 @@ function startAnimate3D() {
         var crossCentroid = (Bx-Ax)*( 0 -Az) - (Bz-Az)*( 0 -Ax);
 
         // camera on exterior side → crossCam and crossCentroid have opposite signs
-        var onExterior = (crossCam * crossCentroid) > 0;
+        var onExterior = (crossCam * crossCentroid) < 0;
 
         if (onExterior) {
           // Camera outside this wall → wall faces us → show it
